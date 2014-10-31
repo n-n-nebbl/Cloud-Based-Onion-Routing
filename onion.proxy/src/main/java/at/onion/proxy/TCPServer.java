@@ -8,92 +8,69 @@ import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public class TCPServer extends Thread
-{
-	private ServerSocket		serverSocket	= null;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-	private AtomicBoolean		running			= new AtomicBoolean(false);
+public class TCPServer extends Thread {
+	private Logger							logger			= LoggerFactory.getLogger(getClass());
 
-	private static Thread		thread			= null;
+	private ServerSocket					serverSocket	= null;
 
-	private static TCPServer	instance		= null;
+	private AtomicBoolean					running			= new AtomicBoolean(false);
 
-	private List<TCPConnection>	connections		= Collections
-														.synchronizedList(new ArrayList<TCPConnection>());
+	private static Thread					thread			= null;
 
-	public synchronized static TCPServer getInstance(int localPort)
-	{
-		if (instance == null)
-		{
-			try
-			{
-				System.out.println(String.format(
-						"Starting SOCKS server, TCP_PORT=%d ...", localPort));
-				instance = new TCPServer(localPort);
-			} catch (IOException e)
-			{
-				System.out
-						.println("Error binding port: " + localPort + " " + e);
-				return null;
-			}
+	private List<TCPConnection>				connections		= Collections
+																	.synchronizedList(new ArrayList<TCPConnection>());
 
-			thread = new Thread(instance);
+	private Class<? extends TCPConnection>	connectionClass	= null;
+
+	public TCPServer(Class<? extends TCPConnection> connectionClass, int localPort) throws SocksException {
+		logger.info(String.format("Starting " + this.getClass().getName() + " server, TCP_PORT=%d ...", localPort));
+
+		try {
+			this.connectionClass = connectionClass;
+			serverSocket = new ServerSocket(localPort);
+			serverSocket.setSoTimeout(5000);
+			this.running.set(true);
+
+			thread = new Thread(this);
 			thread.start();
+		} catch (IOException e) {
+			throw new SocksException(String.format("Error binding port: %d: %s", localPort, e));
 		}
-
-		return instance;
 	}
 
-	private TCPServer(int localPort) throws IOException
-	{
-		serverSocket = new ServerSocket(localPort);
-		serverSocket.setSoTimeout(5000);
-		this.running.set(true);
-	}
-
-	public synchronized void setStopped()
-	{
+	public synchronized void setStopped() {
 		this.running.set(false);
 
-		if (this.serverSocket != null)
-			try
-			{
-				this.serverSocket.close();
-			} catch (IOException e)
-			{
+		if (this.serverSocket != null) try {
+			this.serverSocket.close();
+		} catch (IOException e) {
 
-			}
+		}
 
 		this.serverSocket = null;
 	}
 
-	public synchronized void run()
-	{
-
-		while (running.get())
-		{
+	public void run() {
+		while (running.get()) {
 			TCPConnection c = null;
 
-			try
-			{
-				try
-				{
-					c = TCPConnection.getInstance(this.connections,
-							serverSocket.accept());
-					connections.add(c);
+			try {
+				try {
+					c = TCPConnectionFactory.getInstance(connectionClass, this.connections, serverSocket.accept());
 
-				} catch (SocketTimeoutException ex)
-				{
+					if (c == null) logger.error(connectionClass.getName() + " not in TCPConnectionFactory.");
+
+				} catch (SocketTimeoutException ex) {
 					// System.out.println("STO" + ex);
 				}
 
-			} catch (IOException e)
-			{
-				System.out.println(String.format("Socket I/O Exception 1: %s",
-						e));
+			} catch (IOException e) {
+				logger.error(String.format("Socket I/O Exception 1: %s", e));
 
-				if (c != null)
-					c.setStopped();
+				if (c != null) c.setStopped();
 			}
 
 		}

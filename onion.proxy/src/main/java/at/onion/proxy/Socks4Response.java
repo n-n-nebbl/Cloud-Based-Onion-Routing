@@ -9,7 +9,7 @@ public class Socks4Response
 	}
 
 	public static int getResponseInteger(SOCKS4RESPONSE response)
-			throws SocketException
+			throws SocksException
 	{
 		switch (response)
 		{
@@ -22,13 +22,13 @@ public class Socks4Response
 		case SOCKS4_REP_USERID:
 			return 93;
 		default:
-			throw new SocketException("Response " + response
+			throw new SocksException("Response " + response
 					+ " not implemented.");
 		}
 	}
 
 	public static String getResponseName(SOCKS4RESPONSE response)
-			throws SocketException
+			throws SocksException
 	{
 		switch (response)
 		{
@@ -41,7 +41,7 @@ public class Socks4Response
 		case SOCKS4_REP_USERID:
 			return "user id not matched";
 		default:
-			throw new SocketException("Response " + response
+			throw new SocksException("Response " + response
 					+ " not implemented.");
 		}
 	}

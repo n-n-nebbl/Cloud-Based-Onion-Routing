@@ -8,7 +8,7 @@ public class Socks5Response
 	}
 
 	public static byte getResponseByte(SOCKS5RESPONSE response)
-			throws SocketException
+			throws SocksException
 	{
 		switch (response)
 		{
@@ -33,13 +33,13 @@ public class Socks5Response
 		case SOCKS5_REP_INVADDR:
 			return (byte) 0x09;
 		default:
-			throw new SocketException("Response " + response
+			throw new SocksException("Response " + response
 					+ " not implemented.");
 		}
 	}
 
 	public static String getResponseName(SOCKS5RESPONSE response)
-			throws SocketException
+			throws SocksException
 	{
 		switch (response)
 		{
@@ -64,7 +64,7 @@ public class Socks5Response
 		case SOCKS5_REP_INVADDR:
 			return "Invalid address";
 		default:
-			throw new SocketException("Response " + response
+			throw new SocksException("Response " + response
 					+ " not implemented.");
 		}
 	}

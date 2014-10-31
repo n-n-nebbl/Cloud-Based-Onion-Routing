@@ -3,6 +3,9 @@ package at.onion.proxy;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.SocketTimeoutException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class TCPServer extends Thread
@@ -14,6 +17,9 @@ public class TCPServer extends Thread
 	private static Thread		thread			= null;
 
 	private static TCPServer	instance		= null;
+
+	private List<TCPConnection>	connections		= Collections
+														.synchronizedList(new ArrayList<TCPConnection>());
 
 	public synchronized static TCPServer getInstance(int localPort)
 	{
@@ -72,7 +78,9 @@ public class TCPServer extends Thread
 			{
 				try
 				{
-					c = TCPConnection.getInstance(serverSocket.accept());
+					c = TCPConnection.getInstance(this.connections,
+							serverSocket.accept());
+					connections.add(c);
 
 				} catch (SocketTimeoutException ex)
 				{

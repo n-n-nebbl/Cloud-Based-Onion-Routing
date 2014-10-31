@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import at.onion.proxy.Socks5AuthentificationResponse.SOCKS5AUTHENTIFICATIONRESPONSE;
@@ -12,17 +13,19 @@ import at.onion.proxy.Socks5Response.SOCKS5RESPONSE;
 
 public class TCPConnection extends Thread
 {
-	private int				socketTimeout	= 5000;
+	private int					socketTimeout	= 5000;
 
-	private Socket			socket			= null;
+	private Socket				socket			= null;
 
-	private AtomicBoolean	running			= new AtomicBoolean(false);
+	private AtomicBoolean		running			= new AtomicBoolean(false);
 
-	private BufferedReader	in				= null;
+	private BufferedReader		in				= null;
 
-	private PrintWriter		out				= null;
+	private PrintWriter			out				= null;
 
-	private Thread			thread			= null;
+	private Thread				thread			= null;
+
+	private List<TCPConnection>	connectionList	= null;
 
 	private class DestinationAddress
 	{
@@ -47,10 +50,10 @@ public class TCPConnection extends Thread
 		}
 	}
 
-	public synchronized static TCPConnection getInstance(Socket s)
-			throws IOException
+	public synchronized static TCPConnection getInstance(
+			List<TCPConnection> connectionList, Socket s) throws IOException
 	{
-		TCPConnection instance = new TCPConnection(s);
+		TCPConnection instance = new TCPConnection(connectionList, s);
 		instance.startThread();
 		return instance;
 	}
@@ -66,11 +69,13 @@ public class TCPConnection extends Thread
 		return thread;
 	}
 
-	private TCPConnection(Socket socket) throws IOException
+	private TCPConnection(List<TCPConnection> connectionList, Socket socket)
+			throws IOException
 	{
 		System.out.println(String.format("Connection from %s:%d started.",
 				socket.getLocalAddress(), socket.getLocalPort()));
 		this.socket = socket;
+		this.connectionList = connectionList;
 		this.socket.setSoTimeout(this.socketTimeout);
 		in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 		out = new PrintWriter(this.socket.getOutputStream(), true);
@@ -88,6 +93,8 @@ public class TCPConnection extends Thread
 			} catch (IOException e)
 			{
 			}
+
+		connectionList.remove(this);
 
 		System.out.println(String.format("Connection from %s:%d terminated.",
 				socket.getLocalAddress(), socket.getLocalPort()));
@@ -324,7 +331,7 @@ public class TCPConnection extends Thread
 				return;
 			}
 
-			while (running.get() && (line = in.readLine()) != "")
+			while (running.get() && (line = in.readLine()) != null)
 			{
 				System.out.println(String.format("Got line: %s", line));
 			}

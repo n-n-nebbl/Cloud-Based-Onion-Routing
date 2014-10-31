@@ -19,7 +19,7 @@ public class QuoteController {
 		//TODO: get quote;
 		JSONObject result = new JSONObject().append("quote", quote);
 		
-		logger.debug(result.toString());
+//		logger.debug(result.toString());
 		
 		return result.toString();
 	}	

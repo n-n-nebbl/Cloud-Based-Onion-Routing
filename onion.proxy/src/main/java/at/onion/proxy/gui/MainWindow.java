@@ -111,6 +111,9 @@ public class MainWindow extends JFrame {
 		final JCheckBox chckbxSocks5 = new JCheckBox("SOCKS5");
 		final JCheckBox chckbxSocks4 = new JCheckBox("SOCKS4");
 
+		chckbxSocks5.setSelected(true);
+		chckbxSocks4.setSelected(true);
+
 		final JButton btnStart = new JButton("Start Proxy");
 
 		Timer timer = new Timer(500, new ActionListener() {

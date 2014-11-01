@@ -1,16 +1,19 @@
-package at.onion.proxy;
+package at.onion.proxy.socks5;
 
 import java.io.IOException;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.List;
 
-import at.onion.proxy.Socks5AuthentificationResponse.SOCKS5AUTHENTIFICATIONRESPONSE;
-import at.onion.proxy.Socks5Response.SOCKS5RESPONSE;
+import at.onion.proxy.ProxyFactory;
+import at.onion.proxy.SocksException;
+import at.onion.proxy.TCPConnection;
+import at.onion.proxy.proxyconnection.ProxyConnection;
 
 public class Socks5TCPConnection extends TCPConnection {
 
-	private TestProxyConnection	proxyConnection	= null;
+	private ProxyConnection						proxyConnection			= null;
+	private Class<? extends ProxyConnection>	connectionProxyClass	= null;
 
 	private class DestinationAddress {
 		private String	host;
@@ -31,15 +34,17 @@ public class Socks5TCPConnection extends TCPConnection {
 		}
 	}
 
-	public Socks5TCPConnection(List<TCPConnection> connectionList, Socket s) throws IOException {
-		super(connectionList, s, TestProxyConnection.proxySocketTimeout);
+	public Socks5TCPConnection(Class<? extends ProxyConnection> connectionProxyClass,
+			List<TCPConnection> connectionList, Socket s) throws IOException {
+		super(connectionList, s, Socks5Metadata.proxySocketTimeout, true);
+		this.connectionProxyClass = connectionProxyClass;
 	}
 
 	// Todo: reply not right...
 	private boolean doInitAuthentification() throws IOException {
 		int ver = this.readByte();
 
-		if (ver != 0x05) {
+		if (ver != Socks5Metadata.SOCKS5_Version) {
 			logger.error(String.format("Connection from %s:%d wants version %d not supported.",
 					socket.getLocalAddress(), socket.getLocalPort(), ver));
 			return false;
@@ -52,11 +57,9 @@ public class Socks5TCPConnection extends TCPConnection {
 		for (int i = 0; i < nmethods; i++) {
 			methods[i] = this.readByte();
 
-			if (methods[i] == Socks5AuthentificationResponse
-					.getResponseByte(SOCKS5AUTHENTIFICATIONRESPONSE.SOCKS5_AUTH_NOAUTH)) {
-				out.write(0x05); // Version 1
-				out.write(Socks5AuthentificationResponse
-						.getResponseByte(SOCKS5AUTHENTIFICATIONRESPONSE.SOCKS5_AUTH_NOAUTH));
+			if (methods[i] == Socks5Metadata.SOCKS5_AUTH_NOAUTH) {
+				out.write(Socks5Metadata.SOCKS5_Version); // Version 1
+				out.write(Socks5Metadata.SOCKS5_AUTH_NOAUTH);
 				out.flush();
 				return true;
 			}
@@ -66,8 +69,8 @@ public class Socks5TCPConnection extends TCPConnection {
 		logger.error(String.format("Connection from %s:%d wants auth not supported.", socket.getLocalAddress(),
 				socket.getLocalPort()));
 
-		out.write(0x05); // Version 1
-		out.write(Socks5AuthentificationResponse.getResponseByte(SOCKS5AUTHENTIFICATIONRESPONSE.SOCKS5_AUTH_REJECT));
+		out.write(Socks5Metadata.SOCKS5_Version); // Version 1
+		out.write(Socks5Metadata.SOCKS5_AUTH_REJECT);
 		out.flush();
 		return false;
 	}
@@ -93,11 +96,11 @@ public class Socks5TCPConnection extends TCPConnection {
 		byte[] host = new byte[0];
 
 		// Ipv4 address
-		if (atype == 0x01) {
+		if (atype == Socks5Metadata.SOCKS5_HOSTNAMETYPE_IPV4) {
 			host = new byte[] { this.readByte(), this.readByte(), this.readByte(), this.readByte() };
 
-			hostName = getIpAddress(host, 4);
-		} else if (atype == 0x04) {
+			hostName = Socks5Metadata.convertIPAddress(host, 4);
+		} else if (atype == Socks5Metadata.SOCKS5_HOSTNAMETYPE_IPV6) {
 			host = new byte[] { this.readByte(), this.readByte(), this.readByte(), this.readByte(), this.readByte(),
 					this.readByte(), this.readByte(), this.readByte(), this.readByte(), this.readByte(),
 					this.readByte(), this.readByte(), this.readByte(), this.readByte(), this.readByte(),
@@ -106,7 +109,7 @@ public class Socks5TCPConnection extends TCPConnection {
 			hostName = "";
 		} else
 		// Address
-		if (atype == 0x03) {
+		if (atype == Socks5Metadata.SOCKS5_HOSTNAMETYPE_NAME) {
 			host = new byte[this.readByte()];
 
 			for (int i = 0; i < host.length; i++) {
@@ -117,51 +120,55 @@ public class Socks5TCPConnection extends TCPConnection {
 
 		byte[] portHex = new byte[] { this.readByte(), this.readByte() };
 
-		port = portHex[0] * 256 + portHex[1];
+		port = Socks5Metadata.convertTwoBytesToPort(portHex[0], portHex[1]);
 
-		out.write(0x05);
+		//
+		// Sends the answer
+		//
+
+		out.write(Socks5Metadata.SOCKS5_Version);
 
 		boolean success = false;
 
-		if (ver != 0x05) {
+		if (ver != Socks5Metadata.SOCKS5_Version) {
 			logger.error(String.format("Connection from %s:%d wants connection version not supported.",
 					socket.getLocalAddress(), socket.getLocalPort()));
 
-			out.write(Socks5Response.getResponseByte(SOCKS5RESPONSE.SOCKS5_REP_NALLOWED));
+			out.write(Socks5Metadata.SOCKS5_REP_NALLOWED);
 		} else if (cmd != 0x01) {
 			logger.error(String.format("Connection from %s:%d wants connection command not supported.",
 					socket.getLocalAddress(), socket.getLocalPort()));
 
-			out.write(Socks5Response.getResponseByte(SOCKS5RESPONSE.SOCKS5_REP_CNOTSUP));
+			out.write(Socks5Metadata.SOCKS5_REP_CNOTSUP);
 		}
 
-		else if (rsv != 0x00) {
+		else if (rsv != Socks5Metadata.SOCKS5_Reserved) {
 			logger.error(String.format("Connection from %s:%d wants connection reserverd not 0.",
 					socket.getLocalAddress(), socket.getLocalPort()));
 
-			out.write(Socks5Response.getResponseByte(SOCKS5RESPONSE.SOCKS5_REP_NALLOWED));
+			out.write(Socks5Metadata.SOCKS5_REP_NALLOWED);
 		}
 
-		else if (atype == 0x04) {
+		else if (atype == Socks5Metadata.SOCKS5_HOSTNAMETYPE_IPV6) {
 			logger.error(String.format("Connection from %s:%d wants connection to ipv6.", socket.getLocalAddress(),
 					socket.getLocalPort()));
 
-			out.write(Socks5Response.getResponseByte(SOCKS5RESPONSE.SOCKS5_REP_NALLOWED));
+			out.write(Socks5Metadata.SOCKS5_REP_NALLOWED);
 		} else {
 			// Todo: test connection
 
 			try {
 				if (startConnection(hostName, port)) {
-					out.write(Socks5Response.getResponseByte(SOCKS5RESPONSE.SOCKS5_REP_SUCCEEDED));
+					out.write(Socks5Metadata.SOCKS5_REP_SUCCEEDED);
 					success = true;
 				}
 			} catch (UnknownHostException e) {
-				out.write(Socks5Response.getResponseByte(SOCKS5RESPONSE.SOCKS5_REP_HUNREACH));
+				out.write(Socks5Metadata.SOCKS5_REP_HUNREACH);
 				logger.error(String.format("Connection from %s:%d unknown host.", socket.getLocalAddress(),
 						socket.getLocalPort()));
 
 			} catch (IOException e) {
-				out.write(Socks5Response.getResponseByte(SOCKS5RESPONSE.SOCKS5_REP_REFUSED));
+				out.write(Socks5Metadata.SOCKS5_REP_REFUSED);
 				logger.error(String.format("Connection from %s:%d connection refused.", socket.getLocalAddress(),
 						socket.getLocalPort()));
 			}
@@ -169,7 +176,7 @@ public class Socks5TCPConnection extends TCPConnection {
 		}
 
 		// Reserved
-		out.write(0x00);
+		out.write(Socks5Metadata.SOCKS5_Reserved);
 
 		// Send address type
 		out.write(atype);
@@ -194,7 +201,14 @@ public class Socks5TCPConnection extends TCPConnection {
 		logger.info(String.format("Connection from %s:%d: Starting connection to %s:%d.", socket.getLocalAddress(),
 				socket.getLocalPort(), host, port));
 
-		proxyConnection = new TestProxyConnection(new Socket(host, port), this);
+		proxyConnection = ProxyFactory.getProxyConnection(connectionProxyClass, host, port, this);
+		if (proxyConnection == null) {
+			logger.error(String.format("%s not in %s.", connectionProxyClass.getName(), ProxyFactory.class.getName()));
+
+			return false;
+		}
+
+		proxyConnection.startConnectionAndThread();
 
 		return true;
 	}
@@ -208,10 +222,12 @@ public class Socks5TCPConnection extends TCPConnection {
 	@Override
 	public void send(byte[] data) {
 
-		logger.info(String.format("Send to client connection: %s", new String(data)));
+		// logger.info(String.format("Send to client connection: %s", new
+		// String(data)));
 		super.send(data);
 	}
 
+	@Override
 	public void run() {
 
 		try {
@@ -236,9 +252,10 @@ public class Socks5TCPConnection extends TCPConnection {
 			byte[] data;
 
 			while (!this.isStopped() && !proxyConnection.isStopped() && (data = this.readData()) != null) {
-				logger.info(String.format("Got data from client: %s", new String(data)));
+				// logger.info(String.format("Got data from client: %s", new
+				// String(data)));
 
-				if (proxyConnection != null) proxyConnection.send(data);
+				if (proxyConnection != null) proxyConnection.sendToDestination(data);
 			}
 		} catch (IOException | SocksException e) {
 		}

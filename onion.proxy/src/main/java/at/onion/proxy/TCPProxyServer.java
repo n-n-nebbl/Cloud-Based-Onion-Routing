@@ -11,25 +11,30 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class TCPServer extends Thread {
-	private Logger							logger			= LoggerFactory.getLogger(getClass());
+import at.onion.proxy.proxyconnection.ProxyConnection;
 
-	private ServerSocket					serverSocket	= null;
+public class TCPProxyServer extends Thread {
+	private Logger								logger					= LoggerFactory.getLogger(getClass());
 
-	private AtomicBoolean					running			= new AtomicBoolean(false);
+	private ServerSocket						serverSocket			= null;
 
-	private static Thread					thread			= null;
+	private AtomicBoolean						running					= new AtomicBoolean(false);
 
-	private List<TCPConnection>				connections		= Collections
-																	.synchronizedList(new ArrayList<TCPConnection>());
+	private static Thread						thread					= null;
 
-	private Class<? extends TCPConnection>	connectionClass	= null;
+	private List<TCPConnection>					connections				= Collections
+																				.synchronizedList(new ArrayList<TCPConnection>());
 
-	public TCPServer(Class<? extends TCPConnection> connectionClass, int localPort) throws SocksException {
+	private Class<? extends TCPConnection>		connectionClass			= null;
+	private Class<? extends ProxyConnection>	connectionProxyClass	= null;
+
+	public TCPProxyServer(Class<? extends TCPConnection> connectionClass,
+			Class<? extends ProxyConnection> connectionProxyClass, int localPort) throws SocksException {
 		logger.info(String.format("Starting " + this.getClass().getName() + " server, TCP_PORT=%d ...", localPort));
 
 		try {
 			this.connectionClass = connectionClass;
+			this.connectionProxyClass = connectionProxyClass;
 			serverSocket = new ServerSocket(localPort);
 			serverSocket.setSoTimeout(5000);
 			this.running.set(true);
@@ -59,9 +64,12 @@ public class TCPServer extends Thread {
 
 			try {
 				try {
-					c = TCPConnectionFactory.getInstance(connectionClass, this.connections, serverSocket.accept());
+					c = ProxyFactory.getConnection(connectionClass, connectionProxyClass, this.connections,
+							serverSocket.accept());
 
-					if (c == null) logger.error(connectionClass.getName() + " not in TCPConnectionFactory.");
+					if (c == null)
+						logger.error(String.format("%s not in %s.", connectionClass.getName(),
+								ProxyFactory.class.getName()));
 
 				} catch (SocketTimeoutException ex) {
 					// System.out.println("STO" + ex);

@@ -1,8 +1,8 @@
 package at.onion.proxy;
 
-import java.io.BufferedOutputStream;
-import java.io.DataInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.Socket;
 import java.util.Arrays;
 import java.util.List;
@@ -11,25 +11,26 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public abstract class TCPConnection extends Thread {
+public class TCPConnection implements Runnable {
 
-	public static final String		lineDeterminiter	= "\r\n";
+	public static final String	lineDeterminiter	= "\r\n";
 
-	protected Logger				logger				= LoggerFactory.getLogger(getClass());
+	protected Logger			logger				= LoggerFactory.getLogger(getClass());
 
-	protected Socket				socket				= null;
+	protected Socket			socket				= null;
 
-	private AtomicBoolean			running				= new AtomicBoolean(false);
+	private AtomicBoolean		running				= new AtomicBoolean(false);
 
-	private DataInputStream			in					= null;
+	private InputStream			in					= null;
 
-	protected BufferedOutputStream	out					= null;
+	protected OutputStream		out					= null;
 
-	private Thread					thread				= null;
+	private Thread				thread				= null;
 
-	private List<TCPConnection>		connectionList		= null;
+	private List<TCPConnection>	connectionList		= null;
 
-	public TCPConnection(List<TCPConnection> connectionList, Socket socket, int socketTimeout) throws IOException {
+	public TCPConnection(List<TCPConnection> connectionList, Socket socket, int socketTimeout, boolean startThread)
+			throws IOException {
 		logger.info(String.format("Connection from %s:%d started.", socket.getLocalAddress(), socket.getLocalPort()));
 		this.socket = socket;
 
@@ -39,12 +40,14 @@ public abstract class TCPConnection extends Thread {
 		}
 
 		this.socket.setSoTimeout(socketTimeout);
-		in = new DataInputStream(socket.getInputStream());
-		out = new BufferedOutputStream(socket.getOutputStream());
+		in = socket.getInputStream();
+		out = socket.getOutputStream();
 		this.running.set(true);
 
-		thread = new Thread(this);
-		thread.start();
+		if (startThread) {
+			thread = new Thread(this);
+			thread.start();
+		}
 	}
 
 	public synchronized void setStopped() {
@@ -85,7 +88,7 @@ public abstract class TCPConnection extends Thread {
 	}
 
 	public byte[] readData() throws IOException {
-		byte[] buffer = new byte[5000];
+		byte[] buffer = new byte[this.socket.getReceiveBufferSize()];
 
 		if (this.isStopped()) return null;
 
@@ -109,7 +112,7 @@ public abstract class TCPConnection extends Thread {
 		return -1;
 	}
 
-	protected boolean isStopped() {
+	public boolean isStopped() {
 		return !this.running.get();
 	}
 
@@ -124,16 +127,8 @@ public abstract class TCPConnection extends Thread {
 		}
 	}
 
-	public static String getIpAddress(byte[] rawBytes, int nr) {
-		int i = nr;
-		String ipAddress = "";
-		for (byte raw : rawBytes) {
-			ipAddress += (raw & 0xFF);
-			if (--i > 0) {
-				ipAddress += ".";
-			}
-		}
+	@Override
+	public void run() {
 
-		return ipAddress;
 	}
 }

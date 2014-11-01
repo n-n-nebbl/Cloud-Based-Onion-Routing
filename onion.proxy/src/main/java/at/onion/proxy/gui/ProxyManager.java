@@ -21,7 +21,7 @@ public class ProxyManager {
 			Class<? extends ProxyConnection> connectionProxyClass) {
 
 		// Restart
-		if (server != null) {
+		if (server != null && !server.isStopped()) {
 			logger.info("Server running, stopping...");
 			server.setStopped();
 
@@ -42,6 +42,12 @@ public class ProxyManager {
 		}
 
 		return true;
+	}
+
+	public boolean isRunning() {
+		if (server == null) return false;
+
+		return !server.isStopped();
 	}
 
 	public void stopServer() {

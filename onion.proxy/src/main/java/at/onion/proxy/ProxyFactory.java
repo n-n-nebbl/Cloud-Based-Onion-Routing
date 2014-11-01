@@ -2,6 +2,7 @@ package at.onion.proxy;
 
 import java.io.IOException;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.List;
 
 import at.onion.proxy.proxyconnection.FilterTestProxyConnection;
@@ -11,6 +12,15 @@ import at.onion.proxy.socks4.Socks4TCPConnection;
 import at.onion.proxy.socks5.Socks5TCPConnection;
 
 public class ProxyFactory {
+
+	public static List<Class<? extends ProxyConnection>> getProxyTypes() {
+		List<Class<? extends ProxyConnection>> list = new ArrayList<Class<? extends ProxyConnection>>();
+
+		list.add(TestProxyConnection.class);
+		list.add(FilterTestProxyConnection.class);
+
+		return list;
+	}
 
 	public synchronized static TCPConnection getConnection(Class<? extends TCPConnection> objectClass,
 			Class<? extends ProxyConnection> proxyConnectionClass, List<TCPConnection> connectionList, Socket s)

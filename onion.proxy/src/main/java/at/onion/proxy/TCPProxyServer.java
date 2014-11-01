@@ -65,6 +65,10 @@ public class TCPProxyServer extends Thread {
 		this.serverSocket = null;
 	}
 
+	public synchronized boolean isStopped() {
+		return !this.running.get();
+	}
+
 	public void run() {
 		while (running.get()) {
 			TCPConnection c = null;

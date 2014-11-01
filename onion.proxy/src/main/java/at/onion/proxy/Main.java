@@ -8,13 +8,17 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import at.onion.proxy.proxyconnection.FilterTestProxyConnection;
+import at.onion.proxy.proxyconnection.TestProxyConnection;
+import at.onion.proxy.socks4.Socks4TCPConnection;
 import at.onion.proxy.socks5.Socks5TCPConnection;
 
 public class Main {
 	private static Logger	logger	= LoggerFactory.getLogger(Main.class);
 
 	public static void main(String[] args) throws IOException, SocksException {
-		TCPProxyServer server = new TCPProxyServer(Socks5TCPConnection.class, FilterTestProxyConnection.class, 9000);
+		Class[] allowed = new Class[] { Socks5TCPConnection.class, Socks4TCPConnection.class };
+		TCPProxyServer testServer = new TCPProxyServer(allowed, TestProxyConnection.class, 9000);
+		TCPProxyServer filterServer = new TCPProxyServer(allowed, FilterTestProxyConnection.class, 9001);
 
 		logger.info("Enter to exit.");
 		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
@@ -23,7 +27,8 @@ public class Main {
 
 		while ((line = in.readLine()) != null) {
 			logger.info("Exit server.");
-			server.setStopped();
+			testServer.setStopped();
+			filterServer.setStopped();
 			return;
 		}
 	}

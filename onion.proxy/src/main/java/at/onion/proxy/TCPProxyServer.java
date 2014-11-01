@@ -2,6 +2,7 @@ package at.onion.proxy;
 
 import java.io.IOException;
 import java.net.ServerSocket;
+import java.net.Socket;
 import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -12,28 +13,34 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import at.onion.proxy.proxyconnection.ProxyConnection;
+import at.onion.proxy.socks4.Socks4Metadata;
+import at.onion.proxy.socks4.Socks4TCPConnection;
+import at.onion.proxy.socks5.Socks5Metadata;
+import at.onion.proxy.socks5.Socks5TCPConnection;
 
 public class TCPProxyServer extends Thread {
-	private Logger								logger					= LoggerFactory.getLogger(getClass());
+	private Logger									logger					= LoggerFactory.getLogger(getClass());
 
-	private ServerSocket						serverSocket			= null;
+	private ServerSocket							serverSocket			= null;
 
-	private AtomicBoolean						running					= new AtomicBoolean(false);
+	private AtomicBoolean							running					= new AtomicBoolean(false);
 
-	private static Thread						thread					= null;
+	private static Thread							thread					= null;
 
-	private List<TCPConnection>					connections				= Collections
-																				.synchronizedList(new ArrayList<TCPConnection>());
+	private List<TCPConnection>						connections				= Collections
+																					.synchronizedList(new ArrayList<TCPConnection>());
 
-	private Class<? extends TCPConnection>		connectionClass			= null;
-	private Class<? extends ProxyConnection>	connectionProxyClass	= null;
+	private Class<? extends ProxyConnection>		connectionProxyClass	= null;
+	private List<Class<? extends ProxyConnection>>	allowedProxyConnections	= new ArrayList<Class<? extends ProxyConnection>>();
 
-	public TCPProxyServer(Class<? extends TCPConnection> connectionClass,
+	public TCPProxyServer(Class<? extends ProxyConnection>[] allowedProxyConnections,
 			Class<? extends ProxyConnection> connectionProxyClass, int localPort) throws SocksException {
 		logger.info(String.format("Starting " + this.getClass().getName() + " server, TCP_PORT=%d ...", localPort));
 
 		try {
-			this.connectionClass = connectionClass;
+			for (int i = 0; i < allowedProxyConnections.length; i++)
+				this.allowedProxyConnections.add(allowedProxyConnections[i]);
+
 			this.connectionProxyClass = connectionProxyClass;
 			serverSocket = new ServerSocket(localPort);
 			serverSocket.setSoTimeout(5000);
@@ -64,13 +71,34 @@ public class TCPProxyServer extends Thread {
 
 			try {
 				try {
-					c = ProxyFactory.getConnection(connectionClass, connectionProxyClass, this.connections,
-							serverSocket.accept());
+					Socket s = serverSocket.accept();
 
-					if (c == null)
-						logger.error(String.format("%s not in %s.", connectionClass.getName(),
-								ProxyFactory.class.getName()));
+					int version = s.getInputStream().read();
 
+					if (version == Socks5Metadata.SOCKS5_Version
+							&& this.allowedProxyConnections.contains(Socks5TCPConnection.class)) {
+
+						c = ProxyFactory.getConnection(Socks5TCPConnection.class, connectionProxyClass,
+								this.connections, s);
+
+						if (c == null)
+							logger.error(String.format("%s not in %s.", Socks5TCPConnection.class.getName(),
+									ProxyFactory.class.getName()));
+					} else if (version == Socks4Metadata.SOCKS4_Version
+							&& this.allowedProxyConnections.contains(Socks4TCPConnection.class)) {
+
+						c = ProxyFactory.getConnection(Socks4TCPConnection.class, connectionProxyClass,
+								this.connections, s);
+
+						if (c == null)
+							logger.error(String.format("%s not in %s.", Socks4TCPConnection.class.getName(),
+									ProxyFactory.class.getName()));
+					} else {
+						logger.error("Unknown version from %s.", s.getInetAddress());
+						s.getOutputStream().write("UNKNOWN_VERSION".getBytes());
+						s.getOutputStream().flush();
+						s.close();
+					}
 				} catch (SocketTimeoutException ex) {
 					// System.out.println("STO" + ex);
 				}

@@ -7,6 +7,7 @@ import java.util.List;
 import at.onion.proxy.proxyconnection.FilterTestProxyConnection;
 import at.onion.proxy.proxyconnection.ProxyConnection;
 import at.onion.proxy.proxyconnection.TestProxyConnection;
+import at.onion.proxy.socks4.Socks4TCPConnection;
 import at.onion.proxy.socks5.Socks5TCPConnection;
 
 public class ProxyFactory {
@@ -17,6 +18,9 @@ public class ProxyFactory {
 
 		if (objectClass.equals(Socks5TCPConnection.class)) {
 			return new Socks5TCPConnection(proxyConnectionClass, connectionList, s);
+		}
+		if (objectClass.equals(Socks4TCPConnection.class)) {
+			return new Socks4TCPConnection(proxyConnectionClass, connectionList, s);
 		}
 
 		return null;

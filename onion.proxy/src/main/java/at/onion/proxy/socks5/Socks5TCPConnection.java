@@ -42,13 +42,7 @@ public class Socks5TCPConnection extends TCPConnection {
 
 	// Todo: reply not right...
 	private boolean doInitAuthentification() throws IOException {
-		int ver = this.readByte();
-
-		if (ver != Socks5Metadata.SOCKS5_Version) {
-			logger.error(String.format("Connection from %s:%d wants version %d not supported.",
-					socket.getLocalAddress(), socket.getLocalPort(), ver));
-			return false;
-		}
+		// int ver = this.readByte(); <- already read
 
 		int nmethods = this.readByte();
 
@@ -155,8 +149,6 @@ public class Socks5TCPConnection extends TCPConnection {
 
 			out.write(Socks5Metadata.SOCKS5_REP_NALLOWED);
 		} else {
-			// Todo: test connection
-
 			try {
 				if (startConnection(hostName, port)) {
 					out.write(Socks5Metadata.SOCKS5_REP_SUCCEEDED);

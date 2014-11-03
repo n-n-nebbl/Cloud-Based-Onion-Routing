@@ -1,7 +1,6 @@
 package at.onion.testservice;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -23,13 +22,13 @@ public class QuoteController {
 	Logger	logger	= LoggerFactory.getLogger(getClass());
 
 	private String getQuote() {
-		File paperFile = new File("/tmp/fluxgate.txt");
 
 		StringBuilder fileContent = new StringBuilder();
 
 		FileInputStream fstream1 = null;
 		try {
-			BufferedReader br1 = new BufferedReader(new InputStreamReader(new FileInputStream(paperFile), "UTF-8"));
+			BufferedReader br1 = new BufferedReader(new InputStreamReader(
+					getClass().getResourceAsStream("luxgate.txt"), "UTF-8"));
 			String paperString = fileContent.toString().trim();
 			String forbiddenChars = "@:(){}<>[]";
 			List<String> quotes = new ArrayList<String>();
@@ -76,9 +75,7 @@ public class QuoteController {
 	@RequestMapping(value = "/", produces = "application/json")
 	@ResponseBody
 	public String quote() {
-		String quote = "TestQuote";
-		// TODO: get quote;
-		JSONObject result = new JSONObject().append("quote", quote);
+		JSONObject result = new JSONObject().append("quote", getQuote());
 
 		// logger.debug(result.toString());
 

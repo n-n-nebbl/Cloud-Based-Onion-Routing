@@ -12,6 +12,7 @@
 		<module>onion.commons</module>
 		<module>onion.chainnode</module>
 		<module>onion.directorynode</module>
+		<module>onion.directorynodeCore</module>
 		<module>onion.testservice</module>
 	</modules>
 

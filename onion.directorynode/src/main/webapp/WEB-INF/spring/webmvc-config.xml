@@ -17,5 +17,7 @@
 		up static resources -->
 	<mvc:resources location="/, classpath:/META-INF/web-resources/"
 		mapping="/resources/**" />
+		
+		
 
 </beans>

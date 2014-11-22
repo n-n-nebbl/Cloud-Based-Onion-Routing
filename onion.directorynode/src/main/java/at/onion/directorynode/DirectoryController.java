@@ -1,5 +1,7 @@
 package at.onion.directorynode;
 
+import java.io.IOException;
+import java.net.UnknownHostException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 
@@ -11,27 +13,20 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import at.onion.commons.CryptoUtils;
 import at.onion.commons.NodeChainInfo;
 import at.onion.commons.NodeInfo;
+import at.onion.directorynode.coreClient.CoreClient;
+import at.onion.directorynode.coreClient.InvalidResultException;
+import at.onion.directorynode.coreClient.SimpleCoreClient;
 
 @Controller
 public class DirectoryController {
 
-	@RequestMapping(produces="application/json")
+	@RequestMapping(value="/", produces="application/json")
 	@ResponseBody
-	public String provideNodeChainInformation() throws NoSuchAlgorithmException, NoSuchProviderException {
-		NodeChainInfo info = new NodeChainInfo();
-		
-		//TODO: generate real node-info
-
-		NodeInfo test1 = new NodeInfo("182.172.19.5", 4231, CryptoUtils.generateDefaultRSAKeyPair().getPublic());
-		NodeInfo test2 = new NodeInfo("bla.blubb.at", 1234, CryptoUtils.generateDefaultRSAKeyPair().getPublic());
-		NodeInfo test3 = new NodeInfo("182.172.19.10", 3512, CryptoUtils.generateDefaultRSAKeyPair().getPublic());
-		
-		NodeInfo[] testInfos = new NodeInfo[]{test1, test2, test3};
-		
-		info.setNodes(testInfos);
-		
+	public String provideNodeChainInformation() 
+			throws IOException, InvalidResultException {		
+		CoreClient coreClient = new SimpleCoreClient();
+		NodeChainInfo info = coreClient.getNodeChain();		
 		JSONObject result = new JSONObject().append("nodes", info.getNodes());
-
 		return result.toString();
 	}
 }

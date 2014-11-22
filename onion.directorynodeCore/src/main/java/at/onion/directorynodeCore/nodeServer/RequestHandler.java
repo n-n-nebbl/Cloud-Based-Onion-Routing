@@ -1,5 +1,8 @@
 package at.onion.directorynodeCore.nodeServer;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
@@ -20,9 +23,11 @@ import at.onion.commons.directoryNode.ResponseStatus;
 public class RequestHandler implements Runnable{
 	
 	private Socket socket;
+	private Logger logger;
 	
 	public RequestHandler(Socket socket){
 		this.socket = socket;
+		logger = LoggerFactory.getLogger(this.getClass());
 	}
 
 	@Override
@@ -34,21 +39,22 @@ public class RequestHandler implements Runnable{
 				response = executeRequestAndCreateResponse(request);
 			}catch(ClassNotFoundException ex){
 				response = getInvalidRequestResponse();
-				//TDODO: Log
+				logger.error("Cannot process request - ClassNotFound", ex);
+				logger.debug("Return error response");
 			}
 			sendResponse(response);
 			socket.close();
-		} catch (IOException e) {
-			//TODO: Log
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.debug("Response sent");
+		} catch (IOException ex) {
+			logger.error("Communication error", ex);
 		} 
 	}
 	
 	private Response executeRequestAndCreateResponse(Request request){
 		Response response;
+		logger.debug("Process response for requestType: " + request.getRequestType());
 		switch(request.getRequestType()){
-			case GET_NODECHAIN:
+			case GET_NODECHAIN:				
 				response = getNodeChainResponse();
 				break;
 			case ADD_NODE:
@@ -56,7 +62,6 @@ public class RequestHandler implements Runnable{
 				break;
 			default:
 				response = getInvalidRequestResponse();
-
 		}
 		return response;
 	}
@@ -110,6 +115,7 @@ public class RequestHandler implements Runnable{
     
     private void sendResponse(Response response) 
     		throws IOException{
+    	logger.debug("Send response");
 		OutputStream outputStream = socket.getOutputStream();
 		ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
 		objectOutputStream.writeObject(response);	    	

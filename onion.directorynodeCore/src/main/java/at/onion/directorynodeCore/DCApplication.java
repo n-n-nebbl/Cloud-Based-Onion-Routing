@@ -13,12 +13,23 @@ import at.onion.commons.NodeInfo;
 import at.onion.commons.directoryNode.Request;
 import at.onion.directorynodeCore.nodeServer.NodeServer;
 
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
 public class DCApplication{
 	
 	public static ExecutorService threadPool; 
 
-	public static void main(String [] args) throws IOException, NoSuchAlgorithmException, NoSuchProviderException, ClassNotFoundException{
+	public static void main(String [] args) 
+			throws IOException, NoSuchAlgorithmException, NoSuchProviderException, ClassNotFoundException{
 		System.out.println("Starting server");
+		
+		ApplicationContext context = 
+				new ClassPathXmlApplicationContext(new String[] {"SpringBeans.xml"});
+		
+		NodeServer nodeServer = (NodeServer) context.getBean("nodeServer");
+		new Thread(nodeServer).start();
+		/**		
 		final NodeServer nodeServer = new NodeServer();
 		new Thread(nodeServer).start();
 		
@@ -30,5 +41,6 @@ public class DCApplication{
 	    		}
 	    	}
 	    );
+	    */
 	}	
 }

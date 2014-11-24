@@ -1,0 +1,29 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:context="http://www.springframework.org/schema/context"
+        xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+        http://www.springframework.org/schema/context
+		http://www.springframework.org/schema/context/spring-context-2.5.xsd">
+ 
+ 	<context:annotation-config />
+ 	
+ 	<bean id="nodeListContainer" class="at.onion.directorynodeCore.NodeListContainer"/>
+ 	
+ 	 <bean id="chainGeneratorService" class="at.onion.directorynodeCore.chainGernatorService.SimpleChainGeneratorService">
+ 		<property name="nodeListContainer" ref="nodeListContainer"/>
+ 		<property name="nodeChainElementCount" value="3"/>
+ 	</bean>
+ 	
+ 	<bean id="nodeServer" class="at.onion.directorynodeCore.nodeServer.NodeServer">
+ 		<property name="chainGeneratorService" ref="chainGeneratorService"/>
+ 		<property name="threadPool" ref="nodeServerThreadPool"/>
+ 	</bean>
+ 	
+ 	<bean id="nodeServerThreadPool" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
+	    <property name="corePoolSize" value="5" />
+	    <property name="maxPoolSize" value="10" />
+	    <property name="queueCapacity" value="50" />
+	</bean>
+ 
+</beans>

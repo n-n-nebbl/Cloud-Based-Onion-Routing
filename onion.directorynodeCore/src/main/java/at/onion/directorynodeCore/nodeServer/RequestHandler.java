@@ -19,15 +19,24 @@ import at.onion.commons.directoryNode.Request;
 import at.onion.commons.directoryNode.RequestType;
 import at.onion.commons.directoryNode.Response;
 import at.onion.commons.directoryNode.ResponseStatus;
+import at.onion.directorynodeCore.chainGernatorService.ChainGenerationService;
+import at.onion.directorynodeCore.chainGernatorService.NotEnoughNodesException;
 
 public class RequestHandler implements Runnable{
 	
+	private ChainGenerationService chainGeneratorService;
+		
 	private Socket socket;
-	private Logger logger;
+	private Logger logger;		
 	
-	public RequestHandler(Socket socket){
+	public RequestHandler(Socket socket, ChainGenerationService chainGeneratorService){
+		this.chainGeneratorService = chainGeneratorService;
 		this.socket = socket;
 		logger = LoggerFactory.getLogger(this.getClass());
+	}
+	
+	public void setChainGeneratorService(ChainGenerationService chainGeneratorService) {
+		this.chainGeneratorService = chainGeneratorService;
 	}
 
 	@Override
@@ -67,26 +76,16 @@ public class RequestHandler implements Runnable{
 	}
     
     private Response getNodeChainResponse(){
-    	//TODO: Implement service access
+    	Response response = new Response();
     	
-    	NodeChainInfo info = new NodeChainInfo();
-    	try{			
-			NodeInfo test1 = new NodeInfo("182.172.19.5", 4231, CryptoUtils.generateDefaultRSAKeyPair().getPublic());
-			NodeInfo test2 = new NodeInfo("bla.blubb.at", 1234, CryptoUtils.generateDefaultRSAKeyPair().getPublic());
-			NodeInfo test3 = new NodeInfo("182.172.19.10", 3512, CryptoUtils.generateDefaultRSAKeyPair().getPublic());
-			NodeInfo[] testInfos = new NodeInfo[]{test1, test2, test3};
-			info.setNodes(testInfos);
-		}catch (NoSuchAlgorithmException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (NoSuchProviderException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		try {
+			NodeChainInfo nodeChain = chainGeneratorService.getNodeChain();
+			response.setNodeChain(nodeChain);
+			response.setResponseStatus(ResponseStatus.OK);
+		} catch (NotEnoughNodesException e) {
+			logger.warn("Not enough nodes for required chain lenght - send error resonse", e);
+			response.setResponseStatus(ResponseStatus.ERR_NOT_ENOUGH_NODES);
 		}
-		
-		Response response = new Response();
-		response.setNodeChain(info);
-		response.setResponseStatus(ResponseStatus.OK);
 		
 		return response;
     }

@@ -7,19 +7,31 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
+import org.springframework.core.task.TaskExecutor;
+
+import at.onion.directorynodeCore.chainGernatorService.ChainGenerationService;
+
 public class NodeServer implements Runnable{
 	
-	private ExecutorService threadPool;
+	private TaskExecutor threadPool;
 	private ServerSocket serverSocket;
+	private ChainGenerationService chainGeneratorService;
 	
 	public NodeServer() throws IOException{
 		int port = 8001;
 		serverSocket = new ServerSocket(port);
-		threadPool = Executors.newCachedThreadPool();
+	}
+	
+	public void setChainGeneratorService(ChainGenerationService chainGeneratorService) {
+		this.chainGeneratorService = chainGeneratorService;
+	}
+	
+	public void setThreadPool(TaskExecutor threadPool){
+		this.threadPool = threadPool;
 	}
 	
 	public void shutdown(){
-		cleanUpThreadPool();
+		cleanUp();
 	}
 
 	@Override
@@ -27,23 +39,15 @@ public class NodeServer implements Runnable{
 		try{
 			while(true){
 				Socket clientConnectionSocket = serverSocket.accept();
-				threadPool.execute(new RequestHandler(clientConnectionSocket));
+				threadPool.execute(new RequestHandler(clientConnectionSocket, chainGeneratorService));
 			}
 		}catch(IOException ex){
-			cleanUpThreadPool();
+			cleanUp();
 		}
 	}
 	
 	private void cleanUp(){
-		cleanUpThreadPool();
 		cleanUpServerSocket();
-	}
-	
-	private void cleanUpThreadPool(){
-		if(threadPool == null) return;				
-		try {
-			threadPool.awaitTermination(4L, TimeUnit.SECONDS);
-		} catch (InterruptedException e) {}		
 	}
 	
 	private void cleanUpServerSocket(){
@@ -53,5 +57,4 @@ public class NodeServer implements Runnable{
 			serverSocket.close();
 		} catch (IOException e) {}
 	}
-
 }

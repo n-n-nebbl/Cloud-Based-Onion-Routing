@@ -31,12 +31,13 @@ public class SimpleCoreClient implements CoreClient {
 	}
 
 	@Override
-	public void addNode(NodeInfo node) 
+	public String addNode(NodeInfo node) 
 			throws UnknownHostException, IOException, InvalidResultException {
 		Request request = new Request();
 		request.setRequestType(RequestType.ADD_NODE);
 		request.setNewNode(node);
-		Response reponse = sendRequestAndBlockTillResponse(request);
+		Response response = sendRequestAndBlockTillResponse(request);
+		return response.getId();
 	}
 	
 	

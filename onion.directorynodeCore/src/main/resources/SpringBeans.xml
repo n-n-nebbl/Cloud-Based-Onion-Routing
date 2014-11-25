@@ -15,8 +15,13 @@
  		<property name="nodeChainElementCount" value="3"/>
  	</bean>
  	
+ 	<bean id="nodeService" class="at.onion.directorynodeCore.nodeService.SimpleNodeService">
+ 		<property name="nodeListContainer" ref="nodeListContainer"/>
+ 	</bean>
+ 	
  	<bean id="nodeServer" class="at.onion.directorynodeCore.nodeServer.NodeServer">
  		<property name="chainGeneratorService" ref="chainGeneratorService"/>
+ 		<property name="nodeService" ref="nodeService"/>
  		<property name="threadPool" ref="nodeServerThreadPool"/>
  	</bean>
  	

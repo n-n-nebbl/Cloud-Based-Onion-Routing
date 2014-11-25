@@ -11,7 +11,7 @@ public interface CoreClient {
 	public NodeChainInfo getNodeChain()
 				throws UnknownHostException, IOException, InvalidResultException;
 	
-	public void addNode(NodeInfo node)
+	public String addNode(NodeInfo node)
 			throws UnknownHostException, IOException, InvalidResultException;
 	
 }

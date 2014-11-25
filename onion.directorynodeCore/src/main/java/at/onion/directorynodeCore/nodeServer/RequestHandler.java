@@ -21,16 +21,19 @@ import at.onion.commons.directoryNode.Response;
 import at.onion.commons.directoryNode.ResponseStatus;
 import at.onion.directorynodeCore.chainGernatorService.ChainGenerationService;
 import at.onion.directorynodeCore.chainGernatorService.NotEnoughNodesException;
+import at.onion.directorynodeCore.nodeService.NodeService;
 
 public class RequestHandler implements Runnable{
 	
 	private ChainGenerationService chainGeneratorService;
+	private NodeService nodeService;
 		
 	private Socket socket;
 	private Logger logger;		
 	
-	public RequestHandler(Socket socket, ChainGenerationService chainGeneratorService){
+	public RequestHandler(Socket socket, ChainGenerationService chainGeneratorService, NodeService nodeService){
 		this.chainGeneratorService = chainGeneratorService;
+		this.nodeService = nodeService;
 		this.socket = socket;
 		logger = LoggerFactory.getLogger(this.getClass());
 	}
@@ -91,10 +94,10 @@ public class RequestHandler implements Runnable{
     }
     
     private Response addNodeAndGetResponse(NodeInfo node){
-    	//TODO: Implement service access
+    	String id = nodeService.addNodeAndReturnId(node);
 		Response response = new Response();
 		response.setResponseStatus(ResponseStatus.OK);
-		
+		response.setId(id);		
 		return response;    	
     }
     

@@ -22,4 +22,6 @@ public interface NodeManagementService {
 	
 	public Node getNodeByUuid(UUID uuid);	
 	
+	public void updateNodeTimestampForUuid(UUID uuid);
+	
 }

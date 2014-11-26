@@ -11,6 +11,7 @@ import at.onion.commons.CryptoUtils;
 import at.onion.commons.NodeChainInfo;
 import at.onion.commons.NodeInfo;
 import at.onion.commons.directoryNode.Request;
+import at.onion.directorynodeCore.nodeAliveController.SimpleNodeAliveController;
 import at.onion.directorynodeCore.nodeServer.NodeServer;
 
 import org.springframework.context.ApplicationContext;
@@ -27,20 +28,20 @@ public class DCApplication{
 		ApplicationContext context = 
 				new ClassPathXmlApplicationContext(new String[] {"SpringBeans.xml"});
 		
-		NodeServer nodeServer = (NodeServer) context.getBean("nodeServer");
+		final NodeServer nodeServer = (NodeServer) context.getBean("nodeServer");
 		new Thread(nodeServer).start();
-		/**		
-		final NodeServer nodeServer = new NodeServer();
-		new Thread(nodeServer).start();
+		
+		final SimpleNodeAliveController nodeAliveController = (SimpleNodeAliveController) context.getBean("nodeAliveController");
+		nodeAliveController.startAlivePackageServer();
 		
 	    Runtime.getRuntime().addShutdownHook(
 	    	new Thread() {
 	    		public void run() {
 	    			System.out.println("Server shutdown");
 	    			nodeServer.shutdown();
+	    			nodeAliveController.stopAlivePackageServer();
 	    		}
 	    	}
 	    );
-	    */
 	}	
 }

@@ -1,10 +1,12 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xmlns:context="http://www.springframework.org/schema/context"
+        xmlns:task="http://www.springframework.org/schema/task"        
         xsi:schemaLocation="http://www.springframework.org/schema/beans
         http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
         http://www.springframework.org/schema/context
-		http://www.springframework.org/schema/context/spring-context-2.5.xsd">
+		http://www.springframework.org/schema/context/spring-context-2.5.xsd
+		http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-3.0.xsd">
  
  	<context:annotation-config />
  	
@@ -15,17 +17,23 @@
  		<property name="nodeChainElementCount" value="3"/>
  	</bean>
  	
+ 	 <bean id="nodeInstanceService" class="at.onion.directorynodeCore.nodeInstanceService.SimpleNodeInstanceService">
+ 	</bean>
+ 	
+ 	<!-- NodeAliveController and execution scheduler -->
  	<bean id="nodeAliveController" class="at.onion.directorynodeCore.nodeAliveController.SimpleNodeAliveController">
  		<property name="nodeManagementService" ref="nodeManagementService"/>
  		<property name="nodeInstanceService" ref="nodeInstanceService"/>
  		<property name="nodeOfflineThresholdInMS" value="100"/>
- 		<property name="nodeOfflineScanIntervallInMS" value="5"/>
  		<property name="alivePackagePort" value="8002"/>
+ 		<property name="minimumNodeInstances" value="3"/>
  	</bean>
  	
- 	<bean id="nodeInstanceService" class="at.onion.directorynodeCore.nodeInstanceService.SimpleNodeInstanceService">
- 	</bean>
+ 	<task:scheduled-tasks>
+ 		<task:scheduled ref="nodeAliveController" method="execute" fixed-rate="100"/>
+ 	</task:scheduled-tasks>
  	
+ 	<!-- TCP Server -->
  	<bean id="nodeServer" class="at.onion.directorynodeCore.nodeServer.NodeServer">
  		<property name="chainGeneratorService" ref="chainGeneratorService"/>
  		<property name="nodeManagementService" ref="nodeManagementService"/>

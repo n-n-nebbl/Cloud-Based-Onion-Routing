@@ -33,7 +33,7 @@ public class AliveMessage {
 			throw new IllegalArgumentException("No AliveMessage prefix found");
 		}
 		
-		String uuidSubstring = messageString.substring(prefixLength, messageString.length());
+		String uuidSubstring = messageString.substring(prefixLength, messageString.length()).trim();
 		UUID uuid = UUID.fromString(uuidSubstring);
 		return new AliveMessage(uuid);		
 	}

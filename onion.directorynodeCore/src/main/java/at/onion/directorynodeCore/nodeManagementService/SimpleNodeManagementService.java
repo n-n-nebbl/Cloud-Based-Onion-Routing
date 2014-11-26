@@ -3,6 +3,7 @@ package at.onion.directorynodeCore.nodeManagementService;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
@@ -33,6 +34,7 @@ public class SimpleNodeManagementService implements NodeManagementService {
 		node.setPort(nodeInfo.getPort());
 		node.setPublicKey(nodeInfo.getPublicKey());
 		node.setUuid(uuid);
+		node.setLastAliveTimestamp(new Date());
 		nodeMap.put(uuid.toString(), node);
 		return uuid;
 	}
@@ -52,5 +54,12 @@ public class SimpleNodeManagementService implements NodeManagementService {
 	public synchronized Node getNodeByUuid(UUID uuid) {
 		return nodeMap.get(uuid.toString());
 	}
+
+	@Override
+	public synchronized void updateNodeTimestampForUuid(UUID uuid) {
+		Node node = getNodeByUuid(uuid);		
+		if(node != null) node.setLastAliveTimestamp(new Date());
+	}
+	
 	
 }

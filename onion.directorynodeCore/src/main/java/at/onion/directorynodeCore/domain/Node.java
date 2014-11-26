@@ -2,6 +2,7 @@ package at.onion.directorynodeCore.domain;
 
 import java.net.InetAddress;
 import java.security.Key;
+import java.util.Date;
 import java.util.UUID;
 
 public class Node {
@@ -9,7 +10,7 @@ public class Node {
 	private InetAddress ipAddress;
 	private int port;
 	private Key publicKey;
-	private int lastAliveSignalInMS;	
+	private Date lastAliveTimestamp;	
 
 	public UUID getUuid() {
 		return uuid;
@@ -42,13 +43,13 @@ public class Node {
 	public void setPublicKey(Key publicKey) {
 		this.publicKey = publicKey;
 	}
-	
-	public int getLastAliveSignalInMS() {
-		return lastAliveSignalInMS;
+
+	public Date getLastAliveTimestamp() {
+		return lastAliveTimestamp;
 	}
 
-	public void setLastAliveSignalInMS(int lastAliveSignalInMS) {
-		this.lastAliveSignalInMS = lastAliveSignalInMS;
+	public void setLastAliveTimestamp(Date lastAliveTimestamp) {
+		this.lastAliveTimestamp = lastAliveTimestamp;
 	}
 	
 }

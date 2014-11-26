@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 import java.net.UnknownHostException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -55,6 +56,16 @@ public class NodeManagementServiceTest {
 	}
 	
 	@Test
+	public void addNodeAndGenerateUuid_shouldCreateIntialTimestamp() 
+			throws UnknownHostException{
+		nodeManagementService.addNodeAsNodeInfoAndGenerateUuid(nodeInfo1);
+		List<Node> nodeList = nodeManagementService.getNodeList();
+		Date nodeDate = nodeList.get(0).getLastAliveTimestamp();
+		Date nowDate = new Date();
+		assertTrue(nowDate.compareTo(nodeDate) >= 0);
+	}
+	
+	@Test
 	public void addNodesAndGetNodeList_shouldReturnAddedNodes() 
 			throws UnknownHostException{
 		nodeManagementService.addNodeAsNodeInfoAndGenerateUuid(nodeInfo1);
@@ -69,9 +80,7 @@ public class NodeManagementServiceTest {
 	public void removeNode_shouldRemoveNodeFromPool() 
 			throws UnknownHostException{
 		UUID id = nodeManagementService.addNodeAsNodeInfoAndGenerateUuid(nodeInfo1);
-		System.out.println(id.toString());
 		UUID id2 = nodeManagementService.addNodeAsNodeInfoAndGenerateUuid(nodeInfo2);
-		System.out.println(id2.toString());
 		List<Node> nodeList = nodeManagementService.getNodeList();
 		nodeManagementService.removeNode(nodeList.get(0));
 		nodeList = nodeManagementService.getNodeList();
@@ -89,6 +98,24 @@ public class NodeManagementServiceTest {
 		Node n = nodeManagementService.getNodeByUuid(id);
 		assertEquals(n.getUuid(), id);
 		assertEquals(n.getPort(), nodeInfo1.getPort());
+	}
+	
+	@Test
+	public void updateNodeTimestampForUuid() 
+			throws UnknownHostException{
+		UUID id = nodeManagementService.addNodeAsNodeInfoAndGenerateUuid(nodeInfo1);
+		Date ts1 = new Date();
+		try {
+			Thread.sleep(10);
+		} catch (InterruptedException e) {}
+		nodeManagementService.updateNodeTimestampForUuid(id);
+		try {
+			Thread.sleep(10);
+		} catch (InterruptedException e) {}
+		Date ts2 = new Date();
+		Date nodeDate = nodeManagementService.getNodeByUuid(id).getLastAliveTimestamp();
+		assertTrue(ts1.before(nodeDate));
+		assertTrue(ts2.after(nodeDate));
 	}
 	
 	public void setUpNodeInfos()

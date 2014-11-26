@@ -10,14 +10,14 @@ import java.util.concurrent.TimeUnit;
 import org.springframework.core.task.TaskExecutor;
 
 import at.onion.directorynodeCore.chainGernatorService.ChainGenerationService;
-import at.onion.directorynodeCore.nodeService.NodeService;
+import at.onion.directorynodeCore.nodeManagementService.NodeManagementService;
 
 public class NodeServer implements Runnable{
 	
 	private TaskExecutor threadPool;
 	private ServerSocket serverSocket;
 	private ChainGenerationService chainGeneratorService;
-	private NodeService nodeService;
+	private NodeManagementService nodeManagementService;
 	
 	public NodeServer() throws IOException{
 		int port = 8001;
@@ -28,8 +28,8 @@ public class NodeServer implements Runnable{
 		this.chainGeneratorService = chainGeneratorService;
 	}
 	
-	public void setNodeService(NodeService nodeService) {
-		this.nodeService = nodeService;
+	public void setNodeManagementService(NodeManagementService nodeService) {
+		this.nodeManagementService = nodeService;
 	}
 	
 	public void setThreadPool(TaskExecutor threadPool){
@@ -45,7 +45,7 @@ public class NodeServer implements Runnable{
 		try{
 			while(true){
 				Socket clientConnectionSocket = serverSocket.accept();
-				threadPool.execute(new RequestHandler(clientConnectionSocket, chainGeneratorService, nodeService));
+				threadPool.execute(new RequestHandler(clientConnectionSocket, chainGeneratorService, nodeManagementService));
 			}
 		}catch(IOException ex){
 			cleanUp();

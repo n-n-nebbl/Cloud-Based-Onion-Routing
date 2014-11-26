@@ -9,6 +9,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.net.Socket;
+import java.net.UnknownHostException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 
@@ -21,17 +22,17 @@ import at.onion.commons.directoryNode.Response;
 import at.onion.commons.directoryNode.ResponseStatus;
 import at.onion.directorynodeCore.chainGernatorService.ChainGenerationService;
 import at.onion.directorynodeCore.chainGernatorService.NotEnoughNodesException;
-import at.onion.directorynodeCore.nodeService.NodeService;
+import at.onion.directorynodeCore.nodeManagementService.NodeManagementService;
 
 public class RequestHandler implements Runnable{
 	
 	private ChainGenerationService chainGeneratorService;
-	private NodeService nodeService;
+	private NodeManagementService nodeService;
 		
 	private Socket socket;
 	private Logger logger;		
 	
-	public RequestHandler(Socket socket, ChainGenerationService chainGeneratorService, NodeService nodeService){
+	public RequestHandler(Socket socket, ChainGenerationService chainGeneratorService, NodeManagementService nodeService){
 		this.chainGeneratorService = chainGeneratorService;
 		this.nodeService = nodeService;
 		this.socket = socket;
@@ -94,10 +95,16 @@ public class RequestHandler implements Runnable{
     }
     
     private Response addNodeAndGetResponse(NodeInfo node){
-    	String id = nodeService.addNodeAndReturnId(node);
 		Response response = new Response();
-		response.setResponseStatus(ResponseStatus.OK);
-		response.setId(id);		
+		try {
+			String id = nodeService.addNodeAndReturnId(node);
+			response.setResponseStatus(ResponseStatus.OK);
+			response.setId(id);
+		} catch (UnknownHostException e) {
+			// TODO Auto-generated catch block
+			// TODO Error handling
+			e.printStackTrace();
+		}		
 		return response;    	
     }
     

@@ -9,16 +9,16 @@ import java.util.Random;
 import at.onion.commons.CryptoUtils;
 import at.onion.commons.NodeChainInfo;
 import at.onion.commons.NodeInfo;
-import at.onion.directorynodeCore.NodeListContainer;
+import at.onion.directorynodeCore.nodeManagementService.NodeManagementService;
 
 public class SimpleChainGeneratorService implements ChainGenerationService {
 	
-	private NodeListContainer nodeListContainer;
+	private NodeManagementService nodeManagementService;
 	private int nodeChainElementCount;
     private Random randomGenerator;
 	
-	public void setNodeListContainer(NodeListContainer nodeListContainer) {
-		this.nodeListContainer = nodeListContainer;
+	public void setNodeManagementService(NodeManagementService nodeManagementService) {
+		this.nodeManagementService = nodeManagementService;
 	}
 	
 	public void setNodeChainElementCount(int nodeChainElementCount){
@@ -41,7 +41,7 @@ public class SimpleChainGeneratorService implements ChainGenerationService {
 	
 	public List<NodeInfo> getCompleteNodeList() 
 			throws NotEnoughNodesException{
-		List<NodeInfo> comleteNodeList = nodeListContainer.getNodeList();
+		List<NodeInfo> comleteNodeList = nodeManagementService.getNodeList();
 		if(comleteNodeList.size() < nodeChainElementCount) throw new NotEnoughNodesException(); 
 		return comleteNodeList;
 	}

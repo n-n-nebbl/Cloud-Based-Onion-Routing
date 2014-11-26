@@ -8,20 +8,25 @@
  
  	<context:annotation-config />
  	
- 	<bean id="nodeListContainer" class="at.onion.directorynodeCore.NodeListContainer"/>
+ 	<bean id="nodeManagementService" class="at.onion.directorynodeCore.nodeManagementService.SimpleNodeManagementService"/>
  	
  	 <bean id="chainGeneratorService" class="at.onion.directorynodeCore.chainGernatorService.SimpleChainGeneratorService">
- 		<property name="nodeListContainer" ref="nodeListContainer"/>
+ 		<property name="nodeManagementService" ref="nodeManagementService"/>
  		<property name="nodeChainElementCount" value="3"/>
  	</bean>
  	
- 	<bean id="nodeService" class="at.onion.directorynodeCore.nodeService.SimpleNodeService">
- 		<property name="nodeListContainer" ref="nodeListContainer"/>
+ 	<bean id="nodeAliveService" class="at.onion.directorynodeCore.nodeAliveService.SimpleNodeAliveService">
+ 		<property name="nodeManagementService" ref="nodeManagementService"/>
+ 		<property name="nodeInstanceService" ref="nodeInstanceService"/>
+ 		<property name="nodeOfflineThresholdInMS" value="100"/>
+ 	</bean>
+ 	
+ 	<bean id="nodeInstanceService" class="at.onion.directorynodeCore.nodeInstanceService.SimpleNodeInstanceService">
  	</bean>
  	
  	<bean id="nodeServer" class="at.onion.directorynodeCore.nodeServer.NodeServer">
  		<property name="chainGeneratorService" ref="chainGeneratorService"/>
- 		<property name="nodeService" ref="nodeService"/>
+ 		<property name="nodeManagementService" ref="nodeManagementService"/>
  		<property name="threadPool" ref="nodeServerThreadPool"/>
  	</bean>
  	

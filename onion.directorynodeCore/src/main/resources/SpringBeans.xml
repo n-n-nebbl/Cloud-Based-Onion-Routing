@@ -15,10 +15,12 @@
  		<property name="nodeChainElementCount" value="3"/>
  	</bean>
  	
- 	<bean id="nodeAliveService" class="at.onion.directorynodeCore.nodeAliveService.SimpleNodeAliveService">
+ 	<bean id="nodeAliveController" class="at.onion.directorynodeCore.nodeAliveController.SimpleNodeAliveController">
  		<property name="nodeManagementService" ref="nodeManagementService"/>
  		<property name="nodeInstanceService" ref="nodeInstanceService"/>
  		<property name="nodeOfflineThresholdInMS" value="100"/>
+ 		<property name="nodeOfflineScanIntervallInMS" value="5"/>
+ 		<property name="alivePackagePort" value="8002"/>
  	</bean>
  	
  	<bean id="nodeInstanceService" class="at.onion.directorynodeCore.nodeInstanceService.SimpleNodeInstanceService">

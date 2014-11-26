@@ -2,6 +2,8 @@ package at.onion.directorynodeCore.nodeManagementService;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
@@ -14,13 +16,15 @@ import at.onion.directorynodeCore.domain.Node;
 public class SimpleNodeManagementService implements NodeManagementService {
 	
 	private Logger logger;
+	private HashMap<String, Node> nodeMap;
 	
 	public SimpleNodeManagementService(){
 		logger = LoggerFactory.getLogger(this.getClass());
+		nodeMap = new HashMap<String, Node>();
 	}
 	
 	@Override
-	public String addNodeAndReturnId(NodeInfo nodeInfo) 
+	public synchronized UUID addNodeAsNodeInfoAndGenerateUuid(NodeInfo nodeInfo) 
 			throws UnknownHostException {
 		Node node = new Node();
 		UUID uuid = UUID.randomUUID();
@@ -30,26 +34,25 @@ public class SimpleNodeManagementService implements NodeManagementService {
 		node.setPort(nodeInfo.getPort());
 		node.setPublicKey(nodeInfo.getPublicKey());
 		node.setUuid(uuid);
-		//TODO: Add node
-		return uuid.toString();
+		System.out.println("ADD:" + uuid.toString());
+		nodeMap.put(uuid.toString(), node);
+		return uuid;
 	}
 
 	@Override
-	public List<NodeInfo> getNodeList() {
-		// TODO Auto-generated method stub
-		return null;
+	public synchronized List<Node> getNodeList() {
+		return new ArrayList<Node>(nodeMap.values());
 	}
 
 	@Override
-	public void removeNode(Node node) {
-		// TODO Auto-generated method stub
-		
+	public synchronized void removeNode(Node node) {		
+		String key = node.getUuid().toString();
+		nodeMap.remove(key);
 	}
 
 	@Override
-	public Node getNodeByUuid(UUID uuid) {
-		// TODO Auto-generated method stub
-		return null;
+	public synchronized Node getNodeByUuid(UUID uuid) {
+		return nodeMap.get(uuid.toString());
 	}
 	
 }

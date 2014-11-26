@@ -13,10 +13,10 @@ import at.onion.directorynodeCore.domain.Node;
 
 public interface NodeManagementService {
 	
-	public String addNodeAndReturnId(NodeInfo node)
+	public UUID addNodeAsNodeInfoAndGenerateUuid(NodeInfo node)
 			throws UnknownHostException;
 	
-	public List<NodeInfo> getNodeList();
+	public List<Node> getNodeList();
 	
 	public void removeNode(Node node);
 	

@@ -12,6 +12,7 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
+import java.util.UUID;
 
 import at.onion.commons.CryptoUtils;
 import at.onion.commons.NodeChainInfo;
@@ -97,9 +98,9 @@ public class RequestHandler implements Runnable{
     private Response addNodeAndGetResponse(NodeInfo node){
 		Response response = new Response();
 		try {
-			String id = nodeService.addNodeAndReturnId(node);
+			UUID id = nodeService.addNodeAsNodeInfoAndGenerateUuid(node);
 			response.setResponseStatus(ResponseStatus.OK);
-			response.setId(id);
+			response.setId(id.toString());
 		} catch (UnknownHostException e) {
 			// TODO Auto-generated catch block
 			// TODO Error handling

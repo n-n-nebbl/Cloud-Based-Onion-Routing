@@ -34,7 +34,7 @@ public class SimpleChainGeneratorService implements ChainGenerationService {
 	public NodeChainInfo getNodeChain() 
 			throws NotEnoughNodesException{
 		NodeChainInfo nodeChain = new NodeChainInfo();
-		List<Node> nodeList = getRandomSubsetFromNodeList(getCompleteNodeList());	
+		List<Node> nodeList = getRandomSubsetFromNodeList(getCompleteNodeList());		
 		List<NodeInfo> nodeInfoList = getNodeInfoListForNodeList(nodeList);
 		NodeInfo[] nodeArray = getNodeArrayForList(nodeInfoList);
 		nodeChain.setNodes(nodeArray);
@@ -58,7 +58,7 @@ public class SimpleChainGeneratorService implements ChainGenerationService {
 	
 	public List<NodeInfo> getNodeInfoListForNodeList(List<Node> nodeList){
 		List<NodeInfo> nodeInfoList = new ArrayList<NodeInfo>();
-		for(int i = 0; i < nodeInfoList.size(); i++){
+		for(int i = 0; i < nodeList.size(); i++){
 			nodeInfoList.add(getNodeFromNodeInfo(nodeList.get(i)));
 		}
 		return nodeInfoList;

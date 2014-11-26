@@ -28,13 +28,11 @@ public class SimpleNodeManagementService implements NodeManagementService {
 			throws UnknownHostException {
 		Node node = new Node();
 		UUID uuid = UUID.randomUUID();
-		logger.error("Hallo" + nodeInfo.getHostname());
 		InetAddress inetAddress = InetAddress.getByName(nodeInfo.getHostname());
 		node.setIpAddress(inetAddress);
 		node.setPort(nodeInfo.getPort());
 		node.setPublicKey(nodeInfo.getPublicKey());
 		node.setUuid(uuid);
-		System.out.println("ADD:" + uuid.toString());
 		nodeMap.put(uuid.toString(), node);
 		return uuid;
 	}

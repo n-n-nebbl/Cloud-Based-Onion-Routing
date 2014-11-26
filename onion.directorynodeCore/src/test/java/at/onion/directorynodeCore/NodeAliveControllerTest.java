@@ -24,7 +24,7 @@ import at.onion.commons.AliveMessage;
 import at.onion.commons.CryptoUtils;
 import at.onion.commons.NodeInfo;
 import at.onion.directorynodeCore.domain.Node;
-import at.onion.directorynodeCore.nodeAliveController.NodeAliveService;
+import at.onion.directorynodeCore.nodeAliveController.NodeAliveController;
 import at.onion.directorynodeCore.nodeAliveController.SimpleNodeAliveController;
 import at.onion.directorynodeCore.nodeInstanceService.NodeInstanceService;
 import at.onion.directorynodeCore.nodeManagementService.NodeManagementService;

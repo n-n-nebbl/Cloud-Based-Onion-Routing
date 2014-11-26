@@ -10,11 +10,12 @@
  
  	<context:annotation-config />
  	
+ 	<context:property-placeholder location="application.properties"/>
+ 	
  	<bean id="nodeManagementService" class="at.onion.directorynodeCore.nodeManagementService.SimpleNodeManagementService"/>
  	
  	 <bean id="chainGeneratorService" class="at.onion.directorynodeCore.chainGernatorService.SimpleChainGeneratorService">
  		<property name="nodeManagementService" ref="nodeManagementService"/>
- 		<property name="nodeChainElementCount" value="3"/>
  	</bean>
  	
  	 <bean id="nodeInstanceService" class="at.onion.directorynodeCore.nodeInstanceService.SimpleNodeInstanceService">
@@ -24,13 +25,10 @@
  	<bean id="nodeAliveController" class="at.onion.directorynodeCore.nodeAliveController.SimpleNodeAliveController">
  		<property name="nodeManagementService" ref="nodeManagementService"/>
  		<property name="nodeInstanceService" ref="nodeInstanceService"/>
- 		<property name="nodeOfflineThresholdInMS" value="100"/>
- 		<property name="alivePackagePort" value="8002"/>
- 		<property name="minimumNodeInstances" value="3"/>
  	</bean>
  	
  	<task:scheduled-tasks>
- 		<task:scheduled ref="nodeAliveController" method="execute" fixed-rate="100"/>
+ 		<task:scheduled ref="nodeAliveController" method="execute" fixed-rate="${nodeAlive.executeOfflineNodeCheckIntervallInMS}"/> 		
  	</task:scheduled-tasks>
  	
  	<!-- TCP Server -->
@@ -41,9 +39,9 @@
  	</bean>
  	
  	<bean id="nodeServerThreadPool" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
-	    <property name="corePoolSize" value="5" />
-	    <property name="maxPoolSize" value="10" />
-	    <property name="queueCapacity" value="50" />
+	    <property name="corePoolSize" value="${requestServer.threadPool.corePoolSize}" />
+	    <property name="maxPoolSize" value="${requestServer.threadPool.maxPoolSize}" />
+	    <property name="queueCapacity" value="${requestServer.threadPool.queueCapacity}" />
 	</bean>
  
 </beans>

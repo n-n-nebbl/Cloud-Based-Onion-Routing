@@ -33,6 +33,7 @@ public class DCApplication{
 		
 		final SimpleNodeAliveController nodeAliveController = (SimpleNodeAliveController) context.getBean("nodeAliveController");
 		nodeAliveController.startAlivePackageServer();
+		nodeAliveController.executeAfterStartUp();
 		
 	    Runtime.getRuntime().addShutdownHook(
 	    	new Thread() {

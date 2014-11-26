@@ -27,14 +27,9 @@ public class SimpleNodeManagementService implements NodeManagementService {
 	@Override
 	public synchronized UUID addNodeAsNodeInfoAndGenerateUuid(NodeInfo nodeInfo) 
 			throws UnknownHostException {
-		Node node = new Node();
-		UUID uuid = UUID.randomUUID();
-		InetAddress inetAddress = InetAddress.getByName(nodeInfo.getHostname());
-		node.setIpAddress(inetAddress);
-		node.setPort(nodeInfo.getPort());
-		node.setPublicKey(nodeInfo.getPublicKey());
-		node.setUuid(uuid);
-		node.setLastAliveTimestamp(new Date());
+		Node node = getNodeForNodeInfo(nodeInfo);
+		UUID uuid = node.getUuid();
+		logNewNode(node);
 		nodeMap.put(uuid.toString(), node);
 		return uuid;
 	}
@@ -61,5 +56,20 @@ public class SimpleNodeManagementService implements NodeManagementService {
 		if(node != null) node.setLastAliveTimestamp(new Date());
 	}
 	
+	private void logNewNode(Node node){
+		logger.debug("New node added: [" + node.getIpAddress() + ":" + node.getPort() + "]");
+	}
+	
+	private Node getNodeForNodeInfo(NodeInfo nodeInfo) 
+			throws UnknownHostException{
+		Node node = new Node();
+		InetAddress inetAddress = InetAddress.getByName(nodeInfo.getHostname());
+		node.setIpAddress(inetAddress);
+		node.setPort(nodeInfo.getPort());
+		node.setPublicKey(nodeInfo.getPublicKey());
+		node.setUuid(UUID.randomUUID());
+		node.setLastAliveTimestamp(new Date());
+		return node;
+	}
 	
 }

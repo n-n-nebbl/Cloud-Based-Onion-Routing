@@ -7,6 +7,9 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.task.TaskExecutor;
 
 import at.onion.directorynodeCore.chainGernatorService.ChainGenerationService;
@@ -14,13 +17,17 @@ import at.onion.directorynodeCore.nodeManagementService.NodeManagementService;
 
 public class NodeServer implements Runnable{
 	
-	private TaskExecutor threadPool;
-	private ServerSocket serverSocket;
+	private TaskExecutor threadPool;	
 	private ChainGenerationService chainGeneratorService;
-	private NodeManagementService nodeManagementService;
+	private NodeManagementService nodeManagementService;	
+	private Logger logger;
+	private ServerSocket serverSocket;
+	
+    @Value("${requestServer.port}") 
+	private int port;
 	
 	public NodeServer() throws IOException{
-		int port = 8001;
+		logger = LoggerFactory.getLogger(this.getClass());
 		serverSocket = new ServerSocket(port);
 	}
 	
@@ -36,12 +43,17 @@ public class NodeServer implements Runnable{
 		this.threadPool = threadPool;
 	}
 	
+	public void setPort(int port){
+		this.port = port;
+	}
+	
 	public void shutdown(){
 		cleanUp();
 	}
 
 	@Override
 	public void run() {
+		logger.debug("Start request server on port:" + port);
 		try{
 			while(true){
 				Socket clientConnectionSocket = serverSocket.accept();

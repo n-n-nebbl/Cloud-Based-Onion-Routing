@@ -5,23 +5,36 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 
 import at.onion.directorynodeCore.domain.Node;
 import at.onion.directorynodeCore.nodeInstanceService.NodeInstanceService;
 import at.onion.directorynodeCore.nodeManagementService.NodeManagementService;
 
-public class SimpleNodeAliveController{
+public class SimpleNodeAliveController implements NodeAliveController{
 	
 	private NodeManagementService nodeManagementService;
 	private NodeInstanceService nodeInstanceService;
+	
+	@Value("${nodeAlive.offlineThresholdInMS}")
 	private int nodeOfflineThresholdInMS;
+	
+	@Value("${nodeAlive.port}")
 	private int alivePackagePort;
+	
+	@Value("${nodeAlive.minimumInstances}")
 	private int minimumNodeInstances;
 	
-	private long nowTime;
-	
+	private long nowTime;	
 	private AlivePackageListener alivePackageListener;
+	private Logger logger;
+	
+	public SimpleNodeAliveController(){
+		logger = LoggerFactory.getLogger(this.getClass());
+	}
 	
 	public void setNodeManagementService(NodeManagementService nodeManagementService) {
 		this.nodeManagementService = nodeManagementService;
@@ -55,9 +68,13 @@ public class SimpleNodeAliveController{
 		alivePackageListener = null;
 	}
 	
+	public void executeAfterStartUp(){
+		checkForMinimumNodeInstances();
+	}
+	
+	@Override
 	public void execute(){
 		checkNodesForTimeout();
-		checkForMinimumNodeInstances();
 	}
 	
 	private void checkNodesForTimeout(){
@@ -73,6 +90,8 @@ public class SimpleNodeAliveController{
 		if(nodeIsOverOfflineThreshold(node)){
 			nodeManagementService.removeNode(node);
 			nodeInstanceService.shutdownNodeInstaceOwnerForNode(node);
+			logger.debug("Node timed out: [" + node.getIpAddress().toString() + ":" + node.getPort() + "]");
+			checkForMinimumNodeInstances();
 		}			
 	}
 	
@@ -88,11 +107,22 @@ public class SimpleNodeAliveController{
 	}
 	
 	private void checkForMinimumNodeInstances(){
-		List<Node> nodeList = nodeManagementService.getNodeList();
-		int missingInstanceCount = minimumNodeInstances - nodeList.size();
+		int missingInstanceCount = getMissingNodeCount();
 		while(missingInstanceCount > 0){
 			nodeInstanceService.startNewNodeInstance();
 			missingInstanceCount--;
+		}
+	}
+	
+	private int getMissingNodeCount(){
+		List<Node> nodeList = nodeManagementService.getNodeList();
+		int missingInstanceCount = minimumNodeInstances - nodeList.size();	
+		
+		if(missingInstanceCount > 0){
+			logger.debug("Node count is " + missingInstanceCount + " node(s) under limit.");
+			return missingInstanceCount;
+		}else{
+			return 0;
 		}
 	}
 }

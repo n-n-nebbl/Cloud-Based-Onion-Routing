@@ -6,6 +6,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+
 import at.onion.commons.CryptoUtils;
 import at.onion.commons.NodeChainInfo;
 import at.onion.commons.NodeInfo;
@@ -15,8 +19,12 @@ import at.onion.directorynodeCore.nodeManagementService.NodeManagementService;
 public class SimpleChainGeneratorService implements ChainGenerationService {
 	
 	private NodeManagementService nodeManagementService;
+	
+	@Value("${nodeChain.elementCount}")
 	private int nodeChainElementCount;
+	
     private Random randomGenerator;
+    private Logger logger;
 	
 	public void setNodeManagementService(NodeManagementService nodeManagementService) {
 		this.nodeManagementService = nodeManagementService;
@@ -28,6 +36,7 @@ public class SimpleChainGeneratorService implements ChainGenerationService {
 	
 	public SimpleChainGeneratorService(){
 		randomGenerator = new Random();
+		logger = LoggerFactory.getLogger(this.getClass());
 	}
 
 	@Override
@@ -36,6 +45,7 @@ public class SimpleChainGeneratorService implements ChainGenerationService {
 		NodeChainInfo nodeChain = new NodeChainInfo();
 		List<Node> nodeList = getRandomSubsetFromNodeList(getCompleteNodeList());		
 		List<NodeInfo> nodeInfoList = getNodeInfoListForNodeList(nodeList);
+		logNodeChain(nodeInfoList);
 		NodeInfo[] nodeArray = getNodeArrayForList(nodeInfoList);
 		nodeChain.setNodes(nodeArray);
 		return nodeChain;
@@ -80,6 +90,16 @@ public class SimpleChainGeneratorService implements ChainGenerationService {
 			retList.add(element);
 		}
 		return retList;		
+	}
+	
+	private void logNodeChain(List<NodeInfo> nodeInfoList){
+		if(!logger.isDebugEnabled())return;
+		String logString = "Create NodeChain with nodes: ";
+		for(int i = 0; i < nodeInfoList.size(); i++){
+			NodeInfo nodeInfo = nodeInfoList.get(i);
+			logString += "[" + nodeInfo.getHostname() + ":" + nodeInfo.getPort() + "]";
+		}
+		logger.debug(logString);
 	}
 
 }

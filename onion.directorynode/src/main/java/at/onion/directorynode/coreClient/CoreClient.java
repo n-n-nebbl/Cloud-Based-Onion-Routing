@@ -9,9 +9,11 @@ import at.onion.commons.NodeInfo;
 public interface CoreClient {
 	
 	public NodeChainInfo getNodeChain()
-				throws UnknownHostException, IOException, InvalidResultException;
+				throws IOException, InvalidResultException, InternalServerErrorException, NotEnoughNodesException;
 	
 	public String addNode(NodeInfo node)
-			throws UnknownHostException, IOException, InvalidResultException;
+			throws IOException, InvalidResultException, InternalServerErrorException;
+	
+	public void closeConnection();
 	
 }

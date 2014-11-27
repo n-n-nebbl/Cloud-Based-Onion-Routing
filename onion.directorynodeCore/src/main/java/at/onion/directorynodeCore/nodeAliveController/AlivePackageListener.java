@@ -45,6 +45,7 @@ public class AlivePackageListener implements Runnable{
 	}
 	
 	public void shutdown(){
+		logger.debug("Stop listening for alive messages");
 		if(serverSocket == null)return;
 		if(!serverSocket.isClosed()){
 			serverSocket.close();

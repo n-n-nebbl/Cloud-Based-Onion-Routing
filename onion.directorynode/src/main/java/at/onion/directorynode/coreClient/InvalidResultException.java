@@ -1,6 +1,6 @@
 package at.onion.directorynode.coreClient;
 
-public class InvalidResultException extends Exception {
+public class InvalidResultException extends DirectoryNodeClientException {
 	
 	public InvalidResultException(){
 		super();

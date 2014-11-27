@@ -27,8 +27,7 @@ public class NodeServer implements Runnable{
 	private int port;
 	
 	public NodeServer() throws IOException{
-		logger = LoggerFactory.getLogger(this.getClass());
-		serverSocket = new ServerSocket(port);
+		logger = LoggerFactory.getLogger(this.getClass());		
 	}
 	
 	public void setChainGeneratorService(ChainGenerationService chainGeneratorService) {
@@ -53,8 +52,9 @@ public class NodeServer implements Runnable{
 
 	@Override
 	public void run() {
-		logger.debug("Start request server on port:" + port);
+		logger.debug("Start request server on port: " + port);
 		try{
+			serverSocket = new ServerSocket(port);
 			while(true){
 				Socket clientConnectionSocket = serverSocket.accept();
 				threadPool.execute(new RequestHandler(clientConnectionSocket, chainGeneratorService, nodeManagementService));
@@ -65,6 +65,7 @@ public class NodeServer implements Runnable{
 	}
 	
 	private void cleanUp(){
+		logger.debug("Stop request server");
 		cleanUpServerSocket();
 	}
 	

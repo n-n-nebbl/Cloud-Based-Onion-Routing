@@ -1,5 +1,6 @@
 package at.onion.directorynode.coreClient;
 
+import java.net.InetAddress;
 import java.net.Socket;
 import java.io.IOException;
 import java.io.InputStream;
@@ -13,40 +14,81 @@ import at.onion.commons.NodeInfo;
 import at.onion.commons.directoryNode.Request;
 import at.onion.commons.directoryNode.RequestType;
 import at.onion.commons.directoryNode.Response;
+import at.onion.commons.directoryNode.ResponseStatus;
 
 public class SimpleCoreClient implements CoreClient {
 	
- 	private String ip = "127.0.0.1";
- 	private int port = 8001;
+ 	private int port;
+ 	private InetAddress inetAddress;
 	private Socket socket;
+	
+	public static SimpleCoreClient getInstanceForInetAddressAndPort(InetAddress inetAddres, int port){
+		return new SimpleCoreClient(inetAddres, port);
+	}
+	
+	public SimpleCoreClient(InetAddress inetAddress, int port){
+		this.inetAddress = inetAddress;
+		this.port = port;
+	}
 
 	@Override
 	public NodeChainInfo getNodeChain() 
-			throws UnknownHostException, IOException, InvalidResultException {
+			throws IOException, InvalidResultException, InternalServerErrorException, NotEnoughNodesException {
 		Request request = new Request();
 		request.setRequestType(RequestType.GET_NODECHAIN);
-	 	Response reponse = sendRequestAndBlockTillResponse(request);	
-	 	//TODO: Error handling for status !ok
-		return reponse.getNodeChain();
+	 	Response response = sendRequestAndBlockTillResponse(request);	
+	 	return extractNodeChainFromResponseAndHandleErrors(response);
 	}
 
 	@Override
 	public String addNode(NodeInfo node) 
-			throws UnknownHostException, IOException, InvalidResultException {
+			throws IOException, InvalidResultException, InternalServerErrorException {
 		Request request = new Request();
-		request.setRequestType(RequestType.ADD_NODE);
+		request.setRequestType(RequestType.ADD_NODE);		
 		request.setNewNode(node);
 		Response response = sendRequestAndBlockTillResponse(request);
-		return response.getId();
+		return getIdFromAddNodeResponseAndHandleErrors(response);
 	}
 	
+	@Override
+	public void closeConnection(){
+		shutdownSocket();
+	}
+	
+	private NodeChainInfo extractNodeChainFromResponseAndHandleErrors(Response response) 
+			throws NotEnoughNodesException, InternalServerErrorException{
+		ResponseStatus status = response.getResponseStatus();
+	 	if(status != ResponseStatus.OK){
+	 		handleNodeChainResponseErrorStatus(status);
+	 	}
+	 	if(response.getNodeChain() == null){
+	 		throw new InternalServerErrorException("Server returned empty node chain");
+	 	}
+	 	return response.getNodeChain();
+	}
+	
+	private void handleNodeChainResponseErrorStatus(ResponseStatus status) 
+			throws NotEnoughNodesException, InternalServerErrorException{
+	 	if(status == ResponseStatus.ERR_NOT_ENOUGH_NODES){
+	 		throw new NotEnoughNodesException();
+	 	}else{
+	 		throw new InternalServerErrorException();
+	 	}		
+	}
+	
+	private String getIdFromAddNodeResponseAndHandleErrors(Response response) 
+			throws InternalServerErrorException{
+		if(response.getResponseStatus() != ResponseStatus.OK){
+			throw new InternalServerErrorException();
+		}
+		return response.getId();
+	}
 	
 	private Response sendRequestAndBlockTillResponse(Request request) 
 			throws UnknownHostException, IOException, InvalidResultException{
 		setUpSocket();
 	 	sendRequest(request);
 	 	Response response = blockingReadResponse();
-	 	shutdownSocket();
 	 	return response;
 	}
 	
@@ -73,8 +115,8 @@ public class SimpleCoreClient implements CoreClient {
 	}
 
 	private void setUpSocket() 
-			throws UnknownHostException, IOException{
-	 	socket = new Socket(ip,port);
+			throws IOException{
+	 	socket = new Socket(inetAddress,port);
 	}
 	
 	private void shutdownSocket(){

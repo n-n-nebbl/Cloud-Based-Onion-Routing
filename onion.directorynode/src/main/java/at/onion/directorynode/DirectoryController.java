@@ -27,12 +27,14 @@ import at.onion.directorynode.coreClient.SimpleCoreClient;
 
 @Controller
 public class DirectoryController {
-	
+
+	/*
 	@Autowired
 	private CoreClient coreClient;
 	
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
 	
+
 	@RequestMapping(value="/", produces="application/json")
 	@ResponseBody
 	public String provideNodeChainInformation() 
@@ -59,4 +61,5 @@ public class DirectoryController {
 		JSONObject result = new JSONObject().put("id", id);
 		return result.toString();
 	}
+	*/
 }

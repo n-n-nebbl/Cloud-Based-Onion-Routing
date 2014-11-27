@@ -37,6 +37,13 @@
 			<version>1.9.5</version>
 			<scope>test</scope>
 		</dependency>		
+		<dependency>
+			<groupId>at.ac.tuwien.aic.group3</groupId>
+			<artifactId>onion.directorynode</artifactId>
+			<version>${project.version}</version>
+			<scope>test</scope>
+		</dependency>
+
 		
 		<dependency>
 			<groupId>org.springframework</groupId>

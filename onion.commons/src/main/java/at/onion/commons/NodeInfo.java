@@ -15,6 +15,9 @@ public class NodeInfo implements Serializable {
 		this.port = port;
 		this.publicKey = publicKey;
 	}
+	
+	public NodeInfo(){		
+	}
 
 	public String getHostname() {
 		return hostname;

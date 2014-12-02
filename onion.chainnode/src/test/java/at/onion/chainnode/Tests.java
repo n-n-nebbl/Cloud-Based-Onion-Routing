@@ -20,6 +20,8 @@ import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import static at.onion.commons.CryptoUtils.*;
 import static org.junit.Assert.assertEquals;
@@ -28,6 +30,8 @@ import at.onion.commons.NodeChainMessage;
 import at.onion.commons.NodeInfo;
 
 public class Tests {
+
+	private Logger	logger	= LoggerFactory.getLogger(getClass());
 
 	@Test
 	public void testBlockEncryption() throws IOException, InvalidKeyException, NoSuchAlgorithmException,
@@ -45,18 +49,19 @@ public class Tests {
 		NodeChainMessage msg2 = decryptMessage(encrypt(pair.getPublic(), msg));
 
 		String end = (String) deserialize(msg2.getPayload());
-		
-		System.out.println("Original Message: " + start);
-		System.out.println("After encryption/decryption: " + end);
-		
+
+		logger.info("Original Message: " + start);
+		logger.info("After encryption/decryption: " + end);
+
 		assertEquals(start, end);
 	}
 
 	private void print(byte[] b) {
+		StringBuffer temp = new StringBuffer("");
 		for (int i = 0; i < b.length; i++) {
-			System.out.print(b[i] + " ");
+			temp.append(b[i] + " ");
 		}
-		System.out.println();
+		logger.info(temp.toString());
 	}
 
 	@Test
@@ -75,7 +80,8 @@ public class Tests {
 
 		byte[] encrypted = encrypt(publicKey, msg);
 
-		//simple target server that checks if sent message is arriving and readable
+		// simple target server that checks if sent message is arriving and
+		// readable
 		new Thread() {
 			public void run() {
 				try {
@@ -84,14 +90,14 @@ public class Tests {
 					byte[] buffer = new byte[100];
 					int read;
 					String line = "";
-					while((read = s.getInputStream().read(buffer)) != -1) {
+					while ((read = s.getInputStream().read(buffer)) != -1) {
 						line = new String(buffer, 0, read);
-						System.out.println("server: " + line);
+						logger.info("server: " + line);
 					}
-					
+
 					s.close();
 					ss.close();
-					
+
 					assertEquals(sampleCall, line);
 				} catch (IOException e) {
 					e.printStackTrace();
@@ -148,8 +154,8 @@ public class Tests {
 				try {
 					ServerSocket ss = createEncryptedServerSocket(9998);
 					Socket s = ss.accept();
-					System.out.println("try to get message");
-					System.out.println(deserialize((byte[]) new ObjectInputStream(s.getInputStream()).readObject())
+					logger.info("try to get message");
+					logger.info(deserialize((byte[]) new ObjectInputStream(s.getInputStream()).readObject())
 							.toString());
 					s.close();
 					ss.close();
@@ -169,16 +175,16 @@ public class Tests {
 		try {
 			s = createEncryptedSocket("localhost", 9002);
 			ObjectOutputStream oos = new ObjectOutputStream(s.getOutputStream());
-			System.out.println("sending");
+			logger.info("sending");
 			oos.writeObject(encrypted);
-			System.out.println("message sent");
+			logger.info("message sent");
 			ObjectInputStream oin = new ObjectInputStream(s.getInputStream());
 
-			while(true) {
+			while (true) {
 				byte[] result = (byte[]) oin.readObject();
 				byte[] temp = decrypt(result);
 				temp = decrypt(temp);
-				System.out.println("client: " + new String(temp));
+				logger.info("client: " + new String(temp));
 			}
 		} catch (EOFException e) {
 		} catch (Exception e) {

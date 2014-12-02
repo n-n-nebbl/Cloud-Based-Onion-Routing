@@ -6,14 +6,17 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
- * Waits for new connections and starts a ConnectionThread for each
- * connection
+ * Waits for new connections and starts a ConnectionThread for each connection
  * 
  * @author NEBEL
  */
 public class ListeningThread implements Runnable {
 
+	private Logger			logger	= LoggerFactory.getLogger(getClass());
 	private ServerSocket	ss;
 	private List<Socket>	sockets;
 

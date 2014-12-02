@@ -4,8 +4,12 @@ import java.io.EOFException;
 import java.net.Socket;
 import java.net.SocketException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class ForwardingThread implements Runnable {
 
+	private Logger			logger	= LoggerFactory.getLogger(getClass());
 	private NetworkService	networkService;
 	private Socket			in;
 	private Socket			out;
@@ -28,7 +32,7 @@ public class ForwardingThread implements Runnable {
 				e.printStackTrace();
 			}
 		} catch (Exception e) {
-			System.out.println(mode.getForwardingMode() + " " + mode.getRouteMode());
+			logger.debug(mode.getForwardingMode() + " " + mode.getRouteMode());
 			e.printStackTrace();
 		} finally {
 			try {

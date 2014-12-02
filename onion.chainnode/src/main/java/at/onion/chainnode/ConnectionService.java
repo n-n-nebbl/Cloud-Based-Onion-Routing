@@ -10,10 +10,14 @@ import java.security.UnrecoverableKeyException;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import at.onion.commons.CryptoUtils;
 
 public class ConnectionService {
 
+	private Logger							logger	= LoggerFactory.getLogger(getClass());
 	private Map<Integer, ListeningThread>	listener;
 
 	public ConnectionService() {
@@ -22,13 +26,13 @@ public class ConnectionService {
 
 	public void startListening(int port) throws UnrecoverableKeyException, KeyManagementException, KeyStoreException,
 			NoSuchAlgorithmException, NoSuchProviderException, IOException {
-		//get new encrypted serversocket
+		// get new encrypted serversocket
 		ServerSocket ss = CryptoUtils.createEncryptedServerSocket(port);
-		//prepare and start listening thread
+		// prepare and start listening thread
 		ListeningThread listeningThread = new ListeningThread(ss);
 		listener.put(port, listeningThread);
 		new Thread(listeningThread).start();
-		System.out.println("node starting listening on port " + port);
+		logger.debug("node starting listening on port " + port);
 	}
 
 	public void stopListening(int port) {
@@ -36,7 +40,7 @@ public class ConnectionService {
 		if (listeningThread != null) {
 			listeningThread.stopListening();
 		}
-		System.out.println("node stop listening on port " + port);
+		logger.debug("node stop listening on port " + port);
 	}
 
 }

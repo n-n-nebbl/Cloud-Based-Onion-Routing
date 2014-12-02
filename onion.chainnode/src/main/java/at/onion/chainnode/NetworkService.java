@@ -15,11 +15,16 @@ import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import at.onion.commons.CryptoUtils;
 import at.onion.commons.NodeChainMessage;
 import static at.onion.chainnode.ForwardingMode.*;
 
 public class NetworkService {
+
+	private Logger	logger	= LoggerFactory.getLogger(getClass());
 
 	/**
 	 * forward any message that comes through inputstream to outputstream read
@@ -65,15 +70,15 @@ public class NetworkService {
 			// TODO: timeout?
 			oos = new ObjectOutputStream(out);
 			String line;
-			System.out.println("read from target");
+			logger.debug("read from target");
 			BufferedReader br = new BufferedReader(new InputStreamReader(in));
 			while ((line = br.readLine()) != null) {
 				payload = CryptoUtils.encrypt(mode.getClientPublicKey(), line.getBytes());
-				System.out.println("server reply: " + line);
+				logger.debug("server reply: " + line);
 				oos.writeObject(payload);
 			}
 
-			System.out.println("finished reading from target");
+			logger.debug("finished reading from target");
 			break;
 		}
 	}
@@ -104,7 +109,7 @@ public class NetworkService {
 	 */
 	public void sendMessage(OutputStream out, NodeChainMessage msg) throws IOException, ClassNotFoundException {
 		try {
-			System.out.println("send message: " + new String(msg.getPayload()));
+			logger.debug("send message: " + new String(msg.getPayload()));
 		} catch (Exception e) {
 		}
 		if (!msg.getHeader().isTarget()) {

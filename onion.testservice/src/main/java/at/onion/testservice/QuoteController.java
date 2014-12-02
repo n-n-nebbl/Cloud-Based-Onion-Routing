@@ -28,7 +28,7 @@ public class QuoteController {
 		FileInputStream fstream1 = null;
 		try {
 			BufferedReader br1 = new BufferedReader(new InputStreamReader(
-					getClass().getResourceAsStream("luxgate.txt"), "UTF-8"));
+					getClass().getResourceAsStream("bofh-excuses.txt"), "UTF-8"));
 			String paperString = fileContent.toString().trim();
 			String forbiddenChars = "@:(){}<>[]";
 			List<String> quotes = new ArrayList<String>();

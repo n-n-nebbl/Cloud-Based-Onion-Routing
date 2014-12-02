@@ -16,14 +16,16 @@ import org.junit.Test;
 import at.onion.commons.CryptoUtils;
 import at.onion.commons.NodeChainInfo;
 import at.onion.commons.NodeInfo;
-import at.onion.directorynode.coreClient.CoreClient;
-import at.onion.directorynode.coreClient.InternalServerErrorException;
-import at.onion.directorynode.coreClient.InvalidResultException;
-import at.onion.directorynode.coreClient.NotEnoughNodesException;
-import at.onion.directorynode.coreClient.SimpleCoreClient;
+import at.onion.directorynodeClient.CoreClient;
+import at.onion.directorynodeClient.InternalServerErrorException;
+import at.onion.directorynodeClient.InvalidResultException;
+import at.onion.directorynodeClient.NotEnoughNodesException;
+import at.onion.directorynodeClient.SimpleCoreClient;
 import at.onion.directorynodeCore.util.FakeClientAliveThread;
 
+
 public class ClientBasedIntegrationTest {
+	/*
 	
 	private NodeInfo nodeInfo1;
 	private NodeInfo nodeInfo2;
@@ -88,4 +90,5 @@ public class ClientBasedIntegrationTest {
 		nodeInfo4 = new NodeInfo("182.172.19.4", 4231, CryptoUtils.generateDefaultRSAKeyPair().getPublic());
 		nodeInfo5 = new NodeInfo("182.172.19.5", 4231, CryptoUtils.generateDefaultRSAKeyPair().getPublic());
 	}
+	*/
 }

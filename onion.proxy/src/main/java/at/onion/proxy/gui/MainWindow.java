@@ -27,6 +27,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import at.onion.proxy.ProxyFactory;
+import at.onion.proxy.TCPConnection;
 import at.onion.proxy.proxyconnection.ProxyConnection;
 import at.onion.proxy.socks4.Socks4TCPConnection;
 import at.onion.proxy.socks5.Socks5TCPConnection;
@@ -141,14 +142,14 @@ public class MainWindow extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 
 				if (!manager.isRunning()) {
-					List<Class<? extends ProxyConnection>> allowedProxyConnections = new ArrayList<Class<? extends ProxyConnection>>();
+					List<Class<? extends TCPConnection>> allowedProxyConnections = new ArrayList<Class<? extends TCPConnection>>();
 
 					if (chckbxSocks4.isSelected())
-						allowedProxyConnections.add((Class<? extends ProxyConnection>) Socks5TCPConnection.class);
+						allowedProxyConnections.add((Class<? extends TCPConnection>) Socks5TCPConnection.class);
 					if (chckbxSocks5.isSelected())
-						allowedProxyConnections.add((Class<? extends ProxyConnection>) Socks4TCPConnection.class);
+						allowedProxyConnections.add((Class<? extends TCPConnection>) Socks4TCPConnection.class);
 
-					Class<? extends ProxyConnection>[] allowed = new Class[allowedProxyConnections.size()];
+					Class<? extends TCPConnection>[] allowed = new Class[allowedProxyConnections.size()];
 
 					for (int i = 0; i < allowedProxyConnections.size(); i++) {
 						allowed[i] = allowedProxyConnections.get(i);

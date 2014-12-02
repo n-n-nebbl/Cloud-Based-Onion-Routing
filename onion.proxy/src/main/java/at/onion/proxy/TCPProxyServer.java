@@ -31,9 +31,9 @@ public class TCPProxyServer extends Thread {
 																					.synchronizedList(new ArrayList<TCPConnection>());
 
 	private Class<? extends ProxyConnection>		connectionProxyClass	= null;
-	private List<Class<? extends ProxyConnection>>	allowedProxyConnections	= new ArrayList<Class<? extends ProxyConnection>>();
+	private List<Class<? extends TCPConnection>>	allowedProxyConnections	= new ArrayList<Class<? extends TCPConnection>>();
 
-	public TCPProxyServer(Class<? extends ProxyConnection>[] allowedProxyConnections,
+	public TCPProxyServer(Class<? extends TCPConnection>[] allowedProxyConnections,
 			Class<? extends ProxyConnection> connectionProxyClass, int localPort) throws SocksException {
 		logger.info(String.format("Starting " + this.getClass().getName() + " server, TCP_PORT=%d ...", localPort));
 

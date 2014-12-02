@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import at.onion.proxy.SocksException;
+import at.onion.proxy.TCPConnection;
 import at.onion.proxy.TCPProxyServer;
 import at.onion.proxy.proxyconnection.ProxyConnection;
 
@@ -17,7 +18,7 @@ public class ProxyManager {
 		this.window = window;
 	}
 
-	public boolean startServer(Class<? extends ProxyConnection>[] allowedProxyConnections,
+	public boolean startServer(Class<? extends TCPConnection>[] allowedProxyConnections,
 			Class<? extends ProxyConnection> connectionProxyClass) {
 
 		// Restart

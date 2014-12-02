@@ -23,7 +23,6 @@ public class ChainNode {
 			connServ.startListening(port);
 		} catch (Exception e) {
 			logger.error("Error occured in ChainNode", e);
-		} finally {
 			connServ.stopListening(port);
 		}
 	}

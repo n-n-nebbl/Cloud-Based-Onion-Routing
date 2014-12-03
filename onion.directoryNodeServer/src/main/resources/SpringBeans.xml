@@ -27,9 +27,12 @@
  		<property name="nodeInstanceService" ref="nodeInstanceService"/>
  	</bean>
  	
+ 	<!-- 
  	<task:scheduled-tasks>
- 		<task:scheduled ref="nodeAliveController" method="execute" fixed-rate="${nodeAlive.executeOfflineNodeCheckIntervallInMS}"/> 		
+ 		
+ 			<task:scheduled ref="nodeAliveController" method="execute" fixed-rate="${nodeAlive.executeOfflineNodeCheckIntervallInMS}"/> 		
  	</task:scheduled-tasks>
+ 	-->
  	
  	<!-- TCP Server -->
  	<bean id="nodeServer" class="at.onion.directorynodeCore.nodeServer.NodeServer">

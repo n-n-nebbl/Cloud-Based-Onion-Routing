@@ -19,6 +19,7 @@ import at.onion.directorynodeCore.nodeManagementService.NodeManagementService;
 import at.onion.directorynodeCore.nodeManagementService.SimpleNodeManagementService;
 
 public class NodeManagementServiceTest {
+	/**
 	
 	private NodeManagementService nodeManagementService;
 	private NodeInfo nodeInfo1;
@@ -126,4 +127,5 @@ public class NodeManagementServiceTest {
 		nodeInfo4 = new NodeInfo("182.172.19.4", 4231, CryptoUtils.generateDefaultRSAKeyPair().getPublic());
 		nodeInfo5 = new NodeInfo("182.172.19.5", 4231, CryptoUtils.generateDefaultRSAKeyPair().getPublic());
 	}
+	*/
 }

@@ -23,6 +23,7 @@ import at.onion.directorynodeCore.nodeManagementService.SimpleNodeManagementServ
 
 public class ChainGeneratorServiceTest {
 	
+	/*
 	private NodeManagementService nodeManagementService;
 	private ChainGenerationService chainGenerationService1;
 	private ChainGenerationService chainGenerationService2;
@@ -87,5 +88,6 @@ public class ChainGeneratorServiceTest {
 		nodeInfo4 = new NodeInfo("182.172.19.4", 4231, CryptoUtils.generateDefaultRSAKeyPair().getPublic());
 		nodeInfo5 = new NodeInfo("182.172.19.5", 4231, CryptoUtils.generateDefaultRSAKeyPair().getPublic());
 	}
+	*/
 
 }

@@ -31,6 +31,7 @@ public class ChainNode {
 		}
 
 		String dirNodeHostname = System.getProperty("dirNode.hostname");
+		logger.debug("===============>" + dirNodeHostname);
 
 		if (dirNodeHostname == null) {
 			logger.warn("No directoryNode Hostname found --> no connection to dirNode possible");

@@ -32,6 +32,7 @@ import at.onion.directorynodeCore.nodeManagementService.SimpleNodeManagementServ
 import at.onion.directorynodeCore.util.FakeClientAliveThread;
 
 public class NodeAliveControllerTest {
+	/**
 	
 	private NodeInstanceService mockedNodeInstanceService;
 	private NodeManagementService nodeManagementService;
@@ -158,4 +159,5 @@ public class NodeAliveControllerTest {
 		nodeInfo1 = new NodeInfo("127.0.0.1", 4231, CryptoUtils.generateDefaultRSAKeyPair().getPublic());		
 		nodeInfo2 = new NodeInfo("182.172.19.2", 4231, CryptoUtils.generateDefaultRSAKeyPair().getPublic());
 	}
+	*/
 }

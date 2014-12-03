@@ -1,5 +1,10 @@
 package at.onion.chainnode;
 
+import static at.onion.chainnode.ForwardingMode.FORWARDING_NODE_TO_NODE;
+import static at.onion.chainnode.ForwardingMode.FORWARDING_NODE_TO_TARGET;
+import static at.onion.chainnode.ForwardingMode.FORWARDING_TARGET_TO_NODE;
+import static at.onion.chainnode.ForwardingMode.ROUTE_TO_SERVER;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -20,7 +25,6 @@ import org.slf4j.LoggerFactory;
 
 import at.onion.commons.CryptoUtils;
 import at.onion.commons.NodeChainMessage;
-import static at.onion.chainnode.ForwardingMode.*;
 
 public class NetworkService {
 
@@ -73,6 +77,7 @@ public class NetworkService {
 			logger.debug("read from target");
 			BufferedReader br = new BufferedReader(new InputStreamReader(in));
 			while ((line = br.readLine()) != null) {
+				line += "\r\n"; // Todo: kills readline \r\n or \n?
 				payload = CryptoUtils.encrypt(mode.getClientPublicKey(), line.getBytes());
 				logger.debug("server reply: " + line);
 				oos.writeObject(payload);

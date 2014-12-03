@@ -1,1 +1,24 @@
 
+17:59:03.137 [main] DEBUG at.onion.chainnode.ChainNode - ===============>localhost
+17:59:03.141 [main] DEBUG at.onion.chainnode.ChainNode - ip found fe80:0:0:0:e2b9:a5ff:fed1:76ae%2
+17:59:03.142 [main] DEBUG at.onion.chainnode.ChainNode - ip found 128.131.213.10
+17:59:03.749 [main] ERROR at.onion.chainnode.ChainNode - Error adding Node to directory Server
+java.net.ConnectException: Connection refused
+	at java.net.PlainSocketImpl.socketConnect(Native Method) ~[na:1.7.0_65]
+	at java.net.AbstractPlainSocketImpl.doConnect(AbstractPlainSocketImpl.java:339) ~[na:1.7.0_65]
+	at java.net.AbstractPlainSocketImpl.connectToAddress(AbstractPlainSocketImpl.java:200) ~[na:1.7.0_65]
+	at java.net.AbstractPlainSocketImpl.connect(AbstractPlainSocketImpl.java:182) ~[na:1.7.0_65]
+	at java.net.SocksSocketImpl.connect(SocksSocketImpl.java:392) ~[na:1.7.0_65]
+	at java.net.Socket.connect(Socket.java:579) ~[na:1.7.0_65]
+	at java.net.Socket.connect(Socket.java:528) ~[na:1.7.0_65]
+	at java.net.Socket.<init>(Socket.java:425) ~[na:1.7.0_65]
+	at java.net.Socket.<init>(Socket.java:241) ~[na:1.7.0_65]
+	at at.onion.directoryNodeClient.SimpleCoreClient.setUpSocket(SimpleCoreClient.java:119) ~[classes/:na]
+	at at.onion.directoryNodeClient.SimpleCoreClient.sendRequestAndBlockTillResponse(SimpleCoreClient.java:89) ~[classes/:na]
+	at at.onion.directoryNodeClient.SimpleCoreClient.addNode(SimpleCoreClient.java:49) ~[classes/:na]
+	at at.onion.chainnode.ChainNode.main(ChainNode.java:42) ~[classes/:na]
+17:59:04.053 [main] DEBUG at.onion.chainnode.ConnectionService - node starting listening on port 9003
+19:21:57.601 [main] DEBUG at.onion.chainnode.ConnectionService - node starting listening on port 9000
+19:21:58.780 [Thread-2] DEBUG at.onion.chainnode.ConnectionThread - connect to localhost:9999
+19:21:58.782 [Thread-2] DEBUG at.onion.chainnode.ConnectionThread - 9999: to_client_thread
+19:21:58.783 [Thread-2] DEBUG at.onion.chainnode.NetworkService - send message: GET /sampleCall.asx HTTP/1.1

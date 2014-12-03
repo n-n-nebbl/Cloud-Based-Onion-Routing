@@ -1,5 +1,7 @@
 package at.onion.directorynodeCore.chainGernatorService;
 
+import java.net.Inet4Address;
+import java.net.UnknownHostException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.util.ArrayList;
@@ -76,7 +78,7 @@ public class SimpleChainGeneratorService implements ChainGenerationService {
 	
 	public NodeInfo getNodeFromNodeInfo(Node node){
 		NodeInfo nodeInfo = new NodeInfo();
-		nodeInfo.setHostname(node.getIpAddress().toString());
+		nodeInfo.setHostname(node.getIpAddress().getHostAddress());
 		nodeInfo.setPort(node.getPort());
 		nodeInfo.setPublicKey(node.getPublicKey());
 		return nodeInfo;

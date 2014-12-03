@@ -28,7 +28,7 @@
 		</dependency>
 		<dependency>
 			<groupId>at.ac.tuwien.aic.group3</groupId>
-			<artifactId>onion.directorynodeClient</artifactId>
+			<artifactId>onion.directoryNodeClient</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>

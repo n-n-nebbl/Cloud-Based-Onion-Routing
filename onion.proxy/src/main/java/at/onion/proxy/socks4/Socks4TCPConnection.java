@@ -8,6 +8,7 @@ import java.util.List;
 import at.onion.proxy.ProxyFactory;
 import at.onion.proxy.SocksException;
 import at.onion.proxy.TCPConnection;
+import at.onion.proxy.TCPConnectionProxyProperty;
 import at.onion.proxy.proxyconnection.ProxyConnection;
 import at.onion.proxy.socks5.Socks5Metadata;
 
@@ -36,8 +37,9 @@ public class Socks4TCPConnection extends TCPConnection {
 	}
 
 	public Socks4TCPConnection(Class<? extends ProxyConnection> connectionProxyClass,
-			List<TCPConnection> connectionList, Socket s) throws IOException {
-		super(connectionList, s, Socks5Metadata.proxySocketTimeout, true);
+			List<TCPConnection> connectionList, Socket s, TCPConnectionProxyProperty proxyConnectionProperty)
+			throws IOException {
+		super(connectionList, s, Socks5Metadata.proxySocketTimeout, true, proxyConnectionProperty);
 		this.connectionProxyClass = connectionProxyClass;
 	}
 
@@ -96,13 +98,13 @@ public class Socks4TCPConnection extends TCPConnection {
 			}
 		} catch (UnknownHostException e) {
 			out.write(Socks4Metadata.SOCKS4_REP_REJECTED);
-			logger.error(String.format("Connection from %s:%d unknown host.", socket.getLocalAddress(),
-					socket.getLocalPort()));
+			logger.error(String.format("Connection from %s:%d unknown host: %s.", socket.getLocalAddress(),
+					socket.getLocalPort(), e));
 
 		} catch (IOException e) {
 			out.write(Socks4Metadata.SOCKS4_REP_REJECTED);
-			logger.error(String.format("Connection from %s:%d connection refused.", socket.getLocalAddress(),
-					socket.getLocalPort()));
+			logger.error(String.format("Connection from %s:%d connection refused: %s.", socket.getLocalAddress(),
+					socket.getLocalPort(), e));
 		}
 
 		// field 3: 2 arbitrary bytes, that should be ignored

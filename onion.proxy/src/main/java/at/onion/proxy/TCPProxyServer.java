@@ -33,9 +33,18 @@ public class TCPProxyServer extends Thread {
 	private Class<? extends ProxyConnection>		connectionProxyClass	= null;
 	private List<Class<? extends TCPConnection>>	allowedProxyConnections	= new ArrayList<Class<? extends TCPConnection>>();
 
+	private String									directoryNodeHost		= "";
+	private int										directoryNodePort		= -1;
+
 	public TCPProxyServer(Class<? extends TCPConnection>[] allowedProxyConnections,
-			Class<? extends ProxyConnection> connectionProxyClass, int localPort) throws SocksException {
-		logger.info(String.format("Starting " + this.getClass().getName() + " server, TCP_PORT=%d ...", localPort));
+			Class<? extends ProxyConnection> connectionProxyClass, int localPort, String directoryNodeHost,
+			int directoryNodePort) throws SocksException {
+		logger.info(String.format(
+				"Starting %s server, TCP_PORT=%d, directoryNodeHostName=%s, directoryNodePort=%d ...", this.getClass()
+						.getName(), localPort, directoryNodeHost, directoryNodePort));
+
+		this.directoryNodeHost = directoryNodeHost;
+		this.directoryNodePort = directoryNodePort;
 
 		try {
 			for (int i = 0; i < allowedProxyConnections.length; i++)
@@ -83,7 +92,8 @@ public class TCPProxyServer extends Thread {
 							&& this.allowedProxyConnections.contains(Socks5TCPConnection.class)) {
 
 						c = ProxyFactory.getConnection(Socks5TCPConnection.class, connectionProxyClass,
-								this.connections, s);
+								this.connections, s, new TCPConnectionProxyProperty(directoryNodeHost,
+										directoryNodePort));
 
 						if (c == null)
 							logger.error(String.format("%s not in %s.", Socks5TCPConnection.class.getName(),
@@ -92,7 +102,8 @@ public class TCPProxyServer extends Thread {
 							&& this.allowedProxyConnections.contains(Socks4TCPConnection.class)) {
 
 						c = ProxyFactory.getConnection(Socks4TCPConnection.class, connectionProxyClass,
-								this.connections, s);
+								this.connections, s, new TCPConnectionProxyProperty(directoryNodeHost,
+										directoryNodePort));
 
 						if (c == null)
 							logger.error(String.format("%s not in %s.", Socks4TCPConnection.class.getName(),

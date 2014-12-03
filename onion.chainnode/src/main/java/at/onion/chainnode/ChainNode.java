@@ -17,7 +17,7 @@ import at.onion.directoryNodeClient.SimpleCoreClient;
 
 public class ChainNode {
 
-	private static final int	DEFAULT_PORT	= 9000;
+	private static final int	DEFAULT_PORT	= 9001;
 
 	private static Logger		logger			= LoggerFactory.getLogger(ChainNode.class);
 

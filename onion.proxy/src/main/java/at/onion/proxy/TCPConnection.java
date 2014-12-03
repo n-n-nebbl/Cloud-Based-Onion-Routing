@@ -13,26 +13,31 @@ import org.slf4j.LoggerFactory;
 
 public class TCPConnection implements Runnable {
 
-	public static final String	lineDeterminiter	= "\r\n";
+	public static final String			lineDeterminiter	= "\r\n";
 
-	protected Logger			logger				= LoggerFactory.getLogger(getClass());
+	protected Logger					logger				= LoggerFactory.getLogger(getClass());
 
-	protected Socket			socket				= null;
+	protected Socket					socket				= null;
 
-	private AtomicBoolean		running				= new AtomicBoolean(false);
+	private AtomicBoolean				running				= new AtomicBoolean(false);
 
-	private InputStream			in					= null;
+	private InputStream					in					= null;
 
-	protected OutputStream		out					= null;
+	protected OutputStream				out					= null;
 
-	private Thread				thread				= null;
+	private Thread						thread				= null;
 
-	private List<TCPConnection>	connectionList		= null;
+	private List<TCPConnection>			connectionList		= null;
 
-	public TCPConnection(List<TCPConnection> connectionList, Socket socket, int socketTimeout, boolean startThread)
-			throws IOException {
-		logger.info(String.format("Connection from %s:%d started.", socket.getLocalAddress(), socket.getLocalPort()));
+	private TCPConnectionProxyProperty	connectionProperty	= null;
+
+	public TCPConnection(List<TCPConnection> connectionList, Socket socket, int socketTimeout, boolean startThread,
+			TCPConnectionProxyProperty connectionProperty) throws IOException {
+		logger.info(String.format("Connection from %s:%d (ProxyProperty, directory: %s:%d) started.",
+				socket.getLocalAddress(), socket.getLocalPort(), connectionProperty.getDirectoryNodeHostName(),
+				connectionProperty.getDirectoryNodePort()));
 		this.socket = socket;
+		this.connectionProperty = connectionProperty;
 
 		if (connectionList != null) {
 			this.connectionList = connectionList;
@@ -85,6 +90,10 @@ public class TCPConnection implements Runnable {
 
 		if (connectionList != null) connectionList.remove(this);
 
+	}
+
+	public TCPConnectionProxyProperty getTCPConnectionProxyProperty() {
+		return connectionProperty;
 	}
 
 	public byte[] readData() throws IOException {

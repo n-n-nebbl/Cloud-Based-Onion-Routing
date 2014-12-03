@@ -19,6 +19,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
+import javax.swing.JTextField;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.SwingConstants;
 import javax.swing.Timer;
@@ -39,6 +40,8 @@ public class MainWindow extends JFrame {
 	private Logger				logger				= LoggerFactory.getLogger(this.getClass());
 
 	private ProxyManager		manager				= new ProxyManager(this);
+	private JTextField			txtHost;
+	private JTextField			txtPort;
 
 	public MainWindow() {
 		createGUI();
@@ -63,8 +66,8 @@ public class MainWindow extends JFrame {
 
 	public void createGUI() {
 		setTitle("Proxy Server");
-		setSize(500, 300);
-		setLayout(new BorderLayout());
+		setSize(514, 298);
+		getContentPane().setLayout(new BorderLayout());
 
 		JSeparator separator = new JSeparator();
 
@@ -135,6 +138,17 @@ public class MainWindow extends JFrame {
 			}
 		});
 		timer.start();
+		JLabel lblIp = new JLabel("Host:");
+
+		txtHost = new JTextField();
+		txtHost.setColumns(10);
+		txtHost.setText("localhost");
+
+		txtPort = new JTextField();
+		txtPort.setColumns(10);
+		txtPort.setText("8001");
+
+		JLabel lblPort = new JLabel("Port:");
 
 		// On exit click.
 		btnStart.addActionListener(new ActionListener() {
@@ -158,7 +172,9 @@ public class MainWindow extends JFrame {
 					if (allowedProxyConnections.size() > 0) {
 						for (Class<? extends ProxyConnection> connectionProxyClass : ProxyFactory.getProxyTypes()) {
 							if (connectionProxyClass.getSimpleName().equals(comboBox.getSelectedItem())) {
-								manager.startServer(allowed, connectionProxyClass);
+								manager.startServer(allowed, connectionProxyClass, txtHost.getText().trim(),
+										new Integer(txtPort.getText().trim().length() == 0 ? "-1" : txtPort.getText()
+												.trim()));
 								return;
 							}
 						}
@@ -186,9 +202,23 @@ public class MainWindow extends JFrame {
 										.addComponent(chckbxSocks4)
 										.addComponent(btnStart, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE,
 												Short.MAX_VALUE))
-						.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-						.addComponent(lblStatus, GroupLayout.PREFERRED_SIZE, 243, GroupLayout.PREFERRED_SIZE)
-						.addGap(95)));
+						.addPreferredGap(ComponentPlacement.RELATED)
+						.addGroup(
+								gl_panel.createParallelGroup(Alignment.LEADING, false)
+										.addGroup(
+												gl_panel.createSequentialGroup()
+														.addComponent(lblIp)
+														.addPreferredGap(ComponentPlacement.RELATED)
+														.addComponent(txtHost, GroupLayout.PREFERRED_SIZE,
+																GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+														.addGap(28)
+														.addComponent(lblPort)
+														.addGap(3)
+														.addComponent(txtPort, GroupLayout.PREFERRED_SIZE, 57,
+																GroupLayout.PREFERRED_SIZE))
+										.addComponent(lblStatus, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE,
+												Short.MAX_VALUE)).addPreferredGap(ComponentPlacement.RELATED)
+						.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
 		gl_panel.setVerticalGroup(gl_panel.createParallelGroup(Alignment.LEADING).addGroup(
 				gl_panel.createSequentialGroup()
 						.addGroup(
@@ -203,8 +233,23 @@ public class MainWindow extends JFrame {
 														.addComponent(chckbxSocks4)
 														.addPreferredGap(ComponentPlacement.RELATED)
 														.addComponent(btnStart))
-										.addComponent(lblStatus, GroupLayout.DEFAULT_SIZE, 92, Short.MAX_VALUE))
-						.addContainerGap()));
+										.addGroup(
+												gl_panel.createSequentialGroup()
+														.addGroup(
+																gl_panel.createParallelGroup(Alignment.BASELINE)
+																		.addComponent(lblIp)
+																		.addComponent(txtHost,
+																				GroupLayout.PREFERRED_SIZE,
+																				GroupLayout.DEFAULT_SIZE,
+																				GroupLayout.PREFERRED_SIZE)
+																		.addComponent(lblPort)
+																		.addComponent(txtPort,
+																				GroupLayout.PREFERRED_SIZE,
+																				GroupLayout.DEFAULT_SIZE,
+																				GroupLayout.PREFERRED_SIZE))
+														.addPreferredGap(ComponentPlacement.RELATED)
+														.addComponent(lblStatus, GroupLayout.DEFAULT_SIZE, 104,
+																Short.MAX_VALUE))).addContainerGap()));
 		panel.setLayout(gl_panel);
 		getContentPane().setLayout(groupLayout);
 

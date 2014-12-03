@@ -7,9 +7,9 @@ public interface ProxyConnection {
 	// Starts the connection, should be implemented as Runnable and read
 	public void startConnectionAndThread() throws IOException;
 
-	public void sendToClient(byte[] message);
+	public void sendToClient(byte[] message) throws IOException;
 
-	public void sendToDestination(byte[] message);
+	public void sendToDestination(byte[] message) throws IOException;
 
 	public void setStopped();
 

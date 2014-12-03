@@ -33,26 +33,28 @@ import at.onion.directoryNodeClient.InternalServerErrorException;
 import at.onion.directoryNodeClient.InvalidResultException;
 import at.onion.directoryNodeClient.SimpleCoreClient;
 import at.onion.proxy.TCPConnection;
+import at.onion.proxy.TCPConnectionProxyProperty;
 import at.onion.proxy.socks5.Socks5Metadata;
 
 public class OnionProxyConnection implements ProxyConnection, Runnable {
-	protected Logger		logger					= LoggerFactory.getLogger(getClass());
+	protected Logger					logger						= LoggerFactory.getLogger(getClass());
 
-	private TCPConnection	clientConnection		= null;
-	private Thread			thread					= null;
+	private TCPConnection				clientConnection			= null;
+	private Thread						thread						= null;
 
-	private Socket			destinationSocket		= null;
-	private TCPConnection	destinationConnection	= null;
-	private NodeChainInfo	nodeChain				= null;
+	private Socket						destinationSocket			= null;
+	private TCPConnection				destinationConnection		= null;
+	private NodeChainInfo				nodeChain					= null;
+	private TCPConnectionProxyProperty	tcpConnectionProxyProperty	= null;
 
 	public OnionProxyConnection(String host, int port, TCPConnection socksConnection) throws UnknownHostException,
 			IOException {
 
 		this.clientConnection = socksConnection;
+		this.tcpConnectionProxyProperty = socksConnection.getTCPConnectionProxyProperty();
 
-		SimpleCoreClient directoryNode = new SimpleCoreClient(InetAddress.getByName(socksConnection
-				.getTCPConnectionProxyProperty().getDirectoryNodeHostName()), socksConnection
-				.getTCPConnectionProxyProperty().getDirectoryNodePort());
+		SimpleCoreClient directoryNode = new SimpleCoreClient(InetAddress.getByName(tcpConnectionProxyProperty
+				.getDirectoryNodeHostName()), tcpConnectionProxyProperty.getDirectoryNodePort());
 
 		try {
 			nodeChain = directoryNode.getNodeChain();
@@ -89,7 +91,7 @@ public class OnionProxyConnection implements ProxyConnection, Runnable {
 	@Override
 	public void startConnectionAndThread() throws IOException {
 		this.destinationConnection = new TCPConnection(null, destinationSocket, Socks5Metadata.proxySocketTimeout,
-				false, null);
+				false, this.tcpConnectionProxyProperty);
 
 		thread = new Thread(this);
 		thread.start();

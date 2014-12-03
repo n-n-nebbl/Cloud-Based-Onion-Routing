@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import at.onion.proxy.TCPConnection;
+import at.onion.proxy.TCPConnectionProxyProperty;
 import at.onion.proxy.socks5.Socks5Metadata;
 
 public class TestProxyConnection implements ProxyConnection, Runnable {
@@ -29,7 +30,7 @@ public class TestProxyConnection implements ProxyConnection, Runnable {
 	@Override
 	public void startConnectionAndThread() throws IOException {
 		this.destinationConnection = new TCPConnection(null, destinationSocket, Socks5Metadata.proxySocketTimeout,
-				false, null);
+				false, new TCPConnectionProxyProperty());
 
 		thread = new Thread(this);
 		thread.start();

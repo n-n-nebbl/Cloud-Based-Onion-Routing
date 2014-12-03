@@ -158,13 +158,13 @@ public class Socks5TCPConnection extends TCPConnection {
 				}
 			} catch (UnknownHostException e) {
 				out.write(Socks5Metadata.SOCKS5_REP_HUNREACH);
-				logger.error(String.format("Connection from %s:%d unknown host.", socket.getLocalAddress(),
-						socket.getLocalPort()));
+				logger.error(String.format("Connection from %s:%d unknown host: %s.", socket.getLocalAddress(),
+						socket.getLocalPort(), e));
 
 			} catch (IOException e) {
 				out.write(Socks5Metadata.SOCKS5_REP_REFUSED);
-				logger.error(String.format("Connection from %s:%d connection refused.", socket.getLocalAddress(),
-						socket.getLocalPort()));
+				logger.error(String.format("Connection from %s:%d connection refused: %s", socket.getLocalAddress(),
+						socket.getLocalPort(), e));
 			}
 
 		}
@@ -236,7 +236,7 @@ public class Socks5TCPConnection extends TCPConnection {
 			DestinationAddress address = doInitConnectionRequest();
 
 			if (address == null) {
-				logger.error(String.format("Connection from %s:%d: Failed.", socket.getLocalAddress(),
+				logger.error(String.format("Connection from %s:%d: Failed to init socks5.", socket.getLocalAddress(),
 						socket.getLocalPort()));
 
 				this.setStopped();

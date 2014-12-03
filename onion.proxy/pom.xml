@@ -16,6 +16,16 @@
 	</properties>
 	<dependencies>
 		<dependency>
+			<groupId>at.ac.tuwien.aic.group3</groupId>
+			<artifactId>onion.directoryNodeClient</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>at.ac.tuwien.aic.group3</groupId>
+			<artifactId>onion.directoryNodeServer</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>${junit.version}</version>

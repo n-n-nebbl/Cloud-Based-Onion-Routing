@@ -4,6 +4,7 @@ import static at.onion.commons.CryptoUtils.createEncryptedSocket;
 import static at.onion.commons.CryptoUtils.encrypt;
 import static at.onion.commons.CryptoUtils.getKeyPair;
 
+import java.io.EOFException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -152,6 +153,7 @@ public class OnionProxyConnection implements ProxyConnection, Runnable {
 
 	public void sendToClient(byte[] message) throws IOException {
 
+		logger.info("got for client.");
 		List<NodeInfo> nodeChain = Arrays.asList(this.nodeChain.getNodes());
 
 		try {
@@ -168,7 +170,6 @@ public class OnionProxyConnection implements ProxyConnection, Runnable {
 	}
 
 	public void run() {
-		byte[] data;
 
 		try {
 			ObjectInputStream ois = new ObjectInputStream(destinationConnection.getInputStream());
@@ -181,8 +182,9 @@ public class OnionProxyConnection implements ProxyConnection, Runnable {
 				// new String(data)));
 				sendToClient(bytes);
 			}
-		} catch (IOException e) {
-		} catch (ClassNotFoundException e) {
+		} catch (EOFException e) {
+		} catch (Exception e) {
+			logger.error("OnionProxyConnection failed: ", e);
 		}
 
 		// clientConnection.send("\0".getBytes());

@@ -11,7 +11,7 @@
 	</parent>
 
 	<artifactId>onion.directoryNodeClient</artifactId>
-	<name>onion.directorynodeClient</name>
+	<name>onion.directoryNodeClient</name>
 	<url>http://maven.apache.org</url>
 	<packaging>jar</packaging>
 

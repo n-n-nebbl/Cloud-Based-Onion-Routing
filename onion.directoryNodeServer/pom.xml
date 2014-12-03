@@ -10,7 +10,7 @@
 	</parent>
 
 	<artifactId>onion.directoryNodeServer</artifactId>
-	<name>onion.directorynodeCore</name>
+	<name>onion.directoryNodeServer</name>
 	<url>http://maven.apache.org</url>
 	<packaging>jar</packaging>
 

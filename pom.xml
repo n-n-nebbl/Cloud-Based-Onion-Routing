@@ -11,8 +11,8 @@
 		<module>onion.proxy</module>
 		<module>onion.commons</module>
 		<module>onion.chainnode</module>
-		<module>onion.directorynodeClient</module>
-		<module>onion.directorynodeCore</module>
+		<module>onion.directoryNodeClient</module>
+		<module>onion.directoryNodeServer</module>
 		<module>onion.testservice</module>
 	</modules>
 

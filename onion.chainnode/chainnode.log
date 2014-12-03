@@ -79,3 +79,22 @@ Connection: keep-alive
 20:03:55.914 [Thread-5] DEBUG at.onion.chainnode.NetworkService - server reply: The document has moved
 20:03:55.916 [Thread-5] DEBUG at.onion.chainnode.NetworkService - server reply: <A HREF="http://www.google.at/search?q=inetaddress+get+ip+as+string&amp;ie=utf-8&amp;oe=utf-8&amp;client=ubuntu&amp;channel=fs&amp;gfe_rd=cr&amp;ei=m15_VN6cNcr5-gbSsIDYDw">here</A>.
 20:03:55.919 [Thread-5] DEBUG at.onion.chainnode.NetworkService - server reply: </BODY></HTML>
+21:40:30.696 [main] DEBUG at.onion.chainnode.ConnectionService - node starting listening on port 9000
+21:40:31.707 [Thread-2] INFO  at.onion.chainnode.ConnectionThread - ConnectionThread run started...
+21:40:31.836 [Thread-2] DEBUG at.onion.chainnode.ConnectionThread - connect to localhost:9999
+21:40:31.837 [Thread-2] DEBUG at.onion.chainnode.ConnectionThread - 9999: to_client_thread
+21:40:33.811 [main] DEBUG at.onion.chainnode.ConnectionService - node stop listening on port 9000
+21:40:33.820 [main] DEBUG at.onion.chainnode.ConnectionService - node starting listening on port 9002
+21:40:33.822 [main] DEBUG at.onion.chainnode.ConnectionService - node starting listening on port 9003
+21:40:34.824 [Thread-8] INFO  at.onion.chainnode.ConnectionThread - ConnectionThread run started...
+21:40:34.915 [main] INFO  at.onion.chainnode.Tests - sending
+21:40:34.917 [main] INFO  at.onion.chainnode.Tests - message sent
+21:40:34.989 [Thread-8] DEBUG at.onion.chainnode.ConnectionThread - connect to localhost:9003
+21:40:34.990 [Thread-8] DEBUG at.onion.chainnode.ConnectionThread - 9003: to_client_thread
+21:40:34.991 [Thread-10] INFO  at.onion.chainnode.ConnectionThread - ConnectionThread run started...
+21:40:34.992 [Thread-8] DEBUG at.onion.chainnode.NetworkService - send message: rv�w����$���v��UŏX88\t�e-�!`J�"&xG��kl��&�v�=c=��!�L��� ~T{BY�%I5 3�,������*	{�H ,��7E�-��Pܥ�sfȩ'E���R�{��]�:���T` �vt���uF��{�s\=L��K�л���1��.&؋�Z�����.
+C«��*):Gp�����tP����[�wZ:By��O�l�_�]��xd���q!GLj=/=�\�V>�'���$�؜q�5>Ym� .���Q�ڽ%+%E��~��x:ڰ��,�87���m�$^�cYܮ|��x�(x�j�f<�W�EQ��,~�7���3�p���|�1 �	xo�NiMo�/o��N��4���iŀ�^#l�cߟj���q �"YQyq�/yB�CB14����1إ���o�RS˙�#�
+Y�#[�` �ec<�"Lw����*��l�c���z�����q��K��5�1��Ц�p߮��w;��2����ǟ,7�FHI�u�$Ѹ����Y��ڷ`Ѡ���8�OԔ��y�d��u�	��9�_�}��H��kdsK&��֘O
+K�C���rE��,y��UMw��/��&?��6���=���'���?S�8�?fSn5�۞��Pxn��!�{�{MC���6{U��w*��h����,�{ͅ�	;r* O�<�Ξ�:��4�u�"ś�&C���'��$��7�
+��}��+B��~�ޡx��;��wSx�ܦ+s�� .� s��@�Q;d@'9�u�r��ٗU���`���&W�<NL��[���nh{ihe�N�Gt���&��ΉT�����cp��!����Qה9�����}9k�	�>I~�=���V���3�^@��l�YS4��
+21:40:35.131 [Thread-10] DEBUG at.onion.chainnode.ConnectionThread - connect to localhost:8080

@@ -1,4 +1,4 @@
-package at.onion.directorynodeClient;
+package at.onion.directoryNodeClient;
 
 
 public class InvalidResultException extends DirectoryNodeClientException {

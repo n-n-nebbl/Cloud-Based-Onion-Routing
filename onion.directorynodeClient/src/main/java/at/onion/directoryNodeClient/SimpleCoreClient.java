@@ -1,4 +1,4 @@
-package at.onion.directorynodeClient;
+package at.onion.directoryNodeClient;
 
 import java.net.InetAddress;
 import java.net.Socket;

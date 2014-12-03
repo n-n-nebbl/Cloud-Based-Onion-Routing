@@ -16,11 +16,11 @@ import org.junit.Test;
 import at.onion.commons.CryptoUtils;
 import at.onion.commons.NodeChainInfo;
 import at.onion.commons.NodeInfo;
-import at.onion.directorynodeClient.CoreClient;
-import at.onion.directorynodeClient.InternalServerErrorException;
-import at.onion.directorynodeClient.InvalidResultException;
-import at.onion.directorynodeClient.NotEnoughNodesException;
-import at.onion.directorynodeClient.SimpleCoreClient;
+import at.onion.directoryNodeClient.CoreClient;
+import at.onion.directoryNodeClient.InternalServerErrorException;
+import at.onion.directoryNodeClient.InvalidResultException;
+import at.onion.directoryNodeClient.NotEnoughNodesException;
+import at.onion.directoryNodeClient.SimpleCoreClient;
 import at.onion.directorynodeCore.util.FakeClientAliveThread;
 
 

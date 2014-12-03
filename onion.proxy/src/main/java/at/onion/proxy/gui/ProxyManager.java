@@ -19,7 +19,7 @@ public class ProxyManager {
 	}
 
 	public boolean startServer(Class<? extends TCPConnection>[] allowedProxyConnections,
-			Class<? extends ProxyConnection> connectionProxyClass) {
+			Class<? extends ProxyConnection> connectionProxyClass, String dirNodeHostName, int dirNodePort) {
 
 		// Restart
 		if (server != null && !server.isStopped()) {
@@ -35,7 +35,8 @@ public class ProxyManager {
 		}
 
 		try {
-			server = new TCPProxyServer(allowedProxyConnections, connectionProxyClass, 9000);
+			server = new TCPProxyServer(allowedProxyConnections, connectionProxyClass, 9000, dirNodeHostName,
+					dirNodePort);
 		} catch (SocksException e) {
 
 			logger.error(String.format("Error starting server: %s", e));

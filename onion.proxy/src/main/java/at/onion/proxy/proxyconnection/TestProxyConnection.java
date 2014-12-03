@@ -29,7 +29,7 @@ public class TestProxyConnection implements ProxyConnection, Runnable {
 	@Override
 	public void startConnectionAndThread() throws IOException {
 		this.destinationConnection = new TCPConnection(null, destinationSocket, Socks5Metadata.proxySocketTimeout,
-				false);
+				false, null);
 
 		thread = new Thread(this);
 		thread.start();

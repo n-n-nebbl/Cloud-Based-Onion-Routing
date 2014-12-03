@@ -1,5 +1,11 @@
 package at.onion.chainnode;
 
+import static at.onion.chainnode.ForwardingMode.FORWARDING_NODE_TO_NODE;
+import static at.onion.chainnode.ForwardingMode.FORWARDING_NODE_TO_TARGET;
+import static at.onion.chainnode.ForwardingMode.FORWARDING_TARGET_TO_NODE;
+import static at.onion.chainnode.ForwardingMode.ROUTE_TO_CLIENT;
+import static at.onion.chainnode.ForwardingMode.ROUTE_TO_SERVER;
+
 import java.io.InputStream;
 import java.net.Socket;
 
@@ -9,7 +15,6 @@ import org.slf4j.LoggerFactory;
 import at.onion.commons.CryptoUtils;
 import at.onion.commons.NodeChainMessage;
 import at.onion.commons.NodeInfo;
-import static at.onion.chainnode.ForwardingMode.*;
 
 /**
  * Handles one connection between nodes or node and target
@@ -31,6 +36,8 @@ public class ConnectionThread implements Runnable {
 	@Override
 	public void run() {
 		try {
+			logger.info("ConnectionThread run started...");
+
 			// get first message
 			InputStream in = incomingSocket.getInputStream();
 			NodeChainMessage msg = networkService.readMessage(in);

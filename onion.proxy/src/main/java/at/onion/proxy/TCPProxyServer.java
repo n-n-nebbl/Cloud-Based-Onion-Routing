@@ -114,6 +114,7 @@ public class TCPProxyServer extends Thread {
 						s.getOutputStream().flush();
 						s.close();
 					}
+					return;
 				} catch (SocketTimeoutException ex) {
 					// System.out.println("STO" + ex);
 				}

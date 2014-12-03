@@ -252,6 +252,8 @@ public class Socks5TCPConnection extends TCPConnection {
 				if (proxyConnection != null) proxyConnection.sendToDestination(data);
 			}
 		} catch (IOException | SocksException e) {
+		} catch (Exception e) {
+			logger.error(String.format("Error in socks5 connection: %s., closing", e));
 		}
 		this.setStopped();
 	}

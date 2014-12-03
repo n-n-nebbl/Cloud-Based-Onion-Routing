@@ -5,6 +5,7 @@ import static at.onion.commons.CryptoUtils.encrypt;
 import static at.onion.commons.CryptoUtils.getKeyPair;
 
 import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
@@ -13,6 +14,7 @@ import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
+import java.security.PublicKey;
 import java.security.UnrecoverableKeyException;
 import java.util.Arrays;
 import java.util.Collections;
@@ -46,10 +48,14 @@ public class OnionProxyConnection implements ProxyConnection, Runnable {
 	private TCPConnection				destinationConnection		= null;
 	private NodeChainInfo				nodeChain					= null;
 	private TCPConnectionProxyProperty	tcpConnectionProxyProperty	= null;
+	private String						host						= "";
+	private int							port						= -1;
 
 	public OnionProxyConnection(String host, int port, TCPConnection socksConnection) throws UnknownHostException,
 			IOException {
-
+		logger.info("OnionProxyConnection started");
+		this.host = host;
+		this.port = port;
 		this.clientConnection = socksConnection;
 		this.tcpConnectionProxyProperty = socksConnection.getTCPConnectionProxyProperty();
 
@@ -72,6 +78,11 @@ public class OnionProxyConnection implements ProxyConnection, Runnable {
 		}
 
 		NodeInfo first = nodeChain.getNodes()[0];
+
+		logger.info(String.format("Try to connect to first socket: %s.", first));
+
+		if (first.getHostname() == null || first.getHostname().length() < 0)
+			throw new IOException("Error connecting to first node: connection data invalid.");
 		try {
 			this.destinationSocket = createEncryptedSocket(first.getHostname(), first.getPort());
 		} catch (KeyManagementException e) {
@@ -97,15 +108,15 @@ public class OnionProxyConnection implements ProxyConnection, Runnable {
 		thread.start();
 	}
 
-	public byte[] encryptNode(byte[] payLoad, NodeInfo nodeInfo) throws InvalidKeyException, NoSuchAlgorithmException,
-			NoSuchProviderException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException,
-			IOException {
+	public byte[] encryptNode(PublicKey pubKey, byte[] payLoad, NodeInfo nodeInfo) throws InvalidKeyException,
+			NoSuchAlgorithmException, NoSuchProviderException, NoSuchPaddingException, IllegalBlockSizeException,
+			BadPaddingException, IOException {
 		NodeChainMessage msg = new NodeChainMessage();
 		msg.setPayload(payLoad);
 		msg.setHeader(nodeInfo);
 		msg.setClientPublicKey(getKeyPair().getPublic());
 
-		return encrypt(nodeInfo.getPublicKey(), msg);
+		return encrypt(pubKey, msg);
 	}
 
 	public byte[] decryptNode(byte[] payLoad, NodeInfo nodeInfo) throws InvalidKeyException, NoSuchAlgorithmException,
@@ -116,18 +127,26 @@ public class OnionProxyConnection implements ProxyConnection, Runnable {
 
 	public void sendToDestination(byte[] message) throws IOException {
 
+		logger.info(new String(message));
+
 		List<NodeInfo> nodeChain = Arrays.asList(this.nodeChain.getNodes());
 		Collections.reverse(nodeChain);
 
 		try {
-			for (NodeInfo n : nodeChain) {
-				message = encryptNode(message, n);
+			message = encryptNode((PublicKey) nodeChain.get(0).getPublicKey(), message, new NodeInfo(this.host,
+					this.port, null));
+			for (int i = 1; i < nodeChain.size(); i++) {
+				message = encryptNode((PublicKey) nodeChain.get(i).getPublicKey(), message, nodeChain.get(i - 1));
 			}
+
 		} catch (Exception e) {
 			throw new IOException(String.format("Error sending to first node: %s.", e));
 		}
 
-		this.destinationConnection.send(message);
+		ObjectOutputStream stream = new ObjectOutputStream(this.destinationConnection.getOutputStream());
+		stream.writeObject(message);
+
+		// /this.destinationConnection.send(message);
 	}
 
 	public void sendToClient(byte[] message) throws IOException {
@@ -141,6 +160,8 @@ public class OnionProxyConnection implements ProxyConnection, Runnable {
 		} catch (Exception e) {
 			throw new IOException(String.format("Error sending to first node: %s.", e));
 		}
+
+		logger.info("got:" + new String(message));
 
 		clientConnection.send(message);
 	}

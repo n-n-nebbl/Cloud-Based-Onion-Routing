@@ -121,6 +121,10 @@ public class TCPConnection implements Runnable {
 		return -1;
 	}
 
+	public OutputStream getOutputStream() {
+		return this.out;
+	}
+
 	public boolean isStopped() {
 		return !this.running.get();
 	}

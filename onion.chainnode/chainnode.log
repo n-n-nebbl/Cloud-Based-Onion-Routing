@@ -22,3 +22,60 @@ java.net.ConnectException: Connection refused
 19:21:58.780 [Thread-2] DEBUG at.onion.chainnode.ConnectionThread - connect to localhost:9999
 19:21:58.782 [Thread-2] DEBUG at.onion.chainnode.ConnectionThread - 9999: to_client_thread
 19:21:58.783 [Thread-2] DEBUG at.onion.chainnode.NetworkService - send message: GET /sampleCall.asx HTTP/1.1
+19:41:03.180 [main] DEBUG at.onion.chainnode.ChainNode - ===============>localhost
+19:41:03.192 [main] DEBUG at.onion.chainnode.ChainNode - ip found fe80:0:0:0:6e71:d9ff:fe30:157b%3
+19:41:03.196 [main] DEBUG at.onion.chainnode.ChainNode - ip found 128.131.218.6
+19:41:05.404 [main] INFO  at.onion.chainnode.ChainNode - successfully registered at directoryNode
+19:41:06.244 [main] DEBUG at.onion.chainnode.ConnectionService - node starting listening on port 8013
+19:41:20.901 [Thread-1] INFO  at.onion.chainnode.ConnectionThread - ConnectionThread run started...
+19:41:21.403 [Thread-1] DEBUG at.onion.chainnode.ConnectionThread - connect to 128.131.218.6:8013
+19:41:21.415 [Thread-2] INFO  at.onion.chainnode.ConnectionThread - ConnectionThread run started...
+19:41:21.415 [Thread-1] DEBUG at.onion.chainnode.ConnectionThread - 8013: to_client_thread
+19:41:21.416 [Thread-1] DEBUG at.onion.chainnode.NetworkService - send message: GET /search?q=inetaddress+get+ip+as+string&ie=utf-8&oe=utf-8&client=ubuntu&channel=fs HTTP/1.1
+Host: www.google.com
+User-Agent: Mozilla/5.0 (X11; Linux i686; rv:33.0) Gecko/20100101 Firefox/33.0 Iceweasel/33.1
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+DNT: 1
+Cookie: NID=67=RqHPbHlV9f3h2F_SihUJzdgnhkF7Ywn8Dy7Dtg5RKB7AWpSLbIVwry4yGLMzWe5Mcq2YvWkNDkOQFmDtBgqOV_ry7u1YsVyO6LIU7TdJx2TPTZD9phyFkRNmPLg3OUcmV4hCqUlAW5ylzH_I-QHaceLOQMRm2m5tQN1QSmDNq9EfGxbDvCI; SID=DQAAADgBAAAUtSUY7SZZu1r1hbzEyVOGt3j5Ibhq6ZEZfKIuPlYk47qIqP3mCrmSZhXG29eXxD3eLOfQ1y3lJ_ArrpRTGHhqczZtzMVpAzyK6C0vZ3tllaZrW-rgdS_Qi0LIfq-7SzPraUua0Y9J_5YyO1VcQ9UGDQR6i5DGiPt-tTgj0c_dfc9Ya1GI3LKAtOmzD55BSLqG5gcy0f42_OcGx4MUpJVTH7qOE_4CYXkrbcmAI_RNZopbmmGInqC6o0gsxdwK3nfN2rxLH7_kQneyo8Rn0i82VM4seEcjH2exHFKL083BIRBlcHr9A5inXKB0To37ZaQsUepRHUMq9FlcXyGYIEVW9RjVatpI59HKFwHjGZlex77EUCTYtlhFcPgNWGuZIgJXLDq__JIZmtaIPMFpM16HxD5Q77H85bYCx94h0vjZfg; HSID=A52En382BWtX5vZzF; APISID=lIqYcr6k5ivMI2A0/AM15m4NC12fA4yGbS
+Connection: keep-alive
+
+
+19:58:43.805 [main] DEBUG at.onion.chainnode.ChainNode - ===============>localhost
+19:58:43.816 [main] DEBUG at.onion.chainnode.ChainNode - ip found fe80:0:0:0:6e71:d9ff:fe30:157b%3
+19:58:43.821 [main] DEBUG at.onion.chainnode.ChainNode - ip found 128.131.218.6
+19:58:46.373 [main] INFO  at.onion.chainnode.ChainNode - successfully registered at directoryNode
+19:58:47.204 [main] DEBUG at.onion.chainnode.ConnectionService - node starting listening on port 8013
+19:58:59.054 [Thread-1] INFO  at.onion.chainnode.ConnectionThread - ConnectionThread run started...
+20:01:03.483 [Thread-2] INFO  at.onion.chainnode.ConnectionThread - ConnectionThread run started...
+20:03:55.125 [Thread-3] INFO  at.onion.chainnode.ConnectionThread - ConnectionThread run started...
+20:03:55.618 [Thread-3] DEBUG at.onion.chainnode.ConnectionThread - connect to www.google.com:80
+20:03:55.867 [Thread-3] DEBUG at.onion.chainnode.ConnectionThread - 80: to_client_thread
+20:03:55.868 [Thread-3] DEBUG at.onion.chainnode.NetworkService - send message: GET /search?q=inetaddress+get+ip+as+string&ie=utf-8&oe=utf-8&client=ubuntu&channel=fs HTTP/1.1
+Host: www.google.com
+User-Agent: Mozilla/5.0 (X11; Linux i686; rv:33.0) Gecko/20100101 Firefox/33.0 Iceweasel/33.1
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+DNT: 1
+Cookie: NID=67=RqHPbHlV9f3h2F_SihUJzdgnhkF7Ywn8Dy7Dtg5RKB7AWpSLbIVwry4yGLMzWe5Mcq2YvWkNDkOQFmDtBgqOV_ry7u1YsVyO6LIU7TdJx2TPTZD9phyFkRNmPLg3OUcmV4hCqUlAW5ylzH_I-QHaceLOQMRm2m5tQN1QSmDNq9EfGxbDvCI; SID=DQAAADgBAAAUtSUY7SZZu1r1hbzEyVOGt3j5Ibhq6ZEZfKIuPlYk47qIqP3mCrmSZhXG29eXxD3eLOfQ1y3lJ_ArrpRTGHhqczZtzMVpAzyK6C0vZ3tllaZrW-rgdS_Qi0LIfq-7SzPraUua0Y9J_5YyO1VcQ9UGDQR6i5DGiPt-tTgj0c_dfc9Ya1GI3LKAtOmzD55BSLqG5gcy0f42_OcGx4MUpJVTH7qOE_4CYXkrbcmAI_RNZopbmmGInqC6o0gsxdwK3nfN2rxLH7_kQneyo8Rn0i82VM4seEcjH2exHFKL083BIRBlcHr9A5inXKB0To37ZaQsUepRHUMq9FlcXyGYIEVW9RjVatpI59HKFwHjGZlex77EUCTYtlhFcPgNWGuZIgJXLDq__JIZmtaIPMFpM16HxD5Q77H85bYCx94h0vjZfg; HSID=A52En382BWtX5vZzF; APISID=lIqYcr6k5ivMI2A0/AM15m4NC12fA4yGbS
+Connection: keep-alive
+
+
+20:03:55.869 [Thread-5] DEBUG at.onion.chainnode.NetworkService - read from target
+20:03:55.898 [Thread-5] DEBUG at.onion.chainnode.NetworkService - server reply: HTTP/1.1 302 Found
+20:03:55.900 [Thread-5] DEBUG at.onion.chainnode.NetworkService - server reply: Cache-Control: private
+20:03:55.901 [Thread-5] DEBUG at.onion.chainnode.NetworkService - server reply: Content-Type: text/html; charset=UTF-8
+20:03:55.903 [Thread-5] DEBUG at.onion.chainnode.NetworkService - server reply: Location: http://www.google.at/search?q=inetaddress+get+ip+as+string&ie=utf-8&oe=utf-8&client=ubuntu&channel=fs&gfe_rd=cr&ei=m15_VN6cNcr5-gbSsIDYDw
+20:03:55.904 [Thread-5] DEBUG at.onion.chainnode.NetworkService - server reply: Content-Length: 358
+20:03:55.906 [Thread-5] DEBUG at.onion.chainnode.NetworkService - server reply: Date: Wed, 03 Dec 2014 19:03:55 GMT
+20:03:55.907 [Thread-5] DEBUG at.onion.chainnode.NetworkService - server reply: Server: GFE/2.0
+20:03:55.908 [Thread-5] DEBUG at.onion.chainnode.NetworkService - server reply: Alternate-Protocol: 80:quic,p=0.02
+20:03:55.909 [Thread-5] DEBUG at.onion.chainnode.NetworkService - server reply: 
+20:03:55.910 [Thread-5] DEBUG at.onion.chainnode.NetworkService - server reply: <HTML><HEAD><meta http-equiv="content-type" content="text/html;charset=utf-8">
+20:03:55.912 [Thread-5] DEBUG at.onion.chainnode.NetworkService - server reply: <TITLE>302 Moved</TITLE></HEAD><BODY>
+20:03:55.913 [Thread-5] DEBUG at.onion.chainnode.NetworkService - server reply: <H1>302 Moved</H1>
+20:03:55.914 [Thread-5] DEBUG at.onion.chainnode.NetworkService - server reply: The document has moved
+20:03:55.916 [Thread-5] DEBUG at.onion.chainnode.NetworkService - server reply: <A HREF="http://www.google.at/search?q=inetaddress+get+ip+as+string&amp;ie=utf-8&amp;oe=utf-8&amp;client=ubuntu&amp;channel=fs&amp;gfe_rd=cr&amp;ei=m15_VN6cNcr5-gbSsIDYDw">here</A>.
+20:03:55.919 [Thread-5] DEBUG at.onion.chainnode.NetworkService - server reply: </BODY></HTML>

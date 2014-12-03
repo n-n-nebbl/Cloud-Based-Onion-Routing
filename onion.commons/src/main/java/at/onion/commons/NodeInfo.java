@@ -15,8 +15,8 @@ public class NodeInfo implements Serializable {
 		this.port = port;
 		this.publicKey = publicKey;
 	}
-	
-	public NodeInfo(){		
+
+	public NodeInfo() {
 	}
 
 	public String getHostname() {
@@ -42,8 +42,14 @@ public class NodeInfo implements Serializable {
 	public void setPublicKey(Key publicKey) {
 		this.publicKey = publicKey;
 	}
-	
+
 	public boolean isTarget() {
 		return publicKey == null;
+	}
+
+	@Override
+	public String toString() {
+		return String.format("NodeInfo{%s:%d, key size: %d, key algo: %s}", this.hostname, this.port,
+				this.publicKey.getEncoded().length, this.publicKey.getAlgorithm().toString());
 	}
 }

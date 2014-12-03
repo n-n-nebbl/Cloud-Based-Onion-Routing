@@ -5,10 +5,8 @@ import static at.onion.chainnode.ForwardingMode.FORWARDING_NODE_TO_TARGET;
 import static at.onion.chainnode.ForwardingMode.FORWARDING_TARGET_TO_NODE;
 import static at.onion.chainnode.ForwardingMode.ROUTE_TO_SERVER;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
@@ -25,6 +23,7 @@ import org.slf4j.LoggerFactory;
 
 import at.onion.commons.CryptoUtils;
 import at.onion.commons.NodeChainMessage;
+import at.onion.proxy.TCPConnection;
 
 public class NetworkService {
 
@@ -38,9 +37,9 @@ public class NetworkService {
 	 * @param in
 	 * @param out
 	 */
-	public void forwardMessage(InputStream in, OutputStream out, ForwardingMode mode) throws IOException,
-			ClassNotFoundException, InvalidKeyException, NoSuchAlgorithmException, NoSuchProviderException,
-			NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException {
+	public void forwardMessage(InputStream in, OutputStream out, ForwardingMode mode, int socketRecvSize)
+			throws IOException, ClassNotFoundException, InvalidKeyException, NoSuchAlgorithmException,
+			NoSuchProviderException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException {
 		ObjectInputStream ois;
 		ObjectOutputStream oos;
 		byte[] input, payload;
@@ -73,13 +72,15 @@ public class NetworkService {
 		case FORWARDING_TARGET_TO_NODE:
 			// TODO: timeout?
 			oos = new ObjectOutputStream(out);
-			String line;
+			byte[] data;
 			logger.debug("read from target");
-			BufferedReader br = new BufferedReader(new InputStreamReader(in));
-			while ((line = br.readLine()) != null) {
-				line += "\r\n"; // Todo: kills readline \r\n or \n?
-				payload = CryptoUtils.encrypt(mode.getClientPublicKey(), line.getBytes());
-				logger.debug("server reply: " + line);
+			// BufferedReader br = new BufferedReader(new
+			// InputStreamReader(in));
+
+			while ((data = TCPConnection.readData(socketRecvSize, in)) != null) {
+
+				payload = CryptoUtils.encrypt(mode.getClientPublicKey(), data);
+				logger.debug("server reply: " + new String(data));
 				oos.writeObject(payload);
 			}
 

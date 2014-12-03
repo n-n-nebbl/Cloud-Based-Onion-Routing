@@ -185,7 +185,7 @@ public class OnionProxyConnection implements ProxyConnection, Runnable {
 		} catch (ClassNotFoundException e) {
 		}
 
-		clientConnection.send("\0".getBytes());
+		// clientConnection.send("\0".getBytes());
 
 		this.setStopped();
 	}

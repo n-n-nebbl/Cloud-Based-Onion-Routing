@@ -1,5 +1,16 @@
 package at.onion.chainnode;
 
+import static at.onion.commons.CryptoUtils.createEncryptedServerSocket;
+import static at.onion.commons.CryptoUtils.createEncryptedSocket;
+import static at.onion.commons.CryptoUtils.decrypt;
+import static at.onion.commons.CryptoUtils.decryptMessage;
+import static at.onion.commons.CryptoUtils.deserialize;
+import static at.onion.commons.CryptoUtils.encrypt;
+import static at.onion.commons.CryptoUtils.getKeyPair;
+import static at.onion.commons.CryptoUtils.serialize;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 import java.io.EOFException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -23,9 +34,6 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static at.onion.commons.CryptoUtils.*;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 import at.onion.commons.NodeChainMessage;
 import at.onion.commons.NodeInfo;
 
@@ -135,8 +143,8 @@ public class Tests {
 
 		// Original message, that will be sent to the target
 		NodeChainMessage msg = new NodeChainMessage();
-		msg.setPayload("GET /onion.testservice/ HTTP/1.1\nHost: localhost:8080\n\n".getBytes());
-		NodeInfo header = new NodeInfo("localhost", 8080, null);
+		msg.setPayload("GET / HTTP/1.1\nHost: orf.at:80\n\n".getBytes());
+		NodeInfo header = new NodeInfo("www.orf.at", 80, null);
 		msg.setHeader(header);
 		msg.setClientPublicKey(publicKey);
 
@@ -155,8 +163,7 @@ public class Tests {
 					ServerSocket ss = createEncryptedServerSocket(9998);
 					Socket s = ss.accept();
 					logger.info("try to get message");
-					logger.info(deserialize((byte[]) new ObjectInputStream(s.getInputStream()).readObject())
-							.toString());
+					logger.info(deserialize((byte[]) new ObjectInputStream(s.getInputStream()).readObject()).toString());
 					s.close();
 					ss.close();
 				} catch (Exception e) {

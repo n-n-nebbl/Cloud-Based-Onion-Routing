@@ -96,12 +96,10 @@ public class TCPConnection implements Runnable {
 		return connectionProperty;
 	}
 
-	public byte[] readData() throws IOException {
-		byte[] buffer = new byte[this.socket.getReceiveBufferSize()];
+	public static byte[] readData(int socketBufferSize, InputStream in) throws IOException {
+		byte[] buffer = new byte[socketBufferSize];
 
-		if (this.isStopped()) return null;
-
-		if (this.in != null) {
+		if (in != null) {
 			int len = in.read(buffer);
 
 			if (len < 0) return null;
@@ -110,6 +108,14 @@ public class TCPConnection implements Runnable {
 		}
 
 		return null;
+
+	}
+
+	public byte[] readData() throws IOException {
+
+		if (this.isStopped()) return null;
+
+		return readData(this.socket.getReceiveBufferSize(), in);
 	}
 
 	public byte readByte() throws IOException {
@@ -123,6 +129,10 @@ public class TCPConnection implements Runnable {
 
 	public OutputStream getOutputStream() {
 		return this.out;
+	}
+
+	public InputStream getInputStream() {
+		return this.in;
 	}
 
 	public boolean isStopped() {

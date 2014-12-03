@@ -25,7 +25,7 @@ public class ForwardingThread implements Runnable {
 	@Override
 	public void run() {
 		try {
-			networkService.forwardMessage(in.getInputStream(), out.getOutputStream(), mode);
+			networkService.forwardMessage(in.getInputStream(), out.getOutputStream(), mode, in.getReceiveBufferSize());
 		} catch (EOFException e) {
 		} catch (SocketException e) {
 			if (!e.getMessage().toLowerCase().contains("closed")) {

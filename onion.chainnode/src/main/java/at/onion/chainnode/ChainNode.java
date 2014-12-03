@@ -12,8 +12,8 @@ import org.slf4j.LoggerFactory;
 
 import at.onion.commons.CryptoUtils;
 import at.onion.commons.NodeInfo;
-import at.onion.directorynodeClient.CoreClient;
-import at.onion.directorynodeClient.SimpleCoreClient;
+import at.onion.directoryNodeClient.CoreClient;
+import at.onion.directoryNodeClient.SimpleCoreClient;
 
 public class ChainNode {
 

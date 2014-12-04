@@ -63,7 +63,7 @@ public class ChainNode {
 			Enumeration<InetAddress> ee = n.getInetAddresses();
 			while (ee.hasMoreElements()) {
 				InetAddress i = ee.nextElement();
-				logger.debug("ip found {}", i.getHostAddress());
+				logger.debug("IP found {}.", i.getHostAddress());
 				if (i instanceof Inet6Address) {
 					continue;
 				}
@@ -73,6 +73,7 @@ public class ChainNode {
 				int second = Integer.parseInt(i.getHostAddress().split("\\.")[1]);
 				if (first != 127) {
 					if (!(first == 169 && second == 254)) {
+						logger.debug("Let's take IP: {}.", i.getHostAddress());
 						return i.getHostAddress();
 					}
 				}

@@ -1,9 +1,14 @@
 package at.onion.chainnode;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.Inet6Address;
 import java.net.InetAddress;
+import java.net.MalformedURLException;
 import java.net.NetworkInterface;
 import java.net.SocketException;
+import java.net.URL;
 import java.net.UnknownHostException;
 import java.util.Enumeration;
 
@@ -57,6 +62,21 @@ public class ChainNode {
 	}
 
 	private static String getLocalIPAdress() throws SocketException {
+
+		URL whatismyip;
+		try {
+			whatismyip = new URL("http://agentgatech.appspot.com/");
+			BufferedReader in = new BufferedReader(new InputStreamReader(whatismyip.openStream()));
+
+			String ip = in.readLine().trim();
+			logger.debug("IP per external found {}.", ip);
+			return ip;
+		} catch (MalformedURLException e1) {
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+
 		Enumeration<NetworkInterface> e = NetworkInterface.getNetworkInterfaces();
 		while (e.hasMoreElements()) {
 			NetworkInterface n = e.nextElement();

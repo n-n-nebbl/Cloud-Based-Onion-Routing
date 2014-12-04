@@ -1,0 +1,7 @@
+ssh ec2-user@directorynode.mooo.com
+ssh ec2-user@ec2-54-68-101-79.us-west-2.compute.amazonaws.com
+ssh ec2-user@ec2-54-69-14-190.us-west-2.compute.amazonaws.com
+ssh ec2-user@ec2-54-69-76-134.us-west-2.compute.amazonaws.com
+
+Proxy: directorynode.mooo.com 8001
+

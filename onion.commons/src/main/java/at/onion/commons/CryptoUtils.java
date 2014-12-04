@@ -52,6 +52,7 @@ public class CryptoUtils {
 	private static KeyStore		keyStore;
 	private static char[]		keyStorePw;
 	private static SSLContext	ctx;
+	private static final String	rsaCypther	= "RSA/NONE/PKCS1Padding";
 
 	public static KeyPair getKeyPair() throws NoSuchAlgorithmException, NoSuchProviderException {
 		if (keyPair == null) {
@@ -140,17 +141,16 @@ public class CryptoUtils {
 			}
 		}
 	}
-	
+
 	public static byte[] encrypt(Key publicKey, Object object) throws NoSuchAlgorithmException,
-	NoSuchProviderException, NoSuchPaddingException, InvalidKeyException, IOException,
-	IllegalBlockSizeException, BadPaddingException {
+			NoSuchProviderException, NoSuchPaddingException, InvalidKeyException, IOException,
+			IllegalBlockSizeException, BadPaddingException {
 		return encrypt(publicKey, serialize(object));
 	}
 
-	public static byte[] encrypt(Key publicKey, byte[] bytes) throws NoSuchAlgorithmException,
-			NoSuchProviderException, NoSuchPaddingException, InvalidKeyException, IOException,
-			IllegalBlockSizeException, BadPaddingException {
-		Cipher c = Cipher.getInstance("RSA/NONE/NoPadding", "BC");
+	public static byte[] encrypt(Key publicKey, byte[] bytes) throws NoSuchAlgorithmException, NoSuchProviderException,
+			NoSuchPaddingException, InvalidKeyException, IOException, IllegalBlockSizeException, BadPaddingException {
+		Cipher c = Cipher.getInstance(rsaCypther, "BC");
 		c.init(Cipher.ENCRYPT_MODE, publicKey);
 		return blockCipher(bytes, Cipher.ENCRYPT_MODE, c);
 	}
@@ -169,9 +169,10 @@ public class CryptoUtils {
 	public static byte[] decrypt(byte[] bytes) throws NoSuchAlgorithmException, NoSuchProviderException,
 			NoSuchPaddingException, InvalidKeyException, ClassNotFoundException, IllegalBlockSizeException,
 			BadPaddingException, IOException {
-		Cipher c = Cipher.getInstance("RSA/NONE/NoPadding", "BC");
+		Cipher c = Cipher.getInstance(rsaCypther, "BC");
 		c.init(Cipher.DECRYPT_MODE, keyPair.getPrivate());
-		return blockCipher(bytes, Cipher.DECRYPT_MODE, c);
+		byte[] result = blockCipher(bytes, Cipher.DECRYPT_MODE, c);
+		return result;
 	}
 
 	public static byte[] serialize(Object obj) throws IOException {
@@ -286,9 +287,9 @@ public class CryptoUtils {
 														}
 													} };
 
-
-	private synchronized static byte[] blockCipher(byte[] bytes, int mode, Cipher cipher) throws IllegalBlockSizeException,
-			BadPaddingException, NoSuchAlgorithmException, NoSuchPaddingException, IOException {
+	private synchronized static byte[] blockCipher(byte[] bytes, int mode, Cipher cipher)
+			throws IllegalBlockSizeException, BadPaddingException, NoSuchAlgorithmException, NoSuchPaddingException,
+			IOException {
 		// string initialize 2 buffers.
 		// scrambled will hold intermediate results
 		byte[] scrambled = new byte[0];
@@ -297,9 +298,10 @@ public class CryptoUtils {
 		byte[] toReturn = new byte[0];
 		// if we encrypt we use 100 byte long blocks. Decryption requires 128
 		// byte long blocks (because of RSA)
-		int length = (mode == Cipher.ENCRYPT_MODE) ? (1024 / 8 ) - 11 : (1024 / 8 );
-		
-		if(length > bytes.length) {
+		// TODO: -50 is not very good optimized :D
+		int length = (mode == Cipher.ENCRYPT_MODE) ? (1024 / 8) - 50 : (1024 / 8);
+
+		if (length > bytes.length) {
 			length = bytes.length;
 		}
 
@@ -313,9 +315,9 @@ public class CryptoUtils {
 			// encryption
 			if ((i > 0) && (i % length == 0)) {
 				// execute the operation
-//				System.out.println(length);
-				scrambled = cipher.doFinal(buffer);				
-				
+				// System.out.println(length);
+				scrambled = cipher.doFinal(buffer);
+
 				// add the result to our total result.
 				toReturn = append(toReturn, scrambled);
 				// here we calculate the length of the next buffer required
@@ -355,16 +357,16 @@ public class CryptoUtils {
 		}
 		return toReturn;
 	}
-	
+
 	private static byte[] cut(byte[] b, int start, int end) {
-		byte[] result = new byte[end-start];
-		int index=0;
-		for(int i=start; i<end; i++) {
+		byte[] result = new byte[end - start];
+		int index = 0;
+		for (int i = start; i < end; i++) {
 			result[index++] = b[i];
 		}
 		return result;
 	}
-	
+
 	/*
 	 * Maybe used later -----
 	 */

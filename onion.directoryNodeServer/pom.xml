@@ -74,41 +74,42 @@
 
 	<build>
 		<plugins>
-			<plugin> 
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-dependency-plugin</artifactId>
+			<plugin>
+				<artifactId>maven-shade-plugin</artifactId>
+				<version>1.5</version>
 				<executions>
 					<execution>
-						<id>copy-dependencies</id>
-						<phase>prepare-package</phase>
+						<phase>package</phase>
 						<goals>
-							<goal>copy-dependencies</goal>
+							<goal>shade</goal>
 						</goals>
 						<configuration>
-							<outputDirectory>${project.build.directory}/classes/lib</outputDirectory>                       
-							<overWriteReleases>false</overWriteReleases>
-							<overWriteSnapshots>false</overWriteSnapshots>
-							<overWriteIfNewer>true</overWriteIfNewer>
+							<transformers>
+								<transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+									<mainClass>at.onion.directorynodeCore.DCApplication</mainClass>
+								</transformer>
+								<transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+									<resource>META-INF/spring.handlers</resource>
+								</transformer>
+								<transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+									<resource>META-INF/spring.schemas</resource>
+								</transformer>
+							</transformers>
+							<filters>
+								<filter>
+									<artifact>org.bouncycastle:*</artifact>
+									<excludes>
+										<exclude>META-INF/BCKEY.SF</exclude>
+										<exclude>META-INF/BCKEY.DSA</exclude>
+									</excludes>
+								</filter>
+							</filters>
+							<shadedArtifactAttached>true</shadedArtifactAttached>
+							<shadedClassifierName>executable</shadedClassifierName>
 						</configuration>
 					</execution>
 				</executions>
 			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-jar-plugin</artifactId>
-				<version>2.4</version>
-				<configuration>
-					<archive>
-						<manifest>
-							<addClasspath>true</addClasspath>
-							<classpathPrefix>lib/</classpathPrefix>
-							<mainClass>at.onion.directorynodeCore.DCApplication</mainClass>
-						</manifest>
-					</archive>
-					<outputDirectory>${project.build.directory}</outputDirectory>
-				</configuration>
-			</plugin>
-
 		</plugins>
 	</build>
 

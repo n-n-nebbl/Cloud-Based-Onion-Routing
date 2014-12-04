@@ -72,12 +72,8 @@ public class ChainNode {
 				int first = Integer.parseInt(i.getHostAddress().split("\\.")[0]);
 				int second = Integer.parseInt(i.getHostAddress().split("\\.")[1]);
 				if (first != 127) {
-					if (!(first == 172 && second == 16)) {
-						if (!(first == 172 && second == 31)) {
-							if (!(first == 169 && second == 254)) {
-								return i.getHostAddress();
-							}
-						}
+					if (!(first == 169 && second == 254)) {
+						return i.getHostAddress();
 					}
 				}
 			}

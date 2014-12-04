@@ -28,12 +28,12 @@
 		</dependency>
 		<dependency>
 			<groupId>at.ac.tuwien.aic.group3</groupId>
-			<artifactId>onion.directoryNodeClient</artifactId>
+			<artifactId>onion.proxy</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>at.ac.tuwien.aic.group3</groupId>
-			<artifactId>onion.proxy</artifactId>
+			<artifactId>onion.directoryNodeClient</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
@@ -42,4 +42,24 @@
 			<version>${logback.version}</version>
 		</dependency>
 	</dependencies>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<version>2.4</version>
+				<configuration>
+					<archive>
+						<manifest>
+							<addClasspath>true</addClasspath>
+							<classpathPrefix>lib/</classpathPrefix>
+							<mainClass>at.onion.chainnode.ChainNode</mainClass>
+						</manifest>
+					</archive>
+					<outputDirectory>${project.build.directory}</outputDirectory>
+				</configuration>
+			</plugin>
+
+		</plugins>
+	</build>
 </project>

@@ -22,28 +22,35 @@ import at.onion.directoryNodeClient.SimpleCoreClient;
 
 public class ChainNode {
 
-	private static final int	DEFAULT_PORT	= 9001;
+	private static final int	DEFAULT_PORT			= 9001;
+	private static final int	DEFAULT_DIRNODE_PORT	= 8001;
 
-	private static Logger		logger			= LoggerFactory.getLogger(ChainNode.class);
+	private static Logger		logger					= LoggerFactory.getLogger(ChainNode.class);
 
 	public static void main(String[] args) {
 		ConnectionService connServ = new ConnectionService();
 
 		int port = DEFAULT_PORT;
+		int dirNodePort = DEFAULT_DIRNODE_PORT;
 		try {
 			port = Integer.parseInt(System.getProperty("chainNode.port"));
 		} catch (Exception e) {
 		}
 
+		try {
+			dirNodePort = Integer.parseInt(System.getProperty("dirNode.port"));
+		} catch (Exception e) {
+		}
+
 		String dirNodeHostname = System.getProperty("dirNode.hostname");
-		logger.debug("===============>" + dirNodeHostname);
+		logger.debug("===============>" + dirNodeHostname + ":" + dirNodePort);
 
 		if (dirNodeHostname == null) {
 			logger.warn("No directoryNode Hostname found --> no connection to dirNode possible");
 		} else {
 			try {
 				String localAdress = getLocalIPAdress();
-				CoreClient dirNodeClient = new SimpleCoreClient(InetAddress.getByName(dirNodeHostname), 8001);
+				CoreClient dirNodeClient = new SimpleCoreClient(InetAddress.getByName(dirNodeHostname), dirNodePort);
 				dirNodeClient.addNode(new NodeInfo(localAdress, port, CryptoUtils.getKeyPair().getPublic()));
 				logger.info("successfully registered at directoryNode");
 			} catch (UnknownHostException e) {

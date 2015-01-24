@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
+import at.onion.directorynodeCore.nodeInstanceService.ClaudConnectionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -90,7 +91,7 @@ public class SimpleNodeAliveController implements NodeAliveController{
 	private void checkSingleNodeForTimeout(Node node){
 		if(nodeIsOverOfflineThreshold(node)){
 			nodeManagementService.removeNode(node);
-			nodeInstanceService.shutdownNodeInstaceOwnerForNode(node);
+			tryToShudownNode(node);
 			logger.debug("Node timed out: [" + node.getIpAddress().toString() + ":" + node.getPort() + "]");
 			checkForMinimumNodeInstances();
 		}			
@@ -107,13 +108,21 @@ public class SimpleNodeAliveController implements NodeAliveController{
 		nowTime = nowDate.getTime();
 	}
 	
-	private void checkForMinimumNodeInstances(){
+	private void checkForMinimumNodeInstances() {
 		int missingInstanceCount = getMissingNodeCount();
 		while(missingInstanceCount > 0){
-			nodeInstanceService.startNewNodeInstance();
+			tryStartUpNodeInstance();
 			missingInstanceCount--;
 		}
 	}
+
+    private void tryStartUpNodeInstance() {
+        try {
+            nodeInstanceService.startNewNodeInstance();
+        } catch (ClaudConnectionException e) {
+            logger.error("Cannot startup new node", e);
+        }
+    }
 	
 	private int getMissingNodeCount(){
 		List<Node> nodeList = nodeManagementService.getNodeList();
@@ -131,7 +140,15 @@ public class SimpleNodeAliveController implements NodeAliveController{
         Iterator<Node> nodeIterator = nodeManagementService.getNodeList().iterator();
         while (nodeIterator.hasNext()) {
             Node node = nodeIterator.next();
+            tryToShudownNode(node);
+        }
+    }
+
+    private void tryToShudownNode(Node node) {
+        try {
             nodeInstanceService.shutdownNodeInstaceOwnerForNode(node);
+        } catch (ClaudConnectionException e) {
+            logger.error("Cannot shutdown node: {}", node.getIpAddress(), e);
         }
     }
 }

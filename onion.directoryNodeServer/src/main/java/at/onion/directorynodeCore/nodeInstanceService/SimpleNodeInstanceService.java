@@ -1,6 +1,8 @@
 package at.onion.directorynodeCore.nodeInstanceService;
 
 import at.onion.directorynodeCore.domain.Node;
+import com.amazonaws.AmazonClientException;
+import com.amazonaws.AmazonServiceException;
 import com.amazonaws.services.ec2.AmazonEC2Client;
 import com.amazonaws.services.ec2.model.*;
 import org.apache.commons.codec.binary.Base64;
@@ -36,7 +38,30 @@ public class SimpleNodeInstanceService implements NodeInstanceService {
 
 
     @Override
-	public void startNewNodeInstance() {
+	public void startNewNodeInstance()
+            throws ClaudConnectionException {
+        try {
+            startNewNodeInstanceWithCloudSpecificExceptions();
+        } catch (AmazonServiceException e) {
+            throw new ClaudConnectionException(e);
+        } catch (AmazonClientException e) {
+            throw new ClaudConnectionException(e);
+        }
+	}
+
+	@Override
+	public void shutdownNodeInstaceOwnerForNode(Node node)
+            throws ClaudConnectionException{
+        try {
+            shutdownNodeInstaceOwnerForNodeWithCloudSpecificExceptions(node);
+        } catch (AmazonServiceException e) {
+            throw new ClaudConnectionException(e);
+        } catch (AmazonClientException e) {
+            throw new ClaudConnectionException(e);
+        }
+	}
+
+    private void startNewNodeInstanceWithCloudSpecificExceptions() {
         logger.debug("Start new instance");
         createClientIfNeeded();
 
@@ -49,16 +74,15 @@ public class SimpleNodeInstanceService implements NodeInstanceService {
                 .withSecurityGroupIds(securityGroupId);
         runInstancesRequest.setUserData(getUserDataScript());
         amazonEC2Client.runInstances(runInstancesRequest);
-	}
+    }
 
-	@Override
-	public void shutdownNodeInstaceOwnerForNode(Node node) {
+    private void shutdownNodeInstaceOwnerForNodeWithCloudSpecificExceptions(Node node) {
         createClientIfNeeded();
         String ipString = node.getIpAddress().getHostAddress();
         logger.debug("Shutdown host with ip:" + ipString);
         String id = getIdForPublicIp(ipString);
         if(id != null) terminateInstanceWithId(id);
-	}
+    }
 
     private String getIdForPublicIp(String ipString) {
         createClientIfNeeded();

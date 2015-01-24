@@ -4,7 +4,9 @@ import at.onion.directorynodeCore.domain.Node;
 
 public interface NodeInstanceService {
 	
-	public void startNewNodeInstance();
+	public void startNewNodeInstance()
+            throws ClaudConnectionException;
 	
-	public void shutdownNodeInstaceOwnerForNode(Node node);
+	public void shutdownNodeInstaceOwnerForNode(Node node)
+            throws ClaudConnectionException;
 }

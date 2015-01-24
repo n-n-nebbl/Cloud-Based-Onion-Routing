@@ -26,7 +26,7 @@
  		<property name="nodeManagementService" ref="nodeManagementService"/>
  		<property name="nodeInstanceService" ref="nodeInstanceService"/>
  	</bean>
- 	
+
  	<task:scheduled-tasks>
  			<task:scheduled ref="nodeAliveController" method="execute" fixed-rate="${nodeAlive.executeOfflineNodeCheckIntervallInMS}"/> 		
  	</task:scheduled-tasks>

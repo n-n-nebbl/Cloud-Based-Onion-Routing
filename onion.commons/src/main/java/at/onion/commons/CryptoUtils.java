@@ -298,8 +298,8 @@ public class CryptoUtils {
 		byte[] toReturn = new byte[0];
 		// if we encrypt we use 100 byte long blocks. Decryption requires 128
 		// byte long blocks (because of RSA)
-		// TODO: -50 is not very good optimized :D
-		int length = (mode == Cipher.ENCRYPT_MODE) ? (1024 / 8) - 50 : (1024 / 8);
+		// TODO: -28 is not very good optimized :D
+		int length = (mode == Cipher.ENCRYPT_MODE) ? (1024 / 8) - 28 : (1024 / 8);
 
 		if (length > bytes.length) {
 			length = bytes.length;

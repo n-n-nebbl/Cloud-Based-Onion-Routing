@@ -44,15 +44,22 @@ public class ChainNode {
 
 		String dirNodeHostname = System.getProperty("dirNode.hostname");
 		logger.debug("===============>" + dirNodeHostname + ":" + dirNodePort);
+		
+		String id;
 
 		if (dirNodeHostname == null) {
 			logger.warn("No directoryNode Hostname found --> no connection to dirNode possible");
 		} else {
 			try {
 				String localAdress = getLocalIPAdress();
-				CoreClient dirNodeClient = new SimpleCoreClient(InetAddress.getByName(dirNodeHostname), dirNodePort);
-				dirNodeClient.addNode(new NodeInfo(localAdress, port, CryptoUtils.getKeyPair().getPublic()));
+				InetAddress dirNodeAddress = InetAddress.getByName(dirNodeHostname);
+				CoreClient dirNodeClient = new SimpleCoreClient(dirNodeAddress, dirNodePort);
+				id = dirNodeClient.addNode(new NodeInfo(localAdress, port, CryptoUtils.getKeyPair().getPublic()));
 				logger.info("successfully registered at directoryNode");
+				
+				KeepAliveThread keepAlive = new KeepAliveThread(dirNodeAddress, dirNodePort + 1, id, 200);
+				new Thread(keepAlive).start();
+				logger.info("KeepAlive Thread started");
 			} catch (UnknownHostException e) {
 				logger.error("Could not resolve Hostname", e);
 			} catch (Exception e) {
@@ -80,8 +87,7 @@ public class ChainNode {
 			return ip;
 		} catch (MalformedURLException e1) {
 		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+			logger.error("Could not determine local io address", e1);
 		}
 
 		Enumeration<NetworkInterface> e = NetworkInterface.getNetworkInterfaces();

@@ -66,6 +66,7 @@ public class SimpleNodeAliveController implements NodeAliveController{
 		if(alivePackageListener == null)return;
 		alivePackageListener.shutdown();
 		alivePackageListener = null;
+        terminateAllNodes();
 	}
 	
 	public void executeAfterStartUp(){
@@ -125,4 +126,12 @@ public class SimpleNodeAliveController implements NodeAliveController{
 			return 0;
 		}
 	}
+
+    private void terminateAllNodes() {
+        Iterator<Node> nodeIterator = nodeManagementService.getNodeList().iterator();
+        while (nodeIterator.hasNext()) {
+            Node node = nodeIterator.next();
+            nodeInstanceService.shutdownNodeInstaceOwnerForNode(node);
+        }
+    }
 }

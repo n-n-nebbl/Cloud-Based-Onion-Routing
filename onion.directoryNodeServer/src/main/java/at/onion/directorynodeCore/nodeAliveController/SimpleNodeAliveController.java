@@ -28,6 +28,9 @@ public class SimpleNodeAliveController implements NodeAliveController{
 	
 	@Value("${nodeAlive.minimumInstances}")
 	private int minimumNodeInstances;
+
+    @Value("${nodeAlive.disableCloudBasedNodeManagement}")
+    private boolean disableCloudbasedNodeManagement;
 	
 	private long nowTime;	
 	private AlivePackageListener alivePackageListener;
@@ -58,7 +61,7 @@ public class SimpleNodeAliveController implements NodeAliveController{
 	}
 
 	public void startAlivePackageServer() throws SocketException{
-		if(alivePackageListener != null)return;
+		if (alivePackageListener != null) return;
 		alivePackageListener = new AlivePackageListener(alivePackagePort, nodeManagementService);
 		new Thread(alivePackageListener).start();
 	}
@@ -79,17 +82,17 @@ public class SimpleNodeAliveController implements NodeAliveController{
 		checkNodesForTimeout();
 	}
 	
-	private void checkNodesForTimeout(){
+	private void checkNodesForTimeout() {
 		setNowTime();
 		Iterator<Node> nodeIterator = nodeManagementService.getNodeList().iterator();
-		while(nodeIterator.hasNext()){
+		while (nodeIterator.hasNext()) {
 			Node node = nodeIterator.next();
 			checkSingleNodeForTimeout(node);
 		}		
 	}
 	
 	private void checkSingleNodeForTimeout(Node node){
-		if(nodeIsOverOfflineThreshold(node)){
+		if (nodeIsOverOfflineThreshold(node)) {
 			nodeManagementService.removeNode(node);
 			tryToShudownNode(node);
 			logger.debug("Node timed out: [" + node.getIpAddress().toString() + ":" + node.getPort() + "]");
@@ -117,10 +120,12 @@ public class SimpleNodeAliveController implements NodeAliveController{
 	}
 
     private void tryStartUpNodeInstance() {
-        try {
-            nodeInstanceService.startNewNodeInstance();
-        } catch (ClaudConnectionException e) {
-            logger.error("Cannot startup new node", e);
+        if (!disableCloudbasedNodeManagement) {
+            try {
+                nodeInstanceService.startNewNodeInstance();
+            } catch (ClaudConnectionException e) {
+                logger.error("Cannot startup new node", e);
+            }
         }
     }
 	
@@ -128,10 +133,10 @@ public class SimpleNodeAliveController implements NodeAliveController{
 		List<Node> nodeList = nodeManagementService.getNodeList();
 		int missingInstanceCount = minimumNodeInstances - nodeList.size();	
 		
-		if(missingInstanceCount > 0){
+		if (missingInstanceCount > 0) {
 			logger.debug("Node count is " + missingInstanceCount + " node(s) under limit.");
 			return missingInstanceCount;
-		}else{
+		} else {
 			return 0;
 		}
 	}
@@ -145,10 +150,12 @@ public class SimpleNodeAliveController implements NodeAliveController{
     }
 
     private void tryToShudownNode(Node node) {
-        try {
-            nodeInstanceService.shutdownNodeInstaceOwnerForNode(node);
-        } catch (ClaudConnectionException e) {
-            logger.error("Cannot shutdown node: {}", node.getIpAddress(), e);
+        if (!disableCloudbasedNodeManagement) {
+            try {
+                nodeInstanceService.shutdownNodeInstaceOwnerForNode(node);
+            } catch (ClaudConnectionException e) {
+                logger.error("Cannot shutdown node: {}", node.getIpAddress(), e);
+            }
         }
     }
 }

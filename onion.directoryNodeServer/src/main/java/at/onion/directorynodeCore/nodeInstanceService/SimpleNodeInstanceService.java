@@ -70,8 +70,7 @@ public class SimpleNodeInstanceService implements NodeInstanceService {
                 .withInstanceType(instanceType)
                 .withMinCount(1)
                 .withMaxCount(1)
-                .withKeyName(keyPairName)
-                .withSecurityGroupIds(securityGroupId);
+                .withKeyName(keyPairName);
         runInstancesRequest.setUserData(getUserDataScript());
         amazonEC2Client.runInstances(runInstancesRequest);
     }
@@ -126,7 +125,7 @@ public class SimpleNodeInstanceService implements NodeInstanceService {
         Script script = new Script();
         script.addLine("#!/bin/sh");
         script.addLine("cd /home/ec2-user/");
-        script.addLine("java -jar '-DdirNode.hostname=directoryNode.mooo.com' onion.chainnode-0.0.1-SNAPSHOT.jar");
+        script.addLine("java -jar '-DdirNode.hostname=directoryNode.mooo.com' onion.chainnode-2.0.0.BUILD-SNAPSHOT.jar");
         script.addLine("touch success.txt");
         return script.getEncodedScriptAsString();
     }

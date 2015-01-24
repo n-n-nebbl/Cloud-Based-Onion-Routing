@@ -9,7 +9,7 @@
 		http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-3.0.xsd">
  
  	<context:annotation-config />
- 	
+
  	<context:property-placeholder location="application.properties"/>
  	
  	<bean id="nodeManagementService" class="at.onion.directorynodeCore.nodeManagementService.SimpleNodeManagementService"/>

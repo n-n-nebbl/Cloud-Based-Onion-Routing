@@ -28,14 +28,15 @@ public class QuoteController {
 		FileInputStream fstream1 = null;
 		try {
 			BufferedReader br1 = new BufferedReader(new InputStreamReader(
-					getClass().getResourceAsStream("bofh-excuses.txt"), "UTF-8"));
-			String paperString = fileContent.toString().trim();
+					getClass().getResourceAsStream("/bofh-excuses.txt"), "UTF-8"));
 			String forbiddenChars = "@:(){}<>[]";
 			List<String> quotes = new ArrayList<String>();
 			String fileLine = "";
 
 			while ((fileLine = br1.readLine()) != null)
 				fileContent.append(fileLine).append(' ');
+			
+			String paperString = fileContent.toString().trim();
 
 			BreakIterator boundary = BreakIterator.getSentenceInstance();
 			boundary.setText(paperString);

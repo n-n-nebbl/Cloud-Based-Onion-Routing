@@ -8,10 +8,15 @@ import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.UUID;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import at.onion.commons.AliveMessage;
 
 public class KeepAliveThread implements Runnable {
 
+	private Logger logger = LoggerFactory.getLogger(getClass());
+	
 	private DatagramSocket clientSocket;
 	private AliveMessage aliveMessage;
 	private InetAddress host;
@@ -36,6 +41,7 @@ public class KeepAliveThread implements Runnable {
 				DatagramPacket datagramPacket = new DatagramPacket(msg, msg.length, host, port);
 				clientSocket.send(datagramPacket);
 				clientSocket.close();
+//				logger.debug("keepAliveMessage sent");
 			} catch (SocketException e1) {
 			} catch (IOException e) {
 			}

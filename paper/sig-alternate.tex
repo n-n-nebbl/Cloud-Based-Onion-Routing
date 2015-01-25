@@ -181,10 +181,7 @@ Bridge operators can be identified connection to a website several times~\cite{m
  
  To make it more difficult to identify bridges in the \textit{Tor} network Smits et al.~\cite{smits2011bridgespa}
 uses a single packet for authorization which makes connections from attackers more difficult. 
-To make connection detection to bridges more difficult Appelbaum and Mathewson~\cite{appelbaum2010pluggable} created a framework for pluggable \textit{Tor} transports. With this it's possible to make the connection looks like something else, Mathewson's obfsproxy~\cite{gitlink}.
-%[ N. Mathewson. The Tor Project, A simple obfuscating proxy. https://gitweb.torproject.org/obfsproxy.git. [Online; accessed April 2012] 
-‚
-uses an encrypted stream for that. Moghaddam et al~\cite{mohajeri2012skypemorph} built an obfuscation system which makes connections to the \textit{Tor} network look like Skype video traffic. David Fifield~\cite{pluggableTransport} wrote a pluggable transport called meek which uses the technique domain fronting which makes traffic appear like it comes from a big domain like google or amazon.
+To make connection detection to bridges more difficult Appelbaum and Mathewson~\cite{appelbaum2010pluggable} created a framework for pluggable \textit{Tor} transports. With this it's possible to make the connection looks like something else, Mathewson's obfsproxy~\cite{gitlink} uses an encrypted stream for that. Moghaddam et al~\cite{mohajeri2012skypemorph} built an obfuscation system which makes connections to the \textit{Tor} network look like Skype video traffic. David Fifield~\cite{pluggableTransport} wrote a pluggable transport called meek which uses the technique domain fronting which makes traffic appear like it comes from a big domain like google or amazon.
 
 \subsubsection{P2P}
 An approach would be the usage of Freenet. a peer-to-peer platfrom and decentralized publication system designed for censorhip-resistant communication. By measuring the censorship-resilence of Freenet despite its obfuscation protocols Roos et al.~\cite{roos2014measuring} proves the existence of bottlenecks of the existing algorithms used by Freenet. The result shows that the current topology control mechanism is suboptimal and insufficient for routing due to their neighbor selection and its interaction between Opennet and Darknet.

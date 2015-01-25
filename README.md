@@ -7,7 +7,7 @@ This is the project for "Advanced Internet Computing" "Topic 3 - Cloud-Based Oni
 Start directory node server instance
 
 1. In the ec2 dashboard -> click "Launch Instance"
-2. choose AMI with id "ami-81441db1"
+2. Choose AMI with id "ami-0f7e273f"
 3. Click "Next: Configure Instance Details"
 3. Go to "6. Configure Security Group" and choose "Select an existing security group" and select the security group with name "default"
 4. Click "Review and Launch" -> Next

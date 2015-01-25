@@ -1,0 +1,66 @@
+This is BibTeX, Version 0.99d (TeX Live 2014)
+Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
+The top-level auxiliary file: sig-alternate.aux
+The style file: plain.bst
+Database file #1: sigproc.bib
+Repeated entry---line 414 of file sigproc.bib
+ : @inproceedings{murdoch2005low
+ :                              ,
+I'm skipping whatever remains of this entry
+Too many commas in name 1 of "Simon Hecht, Corinna Kirner, Angela Purker, Alexander Nebel, Christian Willinger" for entry link
+while executing---line 1049 of file plain.bst
+Too many commas in name 1 of "Simon Hecht, Corinna Kirner, Angela Purker, Alexander Nebel, Christian Willinger" for entry link
+while executing---line 1049 of file plain.bst
+Warning--empty journal in brubakercloudtransport
+Warning--empty year in brubakercloudtransport
+Warning--empty journal in hopperchallenges
+Warning--empty year in hopperchallenges
+Warning--empty journal in houmansadr2014no
+Too many commas in name 1 of "Simon Hecht, Corinna Kirner, Angela Purker, Alexander Nebel, Christian Willinger" for entry link
+while executing---line 1090 of file plain.bst
+Too many commas in name 1 of "Simon Hecht, Corinna Kirner, Angela Purker, Alexander Nebel, Christian Willinger" for entry link
+while executing---line 1090 of file plain.bst
+Warning--empty journal in wangeffective
+Warning--empty year in wangeffective
+You've used 57 entries,
+            2118 wiz_defined-function locations,
+            751 strings with 12089 characters,
+and the built_in function-call counts, 17813 in all, are:
+= -- 1783
+> -- 756
+< -- 17
++ -- 307
+- -- 246
+* -- 913
+:= -- 2854
+add.period$ -- 202
+call.type$ -- 57
+change.case$ -- 295
+chr.to.int$ -- 0
+cite$ -- 64
+duplicate$ -- 713
+empty$ -- 1529
+format.name$ -- 246
+if$ -- 3916
+int.to.chr$ -- 0
+int.to.str$ -- 57
+missing$ -- 29
+newline$ -- 303
+num.names$ -- 114
+pop$ -- 506
+preamble$ -- 1
+purify$ -- 237
+quote$ -- 0
+skip$ -- 534
+stack$ -- 0
+substring$ -- 829
+swap$ -- 212
+text.length$ -- 17
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 228
+warning$ -- 7
+while$ -- 169
+width$ -- 59
+write$ -- 613
+(There were 5 error messages)

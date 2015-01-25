@@ -1,0 +1,14 @@
+% sig-alternate.top
+\unprotect
+\def\MPOSTformatswitch{-progname=metafun -mem=}
+\setupsystem[\c!n=1,\c!m=1]
+\setupsystem[\c!method=2]
+\setupsystem[\c!type=macosx]
+\setupsystem[\c!random=689]
+\setupsystem[inputfile=sig-alternate.tex]
+\startsetups *runtime:options
+\setupoutput[xetex]
+\stopsetups
+\startsetups *runtime:modules
+\stopsetups
+\protect \endinput

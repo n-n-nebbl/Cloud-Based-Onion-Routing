@@ -1,0 +1,341 @@
+\begin{thebibliography}{10}
+
+\bibitem{appelbaum2010pluggable}
+Jacob Appelbaum and Nick Mathewson.
+\newblock Pluggable transports for circumvention, 2010.
+
+\bibitem{one}
+Tor~Project Blog.
+\newblock {Tor Project - Critiwue website traffic fingerprinting attacks}.
+\newblock
+  \url{https://blog.torproject.org/blog/critique-website-traffic-fingerprinting-attacks}.
+
+\bibitem{two}
+Tor~Project Blog.
+\newblock {Tor Project - Traffic correlation using netflows}.
+\newblock
+  \url{https://blog.torproject.org/blog/traffic-correlation-using-netflows}.
+
+\bibitem{brubakercloudtransport}
+Chad Brubaker, Amir Houmansadr, and Vitaly Shmatikov.
+\newblock Cloudtransport: Using cloud storage for censorship-resistant
+  networking.
+
+\bibitem{cai2012touching}
+Xiang Cai, Xin~Cheng Zhang, Brijesh Joshi, and Rob Johnson.
+\newblock Touching from a distance: Website fingerprinting attacks and
+  defenses.
+\newblock In {\em Proceedings of the 2012 ACM conference on Computer and
+  Communications Security}, pages 605--616. ACM, 2012.
+
+\bibitem{casenove2014botnet}
+Matteo Casenove and Armando Miraglia.
+\newblock Botnet over tor: The illusion of hiding.
+\newblock In {\em Cyber Conflict (CyCon 2014), 2014 6th International
+  Conference On}, pages 273--282. IEEE, 2014.
+
+\bibitem{chakravarty2014effectiveness}
+Sambuddho Chakravarty, Marco~V Barbera, Georgios Portokalidis, Michalis
+  Polychronakis, and Angelos~D Keromytis.
+\newblock On the effectiveness of traffic analysis against anonymity networks
+  using flow records.
+\newblock In {\em Passive and Active Measurement}, pages 247--257. Springer,
+  2014.
+
+\bibitem{chaum1988dining}
+David Chaum.
+\newblock The dining cryptographers problem: Unconditional sender and recipient
+  untraceability.
+\newblock {\em Journal of cryptology}, 1(1):65--75, 1988.
+
+\bibitem{chaum1981untraceable}
+David~L Chaum.
+\newblock Untraceable electronic mail, return addresses, and digital
+  pseudonyms.
+\newblock {\em Communications of the ACM}, 24(2):84--90, 1981.
+
+\bibitem{clarke2010private}
+Ian Clarke, Oskar Sandberg, Matthew Toseland, and Vilhelm Verendel.
+\newblock Private communication through a network of trusted connections: The
+  dark freenet.
+\newblock {\em Network}, 2010.
+
+\bibitem{linkSix}
+cs~umd edu.
+\newblock {Broadcast systems P5}.
+\newblock \url{http://www.cs.umd.edu/projects/p5/}.
+\newblock Accessed: 2015-01-25.
+
+\bibitem{das2014re}
+Anupam Das, Nikita Borisov, Prateek Mittal, and Matthew Caesar.
+\newblock Re 3: relay reliability reputation for anonymity systems.
+\newblock In {\em Proceedings of the 9th ACM symposium on Information, computer
+  and communications security}, pages 63--74. ACM, 2014.
+
+\bibitem{linkFour}
+Mixminion~Minion Design.
+\newblock {High latency system example}.
+\newblock \url{http://www.mixminion.net/minion-design.pdf/}.
+\newblock Accessed: 2015-01-25.
+
+\bibitem{dijkstra2009ew}
+EW~Dijkstra.
+\newblock The ew dijkstra archive.
+\newblock Technical report, Technical report, http://www. cs. utexas.
+  edu/users/EWD, 2009.
+
+\bibitem{dingledine2004tor}
+Roger Dingledine, Nick Mathewson, and Paul Syverson.
+\newblock Tor: The second-generation onion router.
+\newblock Technical report, DTIC Document, 2004.
+
+\bibitem{dingledine2000free}
+Roger~R Dingledine.
+\newblock {\em The free haven project: Design and deployment of an anonymous
+  secure data haven}.
+\newblock PhD thesis, Citeseer, 2000.
+
+\bibitem{durumeric2013zmap}
+Zakir Durumeric, Eric Wustrow, and J~Alex Halderman.
+\newblock Zmap: Fast internet-wide scanning and its security applications.
+\newblock In {\em USENIX Security}, pages 605--620. Citeseer, 2013.
+
+\bibitem{dyer2012peek}
+Kevin~P Dyer, Scott~E Coull, Thomas Ristenpart, and Thomas Shrimpton.
+\newblock Peek-a-boo, i still see you: Why efficient traffic analysis
+  countermeasures fail.
+\newblock In {\em Security and Privacy (SP), 2012 IEEE Symposium on}, pages
+  332--346. IEEE, 2012.
+
+\bibitem{evans2009practical}
+Nathan~S Evans, Roger Dingledine, and Christian Grothoff.
+\newblock A practical congestion attack on tor using long paths.
+\newblock In {\em USENIX Security Symposium}, pages 33--50, 2009.
+
+\bibitem{linkEight}
+Gnu.
+\newblock {Gnunet}.
+\newblock \url{https://gnunet.org/}.
+\newblock Accessed: 2015-01-25.
+
+\bibitem{linkNine}
+Gnu.
+\newblock {Gnunet}.
+\newblock \url{https://gnunet.org/whitepaper}.
+\newblock Accessed: 2015-01-25.
+
+\bibitem{linkThirteen}
+The guardian.
+\newblock {The guradian Article}.
+\newblock \url{http://www.theguardian.com/world/2013/nov/18/}.
+\newblock Accessed: 2015-01-25.
+
+\bibitem{heartbleed}
+Heartbleed.
+\newblock {Heartbleed}.
+\newblock \url{http://heartbleed.com/}.
+
+\bibitem{hopperchallenges}
+Nicholas Hopper.
+\newblock Challenges in protecting tor hidden services from botnet abuse.
+
+\bibitem{houmansadr2011cirripede}
+Amir Houmansadr, Giang~TK Nguyen, Matthew Caesar, and Nikita Borisov.
+\newblock Cirripede: circumvention infrastructure using router redirection with
+  plausible deniability.
+\newblock In {\em Proceedings of the 18th ACM conference on Computer and
+  communications security}, pages 187--200. ACM, 2011.
+
+\bibitem{houmansadr2014no}
+Amir Houmansadr, Edmund~L Wong, and Vitaly Shmatikov.
+\newblock No direction home: The true cost of routing around decoys.
+\newblock 2014.
+
+\bibitem{linkOne}
+Informatik Huberlin.
+\newblock {High latency system example}.
+\newblock
+  \url{http://waste.informatik.huberlin.de/Grassmuck/Texts/remailer.html}.
+\newblock Accessed: 2015-01-25.
+
+\bibitem{jones2005chain}
+Douglas~W Jones.
+\newblock Chain voting.
+\newblock In {\em Workshop on Developing an Analysis of Threats to Voting
+  Systems, National Institute of Standards and Technology}, 2005.
+
+\bibitem{karlin2011decoy}
+Josh Karlin, Daniel Ellard, Alden~W Jackson, Christine~E Jones, Greg Lauer,
+  David~P Mankins, and W~Timothy Strayer.
+\newblock Decoy routing: Toward unblockable internet communication.
+\newblock In {\em USENIX Workshop on Free and Open Communications on the
+  Internet}, 2011.
+
+\bibitem{lewman2010china}
+Andrew Lewman.
+\newblock China blocking tor: Round two, 2010.
+
+\bibitem{mclachlan2009risks}
+Jon McLachlan and Nicholas Hopper.
+\newblock On the risks of serving whenever you surf: vulnerabilities in tor's
+  blocking resistance design.
+\newblock In {\em Proceedings of the 8th ACM workshop on Privacy in the
+  electronic society}, pages 31--40. ACM, 2009.
+
+\bibitem{linkThree}
+Mixminion.
+\newblock {High latency system example}.
+\newblock \url{http://www.mixminion.net/}.
+\newblock Accessed: 2015-01-25.
+
+\bibitem{mohajeri2012skypemorph}
+Hooman Mohajeri~Moghaddam, Baiyu Li, Mohammad Derakhshani, and Ian Goldberg.
+\newblock Skypemorph: Protocol obfuscation for tor bridges.
+\newblock In {\em Proceedings of the 2012 ACM conference on Computer and
+  communications security}, pages 97--108. ACM, 2012.
+
+\bibitem{murdoch2005low}
+Steven~J Murdoch and George Danezis.
+\newblock Low-cost traffic analysis of tor.
+\newblock In {\em Security and Privacy, 2005 IEEE Symposium on}, pages
+  183--195. IEEE, 2005.
+
+\bibitem{murdoch2007sampled}
+Steven~J Murdoch and Piotr Zieli{\'n}ski.
+\newblock Sampled traffic analysis by internet-exchange-level adversaries.
+\newblock In {\em Privacy Enhancing Technologies}, pages 167--183. Springer,
+  2007.
+
+\bibitem{panchenko2011website}
+Andriy Panchenko, Lukas Niessen, Andreas Zinnen, and Thomas Engel.
+\newblock Website fingerprinting in onion routing based anonymization networks.
+\newblock In {\em Proceedings of the 10th annual ACM workshop on Privacy in the
+  electronic society}, pages 103--114. ACM, 2011.
+
+\bibitem{fingerprinting}
+Panopticlick.
+\newblock {Fingerprinting}.
+\newblock \url{https://panopticlick.eff.org/}.
+\newblock Accessed: 2015-01-25.
+
+\bibitem{linkTwelve}
+Tor Project.
+\newblock {Design paper blocking}.
+\newblock
+  \url{https://svn.torproject.org/svn/projects/design-paper/blocking.html}.
+\newblock Accessed: 2015-01-25.
+
+\bibitem{linkEleven}
+Tor Project.
+\newblock {How to hande millions new tor clients}.
+\newblock
+  \url{https://blog.torproject.org/blog/how-to-handle-millions-new-tor-clients}.
+\newblock Accessed: 2015-01-25.
+
+\bibitem{linkTen}
+Tor Project.
+\newblock {Project Tor Design}.
+\newblock
+  \url{https://svn.torproject.org/svn/projects/design-paper/tor-design.pdf}.
+\newblock Accessed: 2015-01-25.
+
+\bibitem{linkFourteen}
+Tor project.
+\newblock {Tor project - Bridges}.
+\newblock
+  \url{http://gitweb.torproject.org/torspec.git/tree/dir-spec.txt?id=3c0422acc464a9da74bc35d3027ae966bf59d8d0}.
+\newblock Accessed: 2015-01-25.
+
+\bibitem{linkBrideProject}
+Tor project.
+\newblock {Tor project - Bridges}.
+\newblock \url{https://www.torproject.org/docs/bridges.html.en}.
+\newblock Accessed: 2015-01-25.
+
+\bibitem{linkKnockKnockProject}
+Tor project.
+\newblock {Tor project - Knock Knock Knockin Bridges doors}.
+\newblock \url{https://www.torproject.org/docs/bridges.html.en}.
+\newblock Accessed: 2015-01-25.
+
+\bibitem{gitlink}
+Tor project.
+\newblock {Tor project - Obfuscation Proxy}.
+\newblock \url{https://gitweb.torproject.org/obfsproxy.git}.
+\newblock Accessed: 2015-01-25.
+
+\bibitem{pluggableTransport}
+Tor project.
+\newblock {Tor project - Pluggable Transport}.
+\newblock \url{https://trac.torproject.org/projects/tor/wiki/doc/meek}.
+\newblock Accessed: 2015-01-25.
+
+\bibitem{linkSeven}
+Freenet projects.
+\newblock {Freenet Project}.
+\newblock \url{https://freenetproject.org/papers/freenet-0.7.5-paper.pdf}.
+\newblock Accessed: 2015-01-25.
+
+\bibitem{roos2014measuring}
+Stefanie Roos, Benjamin Schiller, Stefan Hacker, and Thorsten Strufe.
+\newblock Measuring freenet in the wild: Censorship-resilience under
+  observation.
+\newblock In {\em Privacy Enhancing Technologies}, pages 263--282. Springer,
+  2014.
+
+\bibitem{schuchard2012routing}
+Max Schuchard, John Geddes, Christopher Thompson, and Nicholas Hopper.
+\newblock Routing around decoys.
+\newblock In {\em Proceedings of the 2012 ACM conference on Computer and
+  communications security}, pages 85--96. ACM, 2012.
+
+\bibitem{link}
+Angela Purker Alexander Nebel Christian~Willinger Simon~Hecht, Corinna~Kirner.
+\newblock {Cloud Based Onion Routing AIC WS2014 Project}.
+\newblock \url{https://github.com/n-n-nebbl/Cloud-Based-Onion-Routing}.
+\newblock Accessed: 2015-01-25.
+
+\bibitem{smits2011bridgespa}
+Rob Smits, Divam Jain, Sarah Pidcock, Ian Goldberg, and Urs Hengartner.
+\newblock Bridgespa: improving tor bridges with single packet authorization.
+\newblock In {\em Proceedings of the 10th annual ACM workshop on Privacy in the
+  electronic society}, pages 93--102. ACM, 2011.
+
+\bibitem{linkTwo}
+Sourceforge.
+\newblock {High latency system example}.
+\newblock \url{http://mixmaster.sourceforge.net/}.
+\newblock Accessed: 2015-01-25.
+
+\bibitem{linkFive}
+Mater thesis davor.
+\newblock {High latency system example}.
+\newblock \url{https://geti2p.net/de/}.
+\newblock Accessed: 2015-01-25.
+
+\bibitem{wangeffective}
+Tao Wang, Xiang Cai, Rishab Nithyanand, Rob Johnson, and Ian Goldberg.
+\newblock Effective attacks and provable defenses for website fingerprinting.
+
+\bibitem{wang2013improved}
+Tao Wang and Ian Goldberg.
+\newblock Improved website fingerprinting on tor.
+\newblock In {\em Proceedings of the 12th ACM workshop on Workshop on privacy
+  in the electronic society}, pages 201--212. ACM, 2013.
+
+\bibitem{winter2012china}
+Philipp Winter and Stefan Lindskog.
+\newblock How china is blocking tor.
+\newblock {\em arXiv preprint arXiv:1204.0447}, 2012.
+
+\bibitem{winter2014spoiled}
+Philipp Winter and Stefan Lindskog.
+\newblock Spoiled onions: Exposing malicious tor exit relays.
+\newblock {\em arXiv preprint arXiv:1401.4917}, 2014.
+
+\bibitem{wustrow2011telex}
+Eric Wustrow, Scott Wolchok, Ian Goldberg, and J~Alex Halderman.
+\newblock Telex: Anticensorship in the network infrastructure.
+\newblock In {\em USENIX Security Symposium}, 2011.
+
+\end{thebibliography}

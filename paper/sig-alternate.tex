@@ -1,0 +1,219 @@
+% This is "sig-alternate.tex" V2.0 May 2012
+% This file should be compiled with V2.5 of "sig-alternate.cls" May 2012
+%
+% This example file demonstrates the use of the 'sig-alternate.cls'
+% V2.5 LaTeX2e document class file. It is for those submitting
+% articles to ACM Conference Proceedings WHO DO NOT WISH TO
+% STRICTLY ADHERE TO THE SIGS (PUBS-BOARD-ENDORSED) STYLE.
+% The 'sig-alternate.cls' file will produce a similar-looking,
+% albeit, 'tighter' paper resulting in, invariably, fewer pages.
+%
+% ----------------------------------------------------------------------------------------------------------------
+% This .tex file (and associated .cls V2.5) produces:
+%       1) The Permission Statement
+%       2) The Conference (location) Info information
+%       3) The Copyright Line with ACM data
+%       4) NO page numbers
+%
+% as against the acm_proc_article-sp.cls file which
+% DOES NOT produce 1) thru' 3) above.
+%
+% Using 'sig-alternate.cls' you have control, however, from within
+% the source .tex file, over both the CopyrightYear
+% (defaulted to 2015) and the ACM Copyright Data
+% 
+% e.g.
+% \CopyrightYear{2007} will cause 2007 to appear in the copyright line.
+% \crdata{0-12345-67-8/90/12} will cause 0-12345-67-8/90/12 to appear in the copyright line.
+%
+% ---------------------------------------------------------------------------------------------------------------
+% This .tex source is an example which *does* use
+% the .bib file (from which the .bbl file % is produced).
+% REMEMBER HOWEVER: After having produced the .bbl file,
+% and prior to final submission, you *NEED* to 'insert'
+% your .bbl file into your source .tex file so as to provide
+% ONE 'self-contained' source file.
+%
+% ================= IF YOU HAVE QUESTIONS =======================
+% Questions regarding the SIGS styles, SIGS policies and
+% procedures, Conferences etc. should be sent to
+% Adrienne Griscti (griscti@acm.org)
+%
+% Technical questions _only_ to
+% Gerald Murray (murray@hq.acm.org)
+% ===============================================================
+%
+% For tracking purposes - this is V2.0 - May 2012
+
+\documentclass{sig-alternate}
+
+\usepackage{url}
+\usepackage{hyperref}
+\usepackage{times}
+
+
+\begin{document}
+%
+% --- Author Metadata here ---
+%\conferenceinfo{WOODSTOCK}{'97 El Paso, Texas USA}
+%\CopyrightYear{2007} % Allows default copyright year (20XX) to be over-ridden - IF NEED BE.
+%\crdata{0-12345-67-8/90/01}  % Allows default copyright data (0-89791-88-6/97/05) to be over-ridden - IF NEED BE.
+% --- End of Author Metadata ---
+
+\title{Topic 3: Cloud-based Onion Routing}
+\subtitle{Advanced Internet Computing, WS2014}
+
+%\titlenote{A full version of this paper is available as
+%\textit{Author's Guide to Preparing ACM SIG Proceedings Using
+%\LaTeX$2_\epsilon$\ and BibTeX} at
+%\texttt{www.acm.org/eaddress.htm}}}
+%
+% You need the command \numberofauthors to handle the 'placement
+% and alignment' of the authors beneath the title.
+%
+% For aesthetic reasons, we recommend 'three authors at a time'
+% i.e. three 'name/affiliation blocks' be placed beneath the title.
+%
+% NOTE: You are NOT restricted in how many 'rows' of
+% "name/affiliations" may appear. We just ask that you restrict
+% the number of 'columns' to three.
+%
+% Because of the available 'opening page real-estate'
+% we ask you to refrain from putting more than six authors
+% (two rows with three columns) beneath the article title.
+% More than six makes the first-page appear very cluttered indeed.
+%
+% Use the \alignauthor commands to handle the names
+% and affiliations for an 'aesthetic maximum' of six authors.
+% Add names, affiliations, addresses for
+% the seventh etc. author(s) as the argument for the
+% \additionalauthors command.
+% These 'additional authors' will be output/set for you
+% without further effort on your part as the last section in
+% the body of your article BEFORE References or any Appendices.
+
+\numberofauthors{5} %  in this sample file, there are a *total*
+% of EIGHT authors. SIX appear on the 'first-page' (for formatting
+% reasons) and the remaining two appear in the \additionalauthors section.
+%
+\author{
+% 1st. author
+\alignauthor
+Simon Hecht\\
+       \email{0926240}\\
+% 2nd. author
+\alignauthor
+Corinna Kirner\\
+       \email{0925538}\\
+% 3rd. author
+\and
+\alignauthor
+Angela Purker\\
+       \email{0926589}\\
+  % use '\and' if you need 'another row' of author names
+% 4th. author
+\alignauthor
+Alexander Nebel\\
+       \email{0925291}\\
+% 5th. author
+\alignauthor
+Christian Willinger\\
+       \email{0825998}\\
+}
+% There's nothing stopping you putting the seventh, eighth, etc.
+% author on the opening page (as the 'third row') but we ask,
+% for aesthetic reasons that you place these 'additional authors'
+% in the \additional authors block, viz.
+%\additionalauthors{Additional authors: John Smith (The Th{\o}rv{\"a}ld Group,
+%email: {\texttt{jsmith@affiliation.org}}) and Julius P.~Kumquat
+%(The Kumquat Consortium, email: {\texttt{jpkumquat@consortium.net}}).}
+\date{24 January 2014}
+% Just remember to make sure that the TOTAL number of authors
+% is the number that will appear on the first page PLUS the
+% number that will appear in the \additionalauthors section.
+
+\maketitle
+\begin{abstract}
+Anonymity networks have become hugely popular in the last years. In order to protect ones own privacy such networks are used to communicate within networks anonymously. Due to the goal of protecting people from privacy 
+invasions anonymity networks have powerful enemys. There are many open questions  which possible weak points and vulnerabilities do anonymous networks provide for attackers. In order to secure such a system a lot of research has to be done to avoid attacks. Some of them are theoretical others are opened because anonymity networks run in the real world.
+This paper present a scientific state of the art in anonymity networks. 
+Since the amount of all necessary topics is too huge, we will focus on how to deal with attacks on the privacy and network, defense mechanisms against it and  on cloud computing, those topics were relevant parts for our solution of the AIC project~\cite{link}.
+
+\end{abstract}
+
+% A category with the (minimum) three required fields
+% \category{H.4}{Information Systems Applications}{Miscellaneous}
+%A category including the fourth, optional field follows...
+\category{C.2}{Computer Communication Networsks}{Network Protocosl, Internetnetworkting, Miscellaneous}
+
+%\terms{Theory}
+
+\keywords{Anonymity networks, Tor, Censoreshiped Environments, Fingerprinting, Cloud Computing}
+
+\section{Introduction}
+Anonymity systems can be divided into high and low latency systems. High latency systems uses long delivery time which reaches from hours to days. Examples for high latency systems are remailers~\cite{linkOne, linkTwo, linkThree, linkFour} which strips informations about users and than send mails to the target. An important notable development in these systems were made in 1981 in which David Chaum introdruced Chaum mixes~\cite{chaum1981untraceable} which changes the order of messages and adds padding. That was made possible by asymmetric encryption. High latency systems are not useable for protocols which needs a fast response like HTTP, SSH, etc. They use time for making network analysis more difficult which low latency systems can't. A lot of topics described in later sections deals with that subject. Single systems like proxies, bouncer, VPN services are easy to monitor so the idea of David Chaum has been taken up too and is used in Onion Routing like in the Tor network~\cite{dingledine2004tor}.
+
+Onion routing takes a route through several nodes of the anonymity network and adds an encryption layer (onion layer) to each node so that through the path each node can only decrypt its layer with the routing information. The last node sends the unencrypted package into the network. Garlic routing developed by Michael J. Freedmanin et al.~\cite{dingledine2000free} collects messages to garlic cloves and sends them together as used in the I2P project~\cite{linkFive}.
+A general problem of all these networks is that an global observer can analyse traffic, there are systems based on the dining cryptographers problem~\cite{dijkstra2009ew}
+like the DC Net~\cite{chaum1988dining} and broadcast systems like P5~\cite{linkSix}. P2P anonymity systems like Freenet~\cite{linkSeven} or GNUNet~\cite{linkEight, linkNine}  tries to be censor resistent but they still lack on scalability on routing~\cite{clarke2010private}.
+
+We have focused this paper on topics which could be relevant for our project if we would make it global [Note: we will never do that]. In section 2 we will discuss some current topics and approaches on anonymity networks. How to deal with censorshiped environments is discussed in section 2.1. In section 2.2 we describe node reputation and browser fingerprinting. Section 2.3 deals with fingerprinting in general. In section 2.4. we discuss how botnets can abuse the network and what can be done against it, and section 3 concludes the paper.
+
+\section{Topics on anonymity networks}
+
+\subsection{Communicate within \\censorshiped environements}
+
+For an anonymity network like \textit{Tor} it can be a problem to communicate with the anonymity network. Countries who censor their network can try to identify entry points into the anonymity network, block connections to that networks and identify their users. There are several approaches to deal with that problem where we will discuss the most efficient ones in the following subsections. Furthermore a broad overview can be found in the \textit{Tor} project's svn~\cite{linkTwelve}.
+\subsubsection{Decoy routing}
+
+Decoys~\cite{karlin2011decoy, houmansadr2011cirripede, wustrow2011telex}
+are the idea to use allied routers (decoy routers) in the internet infrastructure to redirect traffic which is part of an anonymity network to the proxy(decoy proxy) target while it looks like it's normal traffic to another destination. A client can signal decoy routers to redirect it's TCP connection. Karlin et al. suggested that this can be done by port knocking~\cite{karlin2011decoy}, symmetric encrypted data in the payload or a series of payload lenght but they also introduced a technique to hide it in a TLS handshake. When decoy routing is detected which is possible through inconsistence path behaviour the client can be blocked and decoy routers can also be blocked when identified by a routing around decoys attack(RAD)~\cite{schuchard2012routing}. Houmansadr et al.~\cite{houmansadr2014no} simulated base on real internet data that the network costs for a country can be very high when decoy routers are well placed on their network infrastracture. Their results showed that stratetical played decoy routers on 1\% of the autonomous systems can disconnect China from 18\%, Venezuela from 54\% and Syria from 87\% of all internet destinations.
+
+\subsubsection{Cloud computing}
+
+Brubaker et al.~\cite{brubakercloudtransport} introduced the idea that to use cloud storages services such as Amazon S3 to provide entry points into anonymity networks. They built a system named CloudTransport which can be used as a standalone application, a gateway to an anonymity network or as an pluggable transport for \textit{Tor}. The autors argue, that countries like China could be unwilling~\cite{linkThirteen} to shut down cloud services because of the risk of shutting down other encrypted services which are important and willed by people in the country. To do so they have used the same libaries and have connected encrypted to the cloud as other cloud services do.
+
+\subsubsection{Tor bridges}
+ 
+Networks like \textit{Tor} contains public trusted directory authorities which provides \textit{Tor} nodes to use the network. A list of this nodes can be easily generated by an attacker like China~\cite{lewman2010china} who wants to block this clients. Because of that the \textit{Tor} project invented so created bridges~\cite{linkFourteen} as entry nodes which are not publicly known. They can be requested by email or by solving a captcha.~\cite{linkBrideProject} zmap is a tool by Durumeric et al~\cite{durumeric2013zmap} which allows to theoreticaly scan the IPv4 range within 45 minutes with a gigabit internet connection. With these tool they could identify 87\% of the bridges in the internet by scanning for \textit{Tor} handshakes on port 9001 and 443. A countermeassure for this is random ports selection on bridge announcement as obfsproxy which is explained later in this section. China is reportedly trying to locate \textit{Tor} bridges~\cite{linkKnockKnockProject, winter2012china}.
+ 
+Bridge operators can be identified connection to a website several times~\cite{mclachlan2009risks} by a circuit-clogging attack~\cite{murdoch2005low}. 
+ 
+ To make it more difficult to identify bridges in the \textit{Tor} network Smits et al.~\cite{smits2011bridgespa}
+uses a single packet for authorization which makes connections from attackers more difficult. 
+To make connection detection to bridges more difficult Appelbaum and Mathewson~\cite{appelbaum2010pluggable} created a framework for pluggable \textit{Tor} transports. With this it's possible to make the connection looks like something else, Mathewson's obfsproxy~\cite{gitlink}.
+%[ N. Mathewson. The Tor Project, A simple obfuscating proxy. https://gitweb.torproject.org/obfsproxy.git. [Online; accessed April 2012] 
+‚
+uses an encrypted stream for that. Moghaddam et al~\cite{mohajeri2012skypemorph} built an obfuscation system which makes connections to the \textit{Tor} network look like Skype video traffic. David Fifield~\cite{pluggableTransport} wrote a pluggable transport called meek which uses the technique domain fronting which makes traffic appear like it comes from a big domain like google or amazon.
+
+\subsubsection{P2P}
+An approach would be the usage of Freenet. a peer-to-peer platfrom and decentralized publication system designed for censorhip-resistant communication. By measuring the censorship-resilence of Freenet despite its obfuscation protocols Roos et al.~\cite{roos2014measuring} proves the existence of bottlenecks of the existing algorithms used by Freenet. The result shows that the current topology control mechanism is suboptimal and insufficient for routing due to their neighbor selection and its interaction between Opennet and Darknet.
+
+The most striking difference to other peer-to-peer systems is that Freenet is used by a huge amount of users who exhibit uncharacteristically long online times, a session length of more than 90 minutes.
+
+\subsection{Node reputation \\and browser fingerprinting}
+
+Bad quality of nodes in an anonymity network can degrade the user experiance or even be malicious for an user. Das et al.~\cite{das2014re} created a reputation system for anonymity system which rates nodes who do time variation for attacks down over time and developed a filtering strategy.
+Traffic in anonymity networks like onion networks can be observed and manipulated by the exit node which makes the connection to the target by design. Non encrypted connections can be watched, MIM-attacks like sslstrip can be done on TLS. Also attacks on a web user like browser fingerprinting~\cite{fingerprinting}can be done. Because of all that the \textit{Tor} project created the \textit{Tor} browser bundle which should creates a browser environment which protects the user from attacks on his privacy. It uses the extension NoScripts which should prevent script attacks and HTTPS-Everywhere which changes HTTP-connections to HTTPS connections. However there a lot of attacks from which the \textit{Tor} browser can't protect. Attacks like on weak chiper suits, session cookies, heartbleed~\cite{heartbleed}, non-HTTPS traffic like SSH are still possible. Winter et created methods to scan and identify malicous \textit{Tor} exit nodes. They built HoneyConnector, a framework to detect sniffing \textit{Tor} exit node and exitmap a fast exit node scanner. Winter et al. also patched the torbutton so that it compares X.509 certificates through different \textit{Tor} routes. With that methods they identified 65 exit relays which can be marked as BadExit~\cite{winter2014spoiled}.
+
+\subsection{Fingerprinting}
+
+Website fingerprinting is described by Wang et al.~\cite{wangeffective}. A passive eavesdropper can monitoring size lenght or timing information and fingerprint which website a user is using. Their team trained a software to monitor 100 web pages by classifing their patterns and recognised the usage in an simulation with also websites which are not trained. Attacks on \textit{Tor} are more difficult than on other networks because the project uses cell padding and background noise. They also simulated the optimal defense with a good bandwith overhead relation.
+Related work on website fingerprinting described by them were Resource length attacks which worked on HTTP 1.0 because the protocol isn't using persistant connection as HTTP 1.1 does. Also unique packet length attacks can also be used to fingerprint websites by lenght. In 2009 Panchenko et al.~\cite{panchenko2011website} used hidden packet length attacks on \textit{Tor} to identify unique packet lenghts which are hidden by the \textit{Tor}'s cell padding. They were been further improved~\cite{dyer2012peek, cai2012touching, wang2013improved} Murdoch and Danezis~\cite{murdoch2005low} developed a practical traffic analysis in 2005 on \textit{Tor}. Evans et al. stated later that this technique isn't accurate anymore because of the increased traffic~\cite{evans2009practical}. In 2007 Murdoch~\cite{murdoch2007sampled} 
+used NetFlow data to analyse traffic from the \textit{Tor} network. On 2014 Chakravart et al.~\cite{chakravarty2014effectiveness} used a NetFlow data analyse technique where they injected a traffic pattern in the server's response and computed the correlation. They claimed to have 100\% accurancy in their lab environment and 81.6\% accurancy in the tor network with a value of 5.1\% false positive.
+
+However the \textit{Tor} project shows in their blog entries that these results shouldn't be overrated because of the false positives in the results~\cite{one, two}.
+\newpage
+\subsection{Botnet}
+At the end of 2013 the mevade botnet begun to use it's C \& C servers over tor to anonymise their communication. While the traffic hadn't increased much it put a lot of load on tor relays to built circuits. They create so called hidden services~\cite{linkTen} which allows to host services anonymously in the network~\cite{linkEleven}. The \textit{Tor} project reacted to this by releasing ntor to exchange keys more efficient. Nicholas Hopper analysed it in 2014~\cite{hopperchallenges} long term strategies against botnet abuse. He suggested to add costs for building circutes for hidden services like human attention(CAPTCHAs), processor time, bitcoins, etc and to ensure that this can't be double spent. There are serveral problems he found out about this approaches, as it's a anonymous network and without blacklisting, bot's can just requery new challanges to solve. Also bots can do "chain-proving" as chain voting does ~\cite{jones2005chain} to solve challenges.  He also suggested to limit the rate of the entry guard which's disadvantage is that it could affect other hidden services and he also brought the idea to isolate hidden service circuits from other circuits.
+Other research goes in the of de-anonymization botnets. Casenove and Miraglia published Botnet over Tor: The Illusion of Hiding~\cite{casenove2014botnet} in 2014 where they claimed that \textit{Tor} doesn't bring the necessary anonymity for a botnet.
+
+\section{Conclusions}
+A lot of systems and strategies occurs which tries to identify a user in anonymity networks, but there are a lot of countermeasures to protect the users identity.
+For eyample there are many good and practicable solutions when dealing with the problem of communication within censorshiped environements and should be kept in mind during the implementation of an anonymity network. Also the quality of the nodes can be checked by using a node reputation system for detecting and identifying malicoius Tor exit nodes in order to avoid them. 
+Anonymity networks will become an even more popular research area in the future.
+
+\bibliographystyle{plain}
+\bibliography{sigproc}  % sigproc.bib is the name of the Bibliography in this case
+
+\end{document}

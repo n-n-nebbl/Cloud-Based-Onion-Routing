@@ -46,6 +46,12 @@ public class SimpleNodeInstanceService implements NodeInstanceService {
 	@Value("${aws.serviceName.chainNode}")
 	private String			serviceName;
 
+    @Value("${aws.chainnodeDirectory}")
+    private String chainnodeDirectory;
+
+    @Value("${aws.runChainnodeCommand}")
+    private String runChainnodeCommand;
+
 	private AmazonEC2Client	amazonEC2Client;
 
 	private int				runRequestCounter	= 0;
@@ -157,9 +163,9 @@ public class SimpleNodeInstanceService implements NodeInstanceService {
 	private String getUserDataScript() {
 		Script script = new Script();
 		script.addLine("#!/bin/sh");
-		script.addLine("cd /home/ec2-user/");
-		script.addLine("java -jar '-DdirNode.hostname=directoryNode.mooo.com' onion.chainnode-2.0.0.BUILD-SNAPSHOT.jar");
-		script.addLine("touch success.txt");
+		script.addLine("cd " + chainnodeDirectory);
+        script.addLine(runChainnodeCommand);
+		script.addLine("echo \"Startup command executed with return value: $?\" > statupScript.log");
 		return script.getEncodedScriptAsString();
 	}
 

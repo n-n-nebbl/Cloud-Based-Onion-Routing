@@ -32,6 +32,7 @@ public class ChainNode {
 
 		int port = DEFAULT_PORT;
 		int dirNodePort = DEFAULT_DIRNODE_PORT;
+		int dirNodeAlivePort = dirNodePort + 1;
 		try {
 			port = Integer.parseInt(System.getProperty("chainNode.port"));
 		} catch (Exception e) {
@@ -39,6 +40,12 @@ public class ChainNode {
 
 		try {
 			dirNodePort = Integer.parseInt(System.getProperty("dirNode.port"));
+			dirNodeAlivePort = dirNodePort + 1;
+		} catch (Exception e) {
+		}
+		
+		try {
+			dirNodeAlivePort = Integer.parseInt(System.getProperty("dirNode.aliveport"));
 		} catch (Exception e) {
 		}
 
@@ -56,10 +63,19 @@ public class ChainNode {
 				CoreClient dirNodeClient = new SimpleCoreClient(dirNodeAddress, dirNodePort);
 				id = dirNodeClient.addNode(new NodeInfo(localAdress, port, CryptoUtils.getKeyPair().getPublic()));
 				logger.info("successfully registered at directoryNode");
+				final KeepAliveThread keepAlive = new KeepAliveThread(dirNodeAddress, dirNodeAlivePort, id, 1000);
 				
-				KeepAliveThread keepAlive = new KeepAliveThread(dirNodeAddress, dirNodePort + 1, id, 200);
 				new Thread(keepAlive).start();
 				logger.info("KeepAlive Thread started");
+				
+				Runtime.getRuntime().addShutdownHook(
+						new Thread() {
+							public void run() {
+								System.out.println("Node shutdown");
+								keepAlive.setStopped();
+							}
+						}
+					);
 			} catch (UnknownHostException e) {
 				logger.error("Could not resolve Hostname", e);
 			} catch (Exception e) {
@@ -73,6 +89,7 @@ public class ChainNode {
 			logger.error("Error occured in ChainNode", e);
 			connServ.stopListening(port);
 		}
+		
 	}
 
 	private static String getLocalIPAdress() throws SocketException {

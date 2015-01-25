@@ -50,8 +50,12 @@ public class OnionProxyConnection implements ProxyConnection, Runnable {
 	private TCPConnection				destinationConnection		= null;
 	private NodeChainInfo				nodeChain					= null;
 	private TCPConnectionProxyProperty	tcpConnectionProxyProperty	= null;
+	private SimpleCoreClient			directoryNode				= null;
 	private String						host						= "";
 	private int							port						= -1;
+	
+	private byte[] message = null;
+	private boolean firstTry = true;
 
 	public OnionProxyConnection(String host, int port, TCPConnection socksConnection) throws UnknownHostException,
 			IOException {
@@ -61,44 +65,10 @@ public class OnionProxyConnection implements ProxyConnection, Runnable {
 		this.clientConnection = socksConnection;
 		this.tcpConnectionProxyProperty = socksConnection.getTCPConnectionProxyProperty();
 
-		SimpleCoreClient directoryNode = new SimpleCoreClient(InetAddress.getByName(tcpConnectionProxyProperty
+		this.directoryNode = new SimpleCoreClient(InetAddress.getByName(tcpConnectionProxyProperty
 				.getDirectoryNodeHostName()), tcpConnectionProxyProperty.getDirectoryNodePort());
 
-		try {
-			nodeChain = directoryNode.getNodeChain();
-		} catch (IOException e) {
-			throw new IOException(String.format("Error getting the node chain: %s.", e));
-
-		} catch (InvalidResultException e) {
-			throw new IOException(String.format("Error getting the node chain: Invalid result: %s.", e));
-
-		} catch (InternalServerErrorException e) {
-			throw new IOException(String.format("Error getting the node chain: InternalServerError %s.", e));
-
-		} catch (at.onion.directoryNodeClient.NotEnoughNodesException e) {
-			throw new IOException(String.format("Error getting the node chain, not enough nodes: %s.", e));
-		}
-
-		NodeInfo first = nodeChain.getNodes()[0];
-
-		logger.info(String.format("Try to connect to first socket: %s.", first));
-
-		if (first.getHostname() == null || first.getHostname().length() < 0)
-			throw new IOException("Error connecting to first node: connection data invalid.");
-		try {
-			this.destinationSocket = createEncryptedSocket(first.getHostname(), first.getPort());
-		} catch (KeyManagementException e) {
-			throw new IOException(String.format("Error connection to first node, key management exception: %s.", e));
-		} catch (UnrecoverableKeyException e) {
-			throw new IOException(String.format("Error connection to first node, unrecoverable key exception: %s.", e));
-		} catch (NoSuchAlgorithmException e) {
-			throw new IOException(String.format("Error connection to first node, no such algorithm exception: %s.", e));
-		} catch (KeyStoreException e) {
-			throw new IOException(String.format("Error connection to first node, key store exception: %s.", e));
-		} catch (NoSuchProviderException e) {
-			throw new IOException(String.format("Error connection to first node, no such provider exception: %s.", e));
-		}
-
+		initialize();
 	}
 
 	@Override
@@ -129,6 +99,10 @@ public class OnionProxyConnection implements ProxyConnection, Runnable {
 
 	public void sendToDestination(byte[] message) throws IOException {
 
+		if(firstTry) {
+			this.message = message;
+		}
+		
 		logger.info(new String(message));
 
 		List<NodeInfo> nodeChain = Arrays.asList(this.nodeChain.getNodes());
@@ -169,6 +143,51 @@ public class OnionProxyConnection implements ProxyConnection, Runnable {
 		clientConnection.send(message);
 	}
 
+	private void initialize() throws IOException {
+		refreshNodeChain();
+
+		createSocketToDestination();
+	}
+
+	private void refreshNodeChain() throws IOException {
+		try {
+			nodeChain = directoryNode.getNodeChain();
+		} catch (IOException e) {
+			throw new IOException(String.format("Error getting the node chain: %s.", e));
+
+		} catch (InvalidResultException e) {
+			throw new IOException(String.format("Error getting the node chain: Invalid result: %s.", e));
+
+		} catch (InternalServerErrorException e) {
+			throw new IOException(String.format("Error getting the node chain: InternalServerError %s.", e));
+
+		} catch (at.onion.directoryNodeClient.NotEnoughNodesException e) {
+			throw new IOException(String.format("Error getting the node chain, not enough nodes: %s.", e));
+		}
+	}
+
+	private void createSocketToDestination() throws IOException {
+		NodeInfo first = nodeChain.getNodes()[0];
+
+		logger.info(String.format("Try to connect to first socket: %s.", first));
+
+		if (first.getHostname() == null || first.getHostname().length() < 0)
+			throw new IOException("Error connecting to first node: connection data invalid.");
+		try {
+			this.destinationSocket = createEncryptedSocket(first.getHostname(), first.getPort());
+		} catch (KeyManagementException e) {
+			throw new IOException(String.format("Error connection to first node, key management exception: %s.", e));
+		} catch (UnrecoverableKeyException e) {
+			throw new IOException(String.format("Error connection to first node, unrecoverable key exception: %s.", e));
+		} catch (NoSuchAlgorithmException e) {
+			throw new IOException(String.format("Error connection to first node, no such algorithm exception: %s.", e));
+		} catch (KeyStoreException e) {
+			throw new IOException(String.format("Error connection to first node, key store exception: %s.", e));
+		} catch (NoSuchProviderException e) {
+			throw new IOException(String.format("Error connection to first node, no such provider exception: %s.", e));
+		}
+	}
+
 	public void run() {
 
 		try {
@@ -178,18 +197,52 @@ public class OnionProxyConnection implements ProxyConnection, Runnable {
 
 				byte[] bytes = (byte[]) ois.readObject();
 
+				//first answer received
+				if(firstTry) firstTry = false;
+				
 				// logger.info(String.format("Got from final connection: %s",
 				// new String(data)));
 				sendToClient(bytes);
+				
 			}
 		} catch (EOFException e) {
+			// EOFException occurs if connection gets closed (usual end of
+			// connection)
 		} catch (Exception e) {
+			// Other exceptions could be caused because of an erroneous node and
+			// be recovered by a new node-chain
 			logger.error("OnionProxyConnection failed: ", e);
+			logger.error("Try to get new NodeChain");
+
+			try {
+				if(firstTry) {
+					tryToRecoverFromConnectionError();
+					return;
+				}
+			} catch (IOException e1) {
+				logger.error("Could not recover from due to Connection issues: ", e1);
+			}
 		}
 
 		// clientConnection.send("\0".getBytes());
 
 		this.setStopped();
+	}
+
+	public void tryToRecoverFromConnectionError() throws IOException {
+		if (isStopped()) return;
+		
+
+		destinationConnection.setStopped();
+		initialize();
+
+		startConnectionAndThread();
+		
+		if (message != null) {
+			sendToDestination(message);
+		} else {
+			logger.warn("No message to resend, but connection is resetted");
+		}
 	}
 
 	public void setStopped() {

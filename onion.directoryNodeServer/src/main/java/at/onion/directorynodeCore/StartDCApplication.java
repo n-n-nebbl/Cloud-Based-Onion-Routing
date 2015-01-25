@@ -29,7 +29,7 @@ public class StartDCApplication {
 		try {
 			AmazonEC2Client ec2 = new AmazonEC2Client();
 			ec2.setEndpoint(ENDPOINT);
-			credentials = new PropertiesCredentials(new File("awscredentials.properties"));
+			credentials = new PropertiesCredentials(new File("D:\\TU\\AIC\\lab\\awscredentials.properties"));
 			SimpleNodeInstanceService.startNewNodeInstanceWithCloudSpecificExceptions(ec2, TAG_NAME, IMAGE_ID,
 					INSTANCE_TYPE, KEY_NAME, null, getUserDataScript(STARTFILE_DIRECTORYNODE), credentials);
 		} catch (IOException e) {

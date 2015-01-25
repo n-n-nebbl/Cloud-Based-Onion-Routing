@@ -14,6 +14,7 @@
 		<module>onion.directoryNodeClient</module>
 		<module>onion.directoryNodeServer</module>
 		<module>onion.testservice</module>
+		<module>onion.testservice.simpleclient</module>
 	</modules>
 
 	<properties>

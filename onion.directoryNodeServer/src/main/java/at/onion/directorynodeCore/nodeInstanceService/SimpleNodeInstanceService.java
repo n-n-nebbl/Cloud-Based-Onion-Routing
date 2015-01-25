@@ -11,6 +11,7 @@ import at.onion.directorynodeCore.domain.Node;
 
 import com.amazonaws.AmazonClientException;
 import com.amazonaws.AmazonServiceException;
+import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.services.ec2.AmazonEC2Client;
 import com.amazonaws.services.ec2.model.CreateTagsRequest;
 import com.amazonaws.services.ec2.model.DescribeInstancesRequest;
@@ -25,7 +26,7 @@ import com.amazonaws.services.ec2.model.TerminateInstancesRequest;
 
 public class SimpleNodeInstanceService implements NodeInstanceService {
 
-	Logger					logger			= LoggerFactory.getLogger(this.getClass());
+	Logger					logger				= LoggerFactory.getLogger(this.getClass());
 
 	@Value("${aws.keyPairName}")
 	private String			keyPairName;
@@ -72,16 +73,28 @@ public class SimpleNodeInstanceService implements NodeInstanceService {
 	}
 
 	private void startNewNodeInstanceWithCloudSpecificExceptions() {
-		logger.debug("Start new instance");
 		createClientIfNeeded();
-		String instanceTagName = serviceName + "-" + runRequestCounter;
+		logger.debug("Start new instance");
+		startNewNodeInstanceWithCloudSpecificExceptions(amazonEC2Client, serviceName, nodeImageId, instanceType,
+				keyPairName, runRequestCounter, getUserDataScript(), null);
+		runRequestCounter++;
+		logger.debug("New instance started");
+	}
+
+	public static void startNewNodeInstanceWithCloudSpecificExceptions(AmazonEC2Client amazonEC2Client, String tagName,
+			String nodeImageId, String instanceType, String keyPairName, Integer counter, String userDataScript,
+			AWSCredentials credentials) {
+
+		String instanceTagName = tagName + (counter != null ? "-" + counter : "");
 
 		RunInstancesRequest runInstancesRequest = new RunInstancesRequest();
 		runInstancesRequest.withImageId(nodeImageId).withInstanceType(instanceType).withMinCount(1).withMaxCount(1)
 				.withKeyName(keyPairName);
-		runInstancesRequest.setUserData(getUserDataScript());
+		if (credentials != null) {
+			runInstancesRequest.setRequestCredentials(credentials);
+		}
+		runInstancesRequest.setUserData(userDataScript);
 
-		runRequestCounter++;
 		RunInstancesResult runInstances = amazonEC2Client.runInstances(runInstancesRequest);
 
 		List<Instance> instances = runInstances.getReservation().getInstances();

@@ -12,12 +12,15 @@ import at.onion.directorynodeCore.domain.Node;
 import com.amazonaws.AmazonClientException;
 import com.amazonaws.AmazonServiceException;
 import com.amazonaws.services.ec2.AmazonEC2Client;
+import com.amazonaws.services.ec2.model.CreateTagsRequest;
 import com.amazonaws.services.ec2.model.DescribeInstancesRequest;
 import com.amazonaws.services.ec2.model.DescribeInstancesResult;
 import com.amazonaws.services.ec2.model.Filter;
 import com.amazonaws.services.ec2.model.Instance;
 import com.amazonaws.services.ec2.model.Reservation;
 import com.amazonaws.services.ec2.model.RunInstancesRequest;
+import com.amazonaws.services.ec2.model.RunInstancesResult;
+import com.amazonaws.services.ec2.model.Tag;
 import com.amazonaws.services.ec2.model.TerminateInstancesRequest;
 
 public class SimpleNodeInstanceService implements NodeInstanceService {
@@ -44,7 +47,7 @@ public class SimpleNodeInstanceService implements NodeInstanceService {
 
 	private AmazonEC2Client	amazonEC2Client;
 
-	private int				instanceCounter	= 0;
+	private int				runRequestCounter	= 0;
 
 	@Override
 	public void startNewNodeInstance() throws ClaudConnectionException {
@@ -71,14 +74,28 @@ public class SimpleNodeInstanceService implements NodeInstanceService {
 	private void startNewNodeInstanceWithCloudSpecificExceptions() {
 		logger.debug("Start new instance");
 		createClientIfNeeded();
-		amazonEC2Client.setServiceNameIntern(serviceName + "-" + instanceCounter);
-		instanceCounter++;
+		String instanceTagName = serviceName + "-" + runRequestCounter;
 
 		RunInstancesRequest runInstancesRequest = new RunInstancesRequest();
 		runInstancesRequest.withImageId(nodeImageId).withInstanceType(instanceType).withMinCount(1).withMaxCount(1)
 				.withKeyName(keyPairName);
 		runInstancesRequest.setUserData(getUserDataScript());
-		amazonEC2Client.runInstances(runInstancesRequest);
+
+		runRequestCounter++;
+		RunInstancesResult runInstances = amazonEC2Client.runInstances(runInstancesRequest);
+
+		List<Instance> instances = runInstances.getReservation().getInstances();
+		int idx = 1;
+		boolean one = (instances.size() == 1);
+
+		for (Instance instance : instances) {
+			CreateTagsRequest createTagsRequest = new CreateTagsRequest();
+			createTagsRequest.withResources(instance.getInstanceId()).withTags(
+					new Tag("Name", instanceTagName + (one ? "" : "." + idx)));
+			amazonEC2Client.createTags(createTagsRequest);
+
+			idx++;
+		}
 	}
 
 	private void shutdownNodeInstaceOwnerForNodeWithCloudSpecificExceptions(Node node) {

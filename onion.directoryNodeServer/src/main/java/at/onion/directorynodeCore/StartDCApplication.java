@@ -17,21 +17,24 @@ import com.amazonaws.services.ec2.AmazonEC2Client;
 
 public class StartDCApplication {
 	private static PropertiesCredentials	credentials;
-	private static String					TAG_NAME				= "g3-t3-directorynode";
-	private static String					INSTANCE_TYPE			= "t2.micro";
-	private static String					KEY_NAME				= "aic14-group3-topic3";
-	private static String					IMAGE_ID				= "ami-07762037";
-	private static String					ENDPOINT				= "ec2.us-west-2.amazonaws.com";
-	private static String					STARTFILE_DIRECTORYNODE	= "start_directorynodeserver.sh";
+	private static String					TAG_NAME						= "g3-t3-directorynode";
+	private static String					INSTANCE_TYPE					= "t2.micro";
+	private static String					KEY_NAME						= "aic14-group3-topic3";
+	private static String					IMAGE_ID						= "ami-07762037";
+	private static String					ENDPOINT						= "ec2.us-west-2.amazonaws.com";
+	private static String					STARTFILE_DIRECTORYNODE			= "./doc/imagestartscripts/start_directorynodeserver.sh";
+	private static String					STARTFILE_DIRECTORYWITHOUTNODES	= "./doc/imagestartscripts/start_directorywithoutnodes.sh";
 
 	public static void main(String[] args) {
 
 		try {
 			AmazonEC2Client ec2 = new AmazonEC2Client();
 			ec2.setEndpoint(ENDPOINT);
+
 			credentials = new PropertiesCredentials(new File("D:\\TU\\AIC\\lab\\awscredentials.properties"));
 			SimpleNodeInstanceService.startNewNodeInstanceWithCloudSpecificExceptions(ec2, TAG_NAME, IMAGE_ID,
-					INSTANCE_TYPE, KEY_NAME, null, getUserDataScript(STARTFILE_DIRECTORYNODE), credentials);
+					INSTANCE_TYPE, KEY_NAME, null, getUserDataScript(STARTFILE_DIRECTORYWITHOUTNODES), credentials);
+			System.out.println("started");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

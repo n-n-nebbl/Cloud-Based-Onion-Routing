@@ -51,24 +51,24 @@ public class SimpleNodeInstanceService implements NodeInstanceService {
 	private int				runRequestCounter	= 0;
 
 	@Override
-	public void startNewNodeInstance() throws ClaudConnectionException {
+	public void startNewNodeInstance() throws CloudConnectionException {
 		try {
 			startNewNodeInstanceWithCloudSpecificExceptions();
 		} catch (AmazonServiceException e) {
-			throw new ClaudConnectionException(e);
+			throw new CloudConnectionException(e);
 		} catch (AmazonClientException e) {
-			throw new ClaudConnectionException(e);
+			throw new CloudConnectionException(e);
 		}
 	}
 
 	@Override
-	public void shutdownNodeInstaceOwnerForNode(Node node) throws ClaudConnectionException {
+	public void shutdownNodeInstaceOwnerForNode(Node node) throws CloudConnectionException {
 		try {
 			shutdownNodeInstaceOwnerForNodeWithCloudSpecificExceptions(node);
 		} catch (AmazonServiceException e) {
-			throw new ClaudConnectionException(e);
+			throw new CloudConnectionException(e);
 		} catch (AmazonClientException e) {
-			throw new ClaudConnectionException(e);
+			throw new CloudConnectionException(e);
 		}
 	}
 

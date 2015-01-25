@@ -3,22 +3,24 @@ package at.onion.directorynodeCore.nodeInstanceService;
 /**
  * Created by willi on 24.01.15.
  */
-public class ClaudConnectionException extends Exception {
+public class CloudConnectionException extends Exception {
 
-    public ClaudConnectionException() {
-        super();
-    }
+	private static final long	serialVersionUID	= -6921394578930138268L;
 
-    public ClaudConnectionException(String msg) {
-        super(msg);
-    }
+	public CloudConnectionException() {
+		super();
+	}
 
-    public ClaudConnectionException(Throwable cause) {
-        super(cause);
-    }
+	public CloudConnectionException(String msg) {
+		super(msg);
+	}
 
-    public ClaudConnectionException(String msg, Throwable cause) {
-        super(msg, cause);
-    }
+	public CloudConnectionException(Throwable cause) {
+		super(cause);
+	}
+
+	public CloudConnectionException(String msg, Throwable cause) {
+		super(msg, cause);
+	}
 
 }

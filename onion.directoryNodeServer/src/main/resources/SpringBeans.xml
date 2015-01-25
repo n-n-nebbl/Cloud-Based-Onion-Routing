@@ -10,7 +10,11 @@
  
  	<context:annotation-config />
 
+    <!--
  	<context:property-placeholder location="application.properties"/>
+ 	-->
+    <context:property-placeholder location="${ext.properties.dir:classpath:}/application.properties"/>
+
  	
  	<bean id="nodeManagementService" class="at.onion.directorynodeCore.nodeManagementService.SimpleNodeManagementService"/>
  	

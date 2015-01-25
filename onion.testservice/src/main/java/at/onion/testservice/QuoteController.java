@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 public class QuoteController {
 
-	Logger	logger	= LoggerFactory.getLogger(getClass());
+	private Logger	logger	= LoggerFactory.getLogger(getClass());
 
 	private String getQuote() {
 

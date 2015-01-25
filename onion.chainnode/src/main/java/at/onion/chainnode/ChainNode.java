@@ -63,10 +63,10 @@ public class ChainNode {
 				CoreClient dirNodeClient = new SimpleCoreClient(dirNodeAddress, dirNodePort);
 				id = dirNodeClient.addNode(new NodeInfo(localAdress, port, CryptoUtils.getKeyPair().getPublic()));
 				logger.info("successfully registered at directoryNode");
-				final KeepAliveThread keepAlive = new KeepAliveThread(dirNodeAddress, dirNodeAlivePort, id, 1000);
+				final KeepAliveThread keepAlive = new KeepAliveThread(dirNodeAddress, dirNodeAlivePort, id, 50);
 				
 				new Thread(keepAlive).start();
-				logger.info("KeepAlive Thread started");
+				logger.info("KeepAlive Thread started on {}:{}", dirNodeAddress.getHostAddress(), dirNodeAlivePort);
 				
 				Runtime.getRuntime().addShutdownHook(
 						new Thread() {

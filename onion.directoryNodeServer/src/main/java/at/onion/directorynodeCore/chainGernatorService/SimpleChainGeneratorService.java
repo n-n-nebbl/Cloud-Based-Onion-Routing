@@ -24,7 +24,12 @@ public class SimpleChainGeneratorService implements ChainGenerationService {
 	
 	@Value("${nodeChain.elementCount}")
 	private int nodeChainElementCount;
-	
+
+    @Value("${nodeChain.testModeSendCorrupedNodeInEverySecondRequest}")
+    private boolean testModeForDirtyChains;
+
+    private int requestCount = 0;
+
     private Random randomGenerator;
     private Logger logger;
 	
@@ -43,40 +48,48 @@ public class SimpleChainGeneratorService implements ChainGenerationService {
 
 	@Override
 	public NodeChainInfo getNodeChain() 
-			throws NotEnoughNodesException{
-		NodeChainInfo nodeChain = new NodeChainInfo();
+			throws NotEnoughNodesException {
+        requestCount++;
 		List<Node> nodeList = getRandomSubsetFromNodeList(getCompleteNodeList());		
 		List<NodeInfo> nodeInfoList = getNodeInfoListForNodeList(nodeList);
-		logNodeChain(nodeInfoList);
-		NodeInfo[] nodeArray = getNodeArrayForList(nodeInfoList);
-		nodeChain.setNodes(nodeArray);
-		return nodeChain;
+        if (testModeForDirtyChains) {
+            nodeInfoList = curruptEverySecondChainForTesting(nodeInfoList);
+        }
+        logNodeChain(nodeInfoList);
+        return getNodeChainForNodeList(nodeInfoList);
 	}
+
+    private NodeChainInfo getNodeChainForNodeList(List<NodeInfo> nodeInfoList) {
+        NodeChainInfo nodeChain = new NodeChainInfo();
+        NodeInfo[] nodeArray = getNodeArrayForList(nodeInfoList);
+        nodeChain.setNodes(nodeArray);
+        return nodeChain;
+    }
 	
-	public List<Node> getCompleteNodeList() 
-			throws NotEnoughNodesException{
+	private List<Node> getCompleteNodeList()
+			throws NotEnoughNodesException {
 		List<Node> comleteNodeList = nodeManagementService.getNodeList();
 		if(comleteNodeList.size() < nodeChainElementCount) throw new NotEnoughNodesException(); 
 		return comleteNodeList;
 	}
 	
-	public NodeInfo[] getNodeArrayForList(List<NodeInfo> nodeList){
+	private NodeInfo[] getNodeArrayForList(List<NodeInfo> nodeList) {
 		NodeInfo[] retArray = new NodeInfo[nodeList.size()];
-		for(int i = 0; i < nodeList.size(); i++){
+		for (int i = 0; i < nodeList.size(); i++) {
 			retArray[i] = nodeList.get(i);
 		}
 		return retArray;
 	}
 	
-	public List<NodeInfo> getNodeInfoListForNodeList(List<Node> nodeList){
+	private List<NodeInfo> getNodeInfoListForNodeList(List<Node> nodeList) {
 		List<NodeInfo> nodeInfoList = new ArrayList<NodeInfo>();
-		for(int i = 0; i < nodeList.size(); i++){
+		for (int i = 0; i < nodeList.size(); i++) {
 			nodeInfoList.add(getNodeFromNodeInfo(nodeList.get(i)));
 		}
 		return nodeInfoList;
 	}
 	
-	public NodeInfo getNodeFromNodeInfo(Node node){
+	private NodeInfo getNodeFromNodeInfo(Node node) {
 		NodeInfo nodeInfo = new NodeInfo();
 		nodeInfo.setHostname(node.getIpAddress().getHostAddress());
 		nodeInfo.setPort(node.getPort());
@@ -84,7 +97,7 @@ public class SimpleChainGeneratorService implements ChainGenerationService {
 		return nodeInfo;
 	}
 	
-	private List<Node> getRandomSubsetFromNodeList(List<Node> nodeList){
+	private List<Node> getRandomSubsetFromNodeList(List<Node> nodeList) {
 		ArrayList<Node> retList = new ArrayList<Node>();
 		for(int i = 0; i < nodeChainElementCount; i++){
 			int elementId = randomGenerator.nextInt(nodeList.size());
@@ -94,7 +107,7 @@ public class SimpleChainGeneratorService implements ChainGenerationService {
 		return retList;		
 	}
 	
-	private void logNodeChain(List<NodeInfo> nodeInfoList){
+	private void logNodeChain(List<NodeInfo> nodeInfoList) {
 		if(!logger.isDebugEnabled())return;
 		String logString = "Create NodeChain with nodes: ";
 		for(int i = 0; i < nodeInfoList.size(); i++){
@@ -103,5 +116,19 @@ public class SimpleChainGeneratorService implements ChainGenerationService {
 		}
 		logger.debug(logString);
 	}
+
+    private List<NodeInfo> curruptEverySecondChainForTesting(List<NodeInfo> nodeInfoList) {
+        if (requestIsOdd()) {
+            int lastNodeIndex = nodeInfoList.size();
+            int lastNodePos = lastNodeIndex - 1;
+            logger.debug("Corruping node {} in nodechaing", lastNodeIndex);
+            nodeInfoList.get(lastNodePos).setPort(22);
+        }
+        return nodeInfoList;
+    }
+
+    private Boolean requestIsOdd() {
+        return ( (requestCount % 2) == 1);
+    }
 
 }

@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
+import at.onion.directorynodeCore.nodeInstanceService.ClaudConnectionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -27,6 +28,9 @@ public class SimpleNodeAliveController implements NodeAliveController{
 	
 	@Value("${nodeAlive.minimumInstances}")
 	private int minimumNodeInstances;
+
+    @Value("${nodeAlive.disableCloudBasedNodeManagement}")
+    private boolean disableCloudbasedNodeManagement;
 	
 	private long nowTime;	
 	private AlivePackageListener alivePackageListener;
@@ -57,7 +61,7 @@ public class SimpleNodeAliveController implements NodeAliveController{
 	}
 
 	public void startAlivePackageServer() throws SocketException{
-		if(alivePackageListener != null)return;
+		if (alivePackageListener != null) return;
 		alivePackageListener = new AlivePackageListener(alivePackagePort, nodeManagementService);
 		new Thread(alivePackageListener).start();
 	}
@@ -78,19 +82,19 @@ public class SimpleNodeAliveController implements NodeAliveController{
 		checkNodesForTimeout();
 	}
 	
-	private void checkNodesForTimeout(){
+	private void checkNodesForTimeout() {
 		setNowTime();
 		Iterator<Node> nodeIterator = nodeManagementService.getNodeList().iterator();
-		while(nodeIterator.hasNext()){
+		while (nodeIterator.hasNext()) {
 			Node node = nodeIterator.next();
 			checkSingleNodeForTimeout(node);
 		}		
 	}
 	
 	private void checkSingleNodeForTimeout(Node node){
-		if(nodeIsOverOfflineThreshold(node)){
+		if (nodeIsOverOfflineThreshold(node)) {
 			nodeManagementService.removeNode(node);
-			nodeInstanceService.shutdownNodeInstaceOwnerForNode(node);
+			tryToShudownNode(node);
 			logger.debug("Node timed out: [" + node.getIpAddress().toString() + ":" + node.getPort() + "]");
 			checkForMinimumNodeInstances();
 		}			
@@ -107,22 +111,32 @@ public class SimpleNodeAliveController implements NodeAliveController{
 		nowTime = nowDate.getTime();
 	}
 	
-	private void checkForMinimumNodeInstances(){
+	private void checkForMinimumNodeInstances() {
 		int missingInstanceCount = getMissingNodeCount();
 		while(missingInstanceCount > 0){
-			nodeInstanceService.startNewNodeInstance();
+			tryStartUpNodeInstance();
 			missingInstanceCount--;
 		}
 	}
+
+    private void tryStartUpNodeInstance() {
+        if (!disableCloudbasedNodeManagement) {
+            try {
+                nodeInstanceService.startNewNodeInstance();
+            } catch (ClaudConnectionException e) {
+                logger.error("Cannot startup new node", e);
+            }
+        }
+    }
 	
 	private int getMissingNodeCount(){
 		List<Node> nodeList = nodeManagementService.getNodeList();
 		int missingInstanceCount = minimumNodeInstances - nodeList.size();	
 		
-		if(missingInstanceCount > 0){
+		if (missingInstanceCount > 0) {
 			logger.debug("Node count is " + missingInstanceCount + " node(s) under limit.");
 			return missingInstanceCount;
-		}else{
+		} else {
 			return 0;
 		}
 	}
@@ -131,7 +145,17 @@ public class SimpleNodeAliveController implements NodeAliveController{
         Iterator<Node> nodeIterator = nodeManagementService.getNodeList().iterator();
         while (nodeIterator.hasNext()) {
             Node node = nodeIterator.next();
-            nodeInstanceService.shutdownNodeInstaceOwnerForNode(node);
+            tryToShudownNode(node);
+        }
+    }
+
+    private void tryToShudownNode(Node node) {
+        if (!disableCloudbasedNodeManagement) {
+            try {
+                nodeInstanceService.shutdownNodeInstaceOwnerForNode(node);
+            } catch (ClaudConnectionException e) {
+                logger.error("Cannot shutdown node: {}", node.getIpAddress(), e);
+            }
         }
     }
 }
